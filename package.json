@@ -1,0 +1,13 @@
+{
+  "name": "koha-plugin-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "bash ./release_kpz.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

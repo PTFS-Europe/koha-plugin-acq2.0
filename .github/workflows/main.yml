@@ -1,0 +1,28 @@
+name: Upload Release Asset
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      -'v*'
+
+jobs:
+  release:
+    name: Create Release and upload .kpz file
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Version
+        run: |
+          VERSION=$(node checkVersionNumber.js version)
+          FILENAME=$(node checkVersionNumber.js filename)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+      - name: 'Create Release'
+        run: hub release create ${{ env.VERSION }} -m ${{ env.VERSION }} -a ${{ env.FILENAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
