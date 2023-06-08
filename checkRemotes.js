@@ -14,7 +14,8 @@ const getFormattedRemotes = (input) => {
     }
 
     const validRemotes = remotes.filter(remote => remote.type === '(push)').reduce((result, remote) => {
-        if(remote.url !== 'git@github.com:PTFS-Europe/koha-plugin-template-test-url.git') {
+        if(remote.url !== 'git@github.com:PTFS-Europe/koha-plugin-template.git' && 
+        remote.url !== 'https://github.com/PTFS-Europe/koha-plugin-template.git') {
             result.push(remote)
         }
         return result
