@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-RED='\033[0;31m'
-NC='\033[0m' # No colour
-GREEN='\033[0;32m'
+RED="\033[0;31m"
+NC="\033[0m" # No colour
+GREEN="\033[0;32m"
 
 echo "Creating and releasing .kpz file"
 
@@ -18,19 +18,19 @@ zip -r "$FILE" Koha/
 
 NEW_VERSION=$(node checkVersionNumber.js version)
 
-if [ "$NEW_VERSION" = 'No plugin file found' ]; then
+if [ "$NEW_VERSION" = "No plugin file found" ]; then
     echo -e "${RED}No plugin file could be identified, have you created one?"
-    echo -e "A plugin file must contain 'use base qw(Koha::Plugins::Base);'${NC}"
+    echo -e "A plugin file must contain "use base qw(Koha::Plugins::Base);"${NC}"
     exit
-elif [ "$NEW_VERSION" = 'No version found' ]; then
+elif [ "$NEW_VERSION" = "No version found" ]; then
     echo -e "${RED}No version could be identified, does your plugin file include one?"
-    echo -e "A plugin file must contain 'our \$VERSION = "version here";'${NC}"
+    echo -e "A plugin file must contain "our \$VERSION = "version here";"${NC}"
     exit
 else
     NEW_VERSION_NUMBER=${NEW_VERSION:1}
 fi
 
-PREVIOUS_VERSION=$(git log -1 --pretty=oneline | grep -E -o 'v.{0,4}')
+PREVIOUS_VERSION=$(git log -1 --pretty=oneline | grep -E -o "v.{0,4}")
 PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
 
 if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
@@ -39,10 +39,10 @@ if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
     REMOTES=$(git remote -v)
     VALID_REMOTE=$(node checkRemotes.js check $REMOTES)
 
-    if [ "$VALID_REMOTE" = 'No valid remotes' ]; then
+    if [ "$VALID_REMOTE" = "No valid remotes" ]; then
         echo -e "${RED}You have not set a git remote, please set one to push${NC}"
         exit
-    elif [ "$VALID_REMOTE" = 'Multiple remotes available' ]; then
+    elif [ "$VALID_REMOTE" = "Multiple remotes available" ]; then
         REMOTE_LIST=$(node checkRemotes.js provide $REMOTES)
         echo -e "${RED}Multiple git remotes identified, which one would you like to select?${NC}\n"
         PS3="Select a number:"
