@@ -54,9 +54,9 @@ if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
         VALID_REMOTE=$(node checkRemotes.js validate $REMOTE $REMOTES)
     fi
 
-    # git add .
-    # git commit -m "$NEW_VERSION"
-    # git push $VALID_REMOTE
+    git add .
+    git commit -m "$NEW_VERSION"
+    git push $VALID_REMOTE
     echo -e "${GREEN}Plugin has been pushed to Github and a release is being generated${NC}"
 else
     echo -e "${RED}WARNING: The Plugin version needs to be updated - please check the .pm file and update the version${NC}"
