@@ -7,7 +7,7 @@ const identifyPluginFile = (file) => {
 
     let pluginIdentified = false
     fileByLine.forEach(line => {
-        if(line.includes("use base qw(Koha::Plugins::Base)")){
+        if(line.includes("Koha::Plugins::Base")){
             pluginIdentified = true
         }   
     })
