@@ -12,3 +12,26 @@ CREATE TABLE IF NOT EXISTS { { fiscal_year } } (
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
     FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
 ) ENGINE = INNODB;
+CREATE TABLE IF NOT EXISTS { { ledgers } } (
+    `ledger_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the ledger applies to',
+    `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the ledger',
+    `description` VARCHAR(255) DEFAULT '' COMMENT 'description for the ledger',
+    `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the ledger',
+    `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the ledger for use with external accounting systems',
+    `currency` INT(11) DEFAULT NULL COMMENT 'currency of the ledger',
+    `status` TINYINT(1) DEFAULT '1' COMMENT 'is the ledger currently active',
+    `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the ledger',
+    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
+    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the ledger applies to',
+    `over_spend_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overspend allowed on the ledger',
+    `over_encumbrance_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overencumbrance allowed on the ledger',
+    `oe_warning_percent` decimal(5,4) DEFAULT 0.0000 COMMENT 'percentage limit for overencumbrance',
+    `oe_limit_amount` decimal(28,6) DEFAULT 0.000000 COMMENT 'limit for overspend',
+    `oe_warning_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a warning for overspend',
+    `oe_limit_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a block on the ledger for overspend',
+    PRIMARY KEY (`ledger_id`),
+    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`),
+    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
+    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+) ENGINE = INNODB;
