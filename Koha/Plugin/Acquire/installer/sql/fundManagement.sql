@@ -51,3 +51,15 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`),
     FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
 ) ENGINE = INNODB;
+CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
+    `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `fund_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
+    `allocation_amout` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',
+    `reference` VARCHAR(255) DEFAULT '' COMMENT 'allocation reference',
+    `note` VARCHAR(255) DEFAULT '' COMMENT 'any notes associated to the reference',
+    `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the fund',
+    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the fund applies to',
+    PRIMARY KEY (`fund_allocation_id`),
+    FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`),
+    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+) ENGINE = INNODB;

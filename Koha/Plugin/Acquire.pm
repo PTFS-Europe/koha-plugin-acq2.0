@@ -53,14 +53,17 @@ sub install {
 
         my $bundle_path = $bundle_dir;
 
-        my $installer = Koha::Plugin::Acquire::installer::AcquisitionsInstaller->new({
-            table_name_mappings => {
-                fiscal_year => $self->get_qualified_table_name('fiscal_year'),
-                ledgers => $self->get_qualified_table_name('ledgers'),
-                funds => $self->get_qualified_table_name('funds'),
-            },
-            bundle_path => $bundle_path,
-        });
+        my $installer = Koha::Plugin::Acquire::installer::AcquisitionsInstaller->new(
+            {
+                table_name_mappings => {
+                    fiscal_year     => $self->get_qualified_table_name('fiscal_year'),
+                    ledgers         => $self->get_qualified_table_name('ledgers'),
+                    funds           => $self->get_qualified_table_name('funds'),
+                    fund_allocation => $self->get_qualified_table_name('fund_allocation'),
+                },
+                bundle_path => $bundle_path,
+            }
+        );
 
         my $is_success = $installer->install();
         if ( !$is_success ) {
