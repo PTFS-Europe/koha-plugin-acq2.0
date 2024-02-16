@@ -35,3 +35,19 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
     FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
 ) ENGINE = INNODB;
+CREATE TABLE IF NOT EXISTS { { funds } } (
+    `fund_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
+    `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund',
+    `description` VARCHAR(255) DEFAULT '' COMMENT 'description for the fund',
+    `fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the fund',
+    `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the fund',
+    `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the fund for use with external accounting systems',
+    `currency` INT(11) DEFAULT NULL COMMENT 'currency of the fund',
+    `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fund currently active',
+    `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the fund',
+    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the fund applies to',
+    PRIMARY KEY (`fund_id`),
+    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`),
+    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+) ENGINE = INNODB;
