@@ -57,6 +57,7 @@ sub install {
             table_name_mappings => {
                 fiscal_year => $self->get_qualified_table_name('fiscal_year'),
                 ledgers => $self->get_qualified_table_name('ledgers'),
+                funds => $self->get_qualified_table_name('funds'),
             },
             bundle_path => $bundle_path,
         });
