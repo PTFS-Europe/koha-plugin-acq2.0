@@ -1,0 +1,23 @@
+[% INCLUDE 'doc-head-open.inc' %]
+   <title>Acquistions</title>
+   <script type="text/javascript">window.plugin_path="[% PLUGIN_PATH %]"</script>
+   <meta data-n-head="1" charset="utf-8">
+   <meta data-n-head="1" name="viewport" content="width=device-width,initial-scale=1">
+   <link rel="preload" href="/api/v1/contrib/acquire/static/dist/acquire.js" as="script">
+  [% INCLUDE 'doc-head-close.inc' %]
+  
+  <body>
+  [% INCLUDE 'header.inc' %]
+  [% INCLUDE 'cat-search.inc' %]
+  
+  <div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo;
+    Acquisitions
+  </div>
+  
+  <div id="__app"></div>
+
+<script type="text/javascript" src="/api/v1/contrib/acquire/static/dist/acquire.js"></script>
+
+[% INCLUDE 'intranet-bottom.inc' %]
