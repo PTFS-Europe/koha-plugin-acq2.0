@@ -9,6 +9,9 @@ use JSON       qw ( encode_json );
 
 use Template;
 
+use Koha::Plugin::Acquire::installer::AcquisitionsInstaller;
+
+
 our $VERSION = "0.0";
 
 our $metadata = {
@@ -43,7 +46,35 @@ Do all is required to properly install the plugin
 sub install {
     my ( $self, $args ) = @_;
 
-    return 1;
+    return try {
+        my $file       = __FILE__;
+        my $bundle_dir = $file;
+        $bundle_dir =~ s/[.]pm$//smx;
+
+        my $bundle_path = $bundle_dir;
+
+        my $installer = Koha::Plugin::Acquire::installer::AcquisitionsInstaller->new({
+            table_name_mappings => {
+                fiscal_year => $self->get_qualified_table_name('fiscal_year'),
+                ledgers => $self->get_qualified_table_name('ledgers'),
+            },
+            bundle_path => $bundle_path,
+        });
+
+        my $is_success = $installer->install();
+        if ( !$is_success ) {
+            warn 'Migration failed';
+        }
+
+        return 1;
+    }
+    catch {
+        my $error = $_;
+        warn "INSTALL ERROR: $error";
+
+        return 0;
+    }
+
 }
 
 # =head3 api_routes
