@@ -46,4 +46,40 @@ sub install {
     return 1;
 }
 
+# =head3 api_routes
+
+# =cut
+
+# sub api_routes {
+#     my ( $self, $args ) = @_;
+
+#     my $spec_str = $self->mbf_read('api/openapi.json');
+#     my $spec     = decode_json($spec_str);
+
+#     return $spec;
+# }
+
+=head3 api_namespace
+
+=cut
+
+sub api_namespace {
+    my ($self) = @_;
+
+    return 'acquire';
+}
+
+=head3 static_routes
+
+=cut
+
+sub static_routes {
+    my ( $self, $args ) = @_;
+
+    my $spec_str = $self->mbf_read('api/staticapi.json');
+    my $spec     = decode_json($spec_str);
+
+    return $spec;
+}
+
 1;
