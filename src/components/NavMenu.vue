@@ -13,6 +13,15 @@
                             </router-link>
                         </span>
                     </li>
+                    <li>
+                        <span>
+                            <router-link
+                                :to="{ name: 'SettingsHome' }"
+                            >
+                                <span>Settings</span>
+                            </router-link>
+                        </span>
+                    </li>
                 </ul>
             </div>
         </div>
