@@ -10,5 +10,12 @@
                 "type": "multiple"
             }
         }
+    },
+    "funds": {
+        "title": "Fund management",
+        "icon": "fa fa-money-check-dollar",
+        "prefs": {
+
+        }
     }
 }

@@ -2,6 +2,7 @@ import { markRaw } from "vue";
 
 import Homepage from '../components/Homepage.vue'
 import SettingsHome from '../components/Settings/SettingsHome.vue'
+import ModuleSettings from '../components/Settings/ModuleSettings.vue'
 import FundsHome from '../components/FundManagement/FundsHome.vue'
 
 export const routes = [
@@ -38,6 +39,13 @@ export const routes = [
                         path: "",
                         component: markRaw(SettingsHome),
                         name: "SettingsHome",
+                        is_navigation_item: false,
+                    },
+                    {
+                        path: "general",
+                        component: markRaw(ModuleSettings),
+                        name: "ModuleSettingsGeneral",
+                        title: "General",
                         is_navigation_item: false,
                     },
                 ]
