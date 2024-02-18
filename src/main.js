@@ -1,6 +1,7 @@
 import { createApp } from "vue"
 import { createWebHistory, createRouter } from "vue-router"
 import { createPinia } from "pinia"
+import vSelect from "vue-select";
 
 import App from "./components/Main.vue"
 import { routes as routesDef } from './routes/routes.js'
@@ -23,7 +24,7 @@ app.use(router)
 app.use(pinia)
 app.provide("navigationStore", navigationStore)
 app.provide("mainStore", mainStore)
-
+app.component("v-select", vSelect);
 
 app.mount("#__app")
 

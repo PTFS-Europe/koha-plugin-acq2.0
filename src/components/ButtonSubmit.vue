@@ -8,7 +8,7 @@ export default {
     props: {
         text: {
             type: String,
-            default: __("Submit"),
+            default: "Submit",
             required: false,
         },
     },
