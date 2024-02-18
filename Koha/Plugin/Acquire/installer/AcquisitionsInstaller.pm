@@ -20,8 +20,7 @@ package Koha::Plugin::Acquire::installer::AcquisitionsInstaller;
 use Modern::Perl;
 use base qw(Koha::Objects);
 
-use Mojo::JSON qw(decode_json);
-use JSON       qw ( encode_json );
+use JSON       qw ( encode_json decode_json);
 use Try::Tiny;
 use File::Spec;
 use Try::Tiny;
@@ -45,9 +44,59 @@ sub new {
 sub install {
     my ( $self, $args ) = @_;
 
-    my @sql_files = $self->_get_install_data();
+    my $settings_installed = $self->_handle_sql();
 
-    foreach my $file ( @sql_files ) {
+    my $is_success = $self->_handle_sysprefs() if $settings_installed;
+
+    return $is_success;
+}
+
+sub _handle_sysprefs {
+    my ( $self, $args ) = @_;
+
+    my $sysprefs_dir = File::Spec->catdir( $self->{bundle_path}, 'installer/sysprefs' );
+    my @sysprefs_files = glob "$sysprefs_dir/sysprefs.json";
+    my $file = $sysprefs_files[0];
+
+    return try {
+        open my $fh, '<', $file or die "Can't open $file";
+        my $sysprefs_json = do { local $/; <$fh> };
+        close $fh or die "Can't close $file";
+
+        my $table = $self->{table_name_mappings}->{settings};
+        my $sysprefs = decode_json($sysprefs_json);
+
+        my @modules = keys %$sysprefs;
+        foreach my $module ( @modules ) {
+            my @prefs = keys %{$sysprefs->{$module}};
+            foreach my $pref ( @prefs ) {
+                my %pref_data = %{$sysprefs->{$module}->{$pref}};
+                my $query = "INSERT IGNORE INTO $table (variable,value,options,explanation,type) VALUES(?,?,?,?,?)";    
+                my $sth = $self->{dbh}->prepare($query);
+                my ( $value, $options, $explanation, $type ) = @pref_data{"value", "options", "explanation", "type"};
+                $sth->execute( $pref, $value, $options, $explanation, $type );
+                if ( $sth->err ) {
+                    warn "$pref not installed - " . $sth->errstr;
+                }
+            }
+        }
+        return 1;
+    }
+    catch {
+        my $error = $_;
+        warn "INSTALL ERROR for $file: $error";
+
+        return 0;
+    }
+}
+
+sub _handle_sql {
+    my ( $self, $args ) = @_;
+
+    my $settings_installed;
+    my @sql_files = $self->_get_sql_data();
+
+    foreach my $file (@sql_files) {
         $self->{dbh}->begin_work;
 
         my $is_success = $self->_install_file( { file => $file } );
@@ -58,14 +107,16 @@ sub install {
         }
 
         $self->{dbh}->commit;
+        if( $file =~ /settings.sql/ ) {
+            $settings_installed = 1;
+        }
 
         warn "Successfully installed data from $file.";
     }
-
-    return 1;
+    return $settings_installed;
 }
 
-sub _get_install_data {
+sub _get_sql_data {
     my ( $self, $args ) = @_;
 
     my $sql_path = File::Spec->catdir( $self->{bundle_path}, 'installer/sql' );
