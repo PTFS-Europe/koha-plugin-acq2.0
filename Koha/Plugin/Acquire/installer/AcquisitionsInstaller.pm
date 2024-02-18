@@ -68,9 +68,9 @@ sub _handle_sysprefs {
 
         my @modules = keys %$sysprefs;
         foreach my $module ( @modules ) {
-            my @prefs = keys %{$sysprefs->{$module}};
+            my @prefs = keys %{$sysprefs->{$module}->{prefs}};
             foreach my $pref ( @prefs ) {
-                my %pref_data = %{$sysprefs->{$module}->{$pref}};
+                my %pref_data = %{$sysprefs->{$module}->{prefs}->{$pref}};
                 my $query = "INSERT IGNORE INTO $table (variable,value,options,explanation,type) VALUES(?,?,?,?,?)";    
                 my $sth = $self->{dbh}->prepare($query);
                 my ( $value, $options, $explanation, $type ) = @pref_data{"value", "options", "explanation", "type"};
