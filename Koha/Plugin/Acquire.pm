@@ -56,6 +56,7 @@ sub install {
         my $installer = Koha::Plugin::Acquire::installer::AcquisitionsInstaller->new(
             {
                 table_name_mappings => {
+                    settings        => $self->get_qualified_table_name('settings'),
                     fiscal_year     => $self->get_qualified_table_name('fiscal_year'),
                     ledgers         => $self->get_qualified_table_name('ledgers'),
                     funds           => $self->get_qualified_table_name('funds'),
