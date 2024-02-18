@@ -22,6 +22,7 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.provide("navigationStore", navigationStore)
+app.provide("mainStore", mainStore)
 
 
 app.mount("#__app")
