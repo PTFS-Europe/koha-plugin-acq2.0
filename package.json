@@ -17,6 +17,7 @@
     "pinia": "^2.0.13",
     "style-loader": "^3.3.3",
     "vue": "^3.2.31",
+    "vue-flatpickr-component": "^11.0.4",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
