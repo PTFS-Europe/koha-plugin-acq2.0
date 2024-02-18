@@ -25,6 +25,8 @@ import NavMenu from './NavMenu.vue'
 import Breadcrumbs from "./Breadcrumbs.vue"
 import Help from "./Help.vue"
 import Dialog from "./Dialog.vue"
+import "vue-select/dist/vue-select.css"
+
 
 export default {
     components: {
@@ -37,5 +39,38 @@ export default {
 </script>
 
 <style>
+#menu ul ul,
+#navmenulist ul ul {
+    padding-left: 2em;
+    font-size: 100%;
+}
 
+form .v-select {
+    display: inline-block;
+    background-color: white;
+    width: 30%;
+}
+
+.v-select,
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]),
+textarea {
+    border-color: rgba(60, 60, 60, 0.26);
+    border-width: 1px;
+    border-radius: 4px;
+    min-width: 30%;
+}
+.flatpickr-input {
+    width: 30%;
+}
+
+#navmenulist ul li a.current.disabled {
+    background-color: inherit;
+    border-left: 5px solid #e6e6e6;
+    color: #000;
+}
+#navmenulist ul li a.disabled {
+    color: #666;
+    pointer-events: none;
+    font-weight: 700;
+}
 </style>
