@@ -2,26 +2,13 @@
     <aside>
         <div id="navmenu">
             <div id="navmenulist">
-                <h5>Acquisitions</h5>
+                <h5>{{ title }}</h5>
                 <ul>
-                    <li>
-                        <span>
-                            <router-link
-                                :to="{ name: 'FundsHome' }"
-                            >
-                                <span>Fund management</span>
-                            </router-link>
-                        </span>
-                    </li>
-                    <li>
-                        <span>
-                            <router-link
-                                :to="{ name: 'SettingsHome' }"
-                            >
-                                <span>Settings</span>
-                            </router-link>
-                        </span>
-                    </li>
+                    <NavigationItem
+                        v-for="(item, key) in navigationTree"
+                        v-bind:key="key"
+                        :item="item"
+                    ></NavigationItem>
                 </ul>
             </div>
         </div>
@@ -29,15 +16,33 @@
 </template>
 
 <script>
-
+import { inject } from "vue"
+import NavigationItem from "./NavigationItem.vue"
 export default {
     name: "NavMenu",
     data() {
-
         return {
-            entities: []
+            navigationTree: this.leftNavigation,
         }
-    }
+    },
+    setup: () => {
+        const navigationStore = inject("navigationStore")
+        const { leftNavigation } = navigationStore
+        return {
+            leftNavigation,
+        }
+    },
+    async beforeMount() {
+        if (this.condition)
+            this.navigationTree = await this.condition(this.navigationTree)
+    },
+    props: {
+        title: String,
+        condition: Function,
+    },
+    components: {
+        NavigationItem,
+    },
 }
 </script>
 
@@ -58,8 +63,5 @@ export default {
 }
 #navmenulist ul li a.disabled.router-link-active {
     color: #000;
-}
-span.item-last {
-    padding: 7px 3px;
 }
 </style>
