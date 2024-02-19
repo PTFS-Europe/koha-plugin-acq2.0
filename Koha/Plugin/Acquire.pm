@@ -9,9 +9,22 @@ use JSON       qw ( encode_json );
 
 use Template;
 
+use Koha::Database;
+use Koha::Schema;
+
 use Koha::Plugin::Acquire::installer::AcquisitionsInstaller;
 
+BEGIN {
+    my $path = Module::Metadata->find_module_by_name(__PACKAGE__);
+    $path =~ s{[.]pm$}{/lib}xms;
+    unshift @INC, $path;
 
+    require Koha::Acquire::Settings::Settings;
+    require Koha::Schema::Result::KohaPluginAcquireSetting;
+    Koha::Schema->register_class( KohaPluginAcquireSetting => 'Koha::Schema::Result::KohaPluginAcquireSetting' );
+
+    Koha::Database->schema( { new => 1 } );
+}
 our $VERSION = "0.0";
 
 our $metadata = {
@@ -82,18 +95,18 @@ sub install {
 
 }
 
-# =head3 api_routes
+=head3 api_routes
 
-# =cut
+=cut
 
-# sub api_routes {
-#     my ( $self, $args ) = @_;
+sub api_routes {
+    my ( $self, $args ) = @_;
 
-#     my $spec_str = $self->mbf_read('api/openapi.json');
-#     my $spec     = decode_json($spec_str);
+    my $spec_str = $self->mbf_read('api/openapi.json');
+    my $spec     = decode_json($spec_str);
 
-#     return $spec;
-# }
+    return $spec;
+}
 
 =head3 api_namespace
 
