@@ -1,3 +1,5 @@
+[% USE raw %]
+[% USE To %]
 [% INCLUDE 'doc-head-open.inc' %]
    <title>Acquistions</title>
    <script type="text/javascript">window.plugin_path="[% PLUGIN_PATH %]"</script>
@@ -16,6 +18,11 @@
   [% INCLUDE 'js-date-format.inc' %]
 
   <div id="__app"></div>
+      <script>
+        const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+        const userflags = [% To.json(userflags) | $raw %];
+
+    </script>
 
 <script type="text/javascript" src="/api/v1/contrib/acquire/static/dist/acquire.js"></script>
 
