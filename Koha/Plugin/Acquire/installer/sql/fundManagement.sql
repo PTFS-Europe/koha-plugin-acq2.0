@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS { { fiscal_year } } (
     `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal year',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fiscal year is visible to',
     PRIMARY KEY (`fiscal_yr_id`),
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
+    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `ledger_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -31,8 +31,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `oe_limit_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a block on the ledger for overspend',
     PRIMARY KEY (`ledger_id`),
     FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`),
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
-    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { funds } } (
     `fund_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -47,8 +46,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
     PRIMARY KEY (`fund_id`),
-    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`),
-    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -59,6 +57,5 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund allocation is visible to',
     PRIMARY KEY (`fund_allocation_id`),
-    FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`),
-    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
+    FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`)
 ) ENGINE = INNODB;
