@@ -21,6 +21,7 @@
       <script>
         const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
         const userflags = [% To.json(userflags) | $raw %];
+        const library_groups = [% To.json(library_groups) | $raw %];
 
     </script>
 
