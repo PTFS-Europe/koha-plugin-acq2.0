@@ -1,22 +1,27 @@
 <template>
-    <div class="main container-fluid">
+    <div v-if="initialized && userPermitted">
         <div id="sub-header">
             <Breadcrumbs />
             <Help />
         </div>
-        <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
-                <main>
-                    <Dialog />
-                    <router-view :key="$route.name" />
-                </main>
-            </div>
-            <div class="col-sm-2 col-sm-pull-10">
-                <NavMenu
-                    :title="'Acquisitions'"
-                ></NavMenu>
+        <div class="main container-fluid">
+            <div class="row">
+                <div class="col-sm-10 col-sm-push-2">
+                    <main>
+                        <Dialog />
+                        <router-view :key="$route.name" />
+                    </main>
+                </div>
+                <div class="col-sm-2 col-sm-pull-10">
+                    <NavMenu
+                        :title="'Acquisitions'"
+                    ></NavMenu>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="main container-fluid" v-else>
+        <Dialog />
     </div>
 </template>
 
@@ -28,6 +33,7 @@ import Dialog from "./Dialog.vue"
 import "vue-select/dist/vue-select.css"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
+import { APIClient } from "./../fetch/api-client.js"
 
 export default {
     components: {
@@ -37,17 +43,51 @@ export default {
         Help,
     },
     setup() {
+        const mainStore = inject("mainStore")
+        const { loading, loaded, setError } = mainStore
+
         const acquisitionsStore = inject("acquisitionsStore")
         const { user, settings } = storeToRefs(acquisitionsStore)
-        user.logged_in_user = logged_in_user
-        user.userflags = userflags
 
         return {
+            setError,
+            loading,
+            loaded,
             settings,
             user
         }
     },
+    data() {
+        return {
+            initialized: false,
+            userPermitted:false
+        }
+    },
+    beforeCreate() {
+        this.loading()
 
+        const client = APIClient.acquisition
+        client.settings
+            .getAll()
+            .then(settings => {
+                this.settings = settings
+                this.user.logged_in_user = logged_in_user
+                this.user.userflags = userflags
+                const { acquisition, superlibrarian } = this.user.userflags
+                if (!acquisition && !superlibrarian) {
+                    return this.setError(
+                        'You do not have permission to access this module. Please contact your system administrator.',
+                        false
+                    )
+                }
+                this.userPermitted = true
+                return
+            })
+            .then(() => {
+                this.loaded()
+                this.initialized = true
+            })
+    }
 }
 </script>
 
