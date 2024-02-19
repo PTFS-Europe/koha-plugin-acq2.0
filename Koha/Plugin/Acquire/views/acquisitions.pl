@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( get_template_and_user haspermission );
 use C4::Context;
 use C4::Output    qw( output_html_with_http_headers );
 
@@ -35,6 +35,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type            => 'intranet',
         is_plugin       => 1,
     }
+);
+
+my $patron = Koha::Patrons->find({ borrowernumber => $borrowernumber });
+
+my $userflags = haspermission($patron->userid);
+
+$template->param(
+    userflags => $userflags
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
