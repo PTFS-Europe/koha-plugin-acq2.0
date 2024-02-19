@@ -14,7 +14,7 @@
                 "200": {
                     "description": "Settings data",
                     "schema": {
-                        "type": "object"
+                        "type": "array"
                     }
                 },
                 "404": {
