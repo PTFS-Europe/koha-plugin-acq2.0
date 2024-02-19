@@ -1,4 +1,4 @@
-<template>
+<template v-if="initialised">
     <h1>Settings</h1>
     <div class="navPanesGrid">
         <SettingsCard
@@ -12,6 +12,7 @@
 <script>
 import settingsJSON from '../../../Koha/Plugin/Acquire/installer/sysprefs/sysprefs.json'
 import SettingsCard from './SettingsCard.vue'
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -21,16 +22,36 @@ export default {
     },
     data() {
         return {
-            navPanes: []
+            navPanes: [],
+            initialised: false
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.createNavPanes(settingsJSON)
+            vm.determineNavPanesToDisplay(settingsJSON)
         })
     },
     methods: {
-        createNavPanes(settingsJSON) {
+        async getSettings() {
+            const client = APIClient.acquisition
+            const settings = await client.settings.getAll().then(
+                settings => {
+                    return settings
+                },
+                error => {}
+            )
+            return settings
+        },
+        async determineNavPanesToDisplay(settingsJSON) {
+            const settings = await this.getSettings()
+            const { value } = settings.find(i => i.variable === 'modulesEnabled')
+            let modulesEnabled = []
+            if(value) {
+                const selectedModules = value.split("|")
+                modulesEnabled = [...selectedModules]
+            }
+            modulesEnabled.push('general')
+
             const modules = Object.keys(settingsJSON)
             const navPanes = modules.map(module => {
                 const moduleData = settingsJSON[module]
@@ -38,9 +59,11 @@ export default {
                     path: "/acquisitions/settings/" + module,
                     icon: moduleData.icon,
                     title: moduleData.title,
+                    module
                 }
-            })
+            }).filter(m => modulesEnabled.includes(m.module))
             this.navPanes = navPanes
+            this.initialised = true
             return navPanes
         }
     },
