@@ -3,20 +3,22 @@ import HttpClient from "./http-client";
 export class AcquisitionAPIClient extends HttpClient {
     constructor() {
         super({
-            baseURL: "/api/v1/acquisitions/",
+            baseURL: "/api/v1/contrib/acquire/",
         });
     }
 
-    get vendors() {
+    get settings() {
         return {
             getAll: (query, params) =>
                 this.get({
-                    endpoint: "vendors",
+                    endpoint: "settings",
                     query,
                     params,
-                    headers: {
-                        "x-koha-embed": "aliases",
-                    },
+                }),
+            create: config =>
+                this.post({
+                    endpoint: "settings",
+                    body: config,
                 }),
         };
     }

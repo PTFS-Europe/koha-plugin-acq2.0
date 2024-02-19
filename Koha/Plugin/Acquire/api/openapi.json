@@ -1,0 +1,99 @@
+{
+    "/settings": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::Settings::Settings#get_settings",
+            "operationId": "AcquireGetSettings",
+            "description": "Retrieves the user settings for the Acquisitions plugin module",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Settings data",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "parameters": "1"
+                }
+            }
+        },
+        "post": {
+            "x-mojo-to": "Acquire::Controllers::Settings::Settings#store_settings",
+            "operationId": "AcquireStoreSettings",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Settings",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "parameters": "1"
+                }
+            }
+        }
+    }
+}

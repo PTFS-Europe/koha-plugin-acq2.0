@@ -10,10 +10,10 @@
             :options="item.options"
             :multiple="item.type === 'multiple'"
             class="settingsSelect"
+            v-model="model"
         >
             <template #search="{ attributes, events }">
                 <input
-                    :required="!item.required"
                     class="vs__search"
                     v-bind="attributes"
                     v-on="events"
@@ -27,7 +27,19 @@
 
 export default {
     props: {
-        item: Object
+        item: Object,
+        modelValue: null
+    },
+    emits: ["update:modelValue"],
+    computed: {
+        model: {
+            get() {
+                return this.modelValue
+            },
+            set(value) {
+                this.$emit("update:modelValue", value)
+            },
+        },
     }
 }
 </script>
