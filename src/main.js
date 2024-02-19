@@ -33,6 +33,11 @@ app.mount("#__app")
 
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
-    navigationStore.$patch({ current: to.matched, params: to.params || {} })
+    if(to.matched.length === 0) {
+        // The Apache redirect does not render breadcrumbs so we need to push to the correct route
+        router.push({ name: "Homepage" })
+    } else {
+        navigationStore.$patch({ current: to.matched, params: to.params || {} })
+    }
     removeMessages(); // This will actually flag the messages as displayed already
 })
