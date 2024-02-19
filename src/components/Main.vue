@@ -47,14 +47,15 @@ export default {
         const { loading, loaded, setError } = mainStore
 
         const acquisitionsStore = inject("acquisitionsStore")
-        const { user, settings } = storeToRefs(acquisitionsStore)
+        const { user, settings, acquisitions_library_groups } = storeToRefs(acquisitionsStore)
 
         return {
             setError,
             loading,
             loaded,
             settings,
-            user
+            user,
+            acquisitions_library_groups
         }
     },
     data() {
@@ -73,6 +74,7 @@ export default {
                 this.settings = settings
                 this.user.logged_in_user = logged_in_user
                 this.user.userflags = userflags
+                this.user.library_groups = library_groups
                 const { acquisition, superlibrarian } = this.user.userflags
                 if (!acquisition && !superlibrarian) {
                     return this.setError(
