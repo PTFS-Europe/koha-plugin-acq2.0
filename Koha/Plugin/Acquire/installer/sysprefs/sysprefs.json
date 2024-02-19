@@ -12,7 +12,7 @@
         }
     },
     "funds": {
-        "title": "Fund management",
+        "title": "Funds and ledgers",
         "icon": "fa fa-money-check-dollar",
         "prefs": {
 

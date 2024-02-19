@@ -29,7 +29,10 @@ use Koha::Acquire::Settings::Settings;
 sub get_settings {
     my $c = shift->openapi->valid_input or return;
 
-    return $c->render( status => 200, openapi => 'Success' );
+    my $settings_set = Koha::Acquire::Settings::Settings->new;
+    my $settings = $c->objects->search( $settings_set );
+
+    return $c->render( status => 200, openapi => $settings );
 }
 
 sub store_settings {
