@@ -7,10 +7,9 @@ CREATE TABLE IF NOT EXISTS { { fiscal_year } } (
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fiscal year currently active',
     `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the fiscal year',
     `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal year',
-    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the fiscal year applies to',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fiscal year is visible to',
     PRIMARY KEY (`fiscal_yr_id`),
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`),
-    FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `ledger_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -23,7 +22,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the ledger currently active',
     `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the ledger',
     `owner` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
-    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the ledger applies to',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the ledger is visible to',
     `over_spend_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overspend allowed on the ledger',
     `over_encumbrance_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overencumbrance allowed on the ledger',
     `oe_warning_percent` decimal(5,4) DEFAULT 0.0000 COMMENT 'percentage limit for overencumbrance',
@@ -46,7 +45,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `currency` INT(11) DEFAULT NULL COMMENT 'currency of the fund',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fund currently active',
     `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the fund',
-    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the fund applies to',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
     PRIMARY KEY (`fund_id`),
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`),
     FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
@@ -58,7 +57,7 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `reference` VARCHAR(255) DEFAULT '' COMMENT 'allocation reference',
     `note` VARCHAR(255) DEFAULT '' COMMENT 'any notes associated to the reference',
     `last_updated` DATETIME DEFAULT NULL COMMENT 'time of the last update to the fund',
-    `lib_group` INT(11) DEFAULT NULL COMMENT 'library group the fund applies to',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund allocation is visible to',
     PRIMARY KEY (`fund_allocation_id`),
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`),
     FOREIGN KEY (`lib_group`) REFERENCES `library_groups` (`id`)
