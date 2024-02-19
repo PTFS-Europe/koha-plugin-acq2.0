@@ -7,9 +7,11 @@ import App from "./components/Main.vue"
 import { routes as routesDef } from './routes/routes.js'
 import { useMainStore } from "./stores/main"
 import { useNavigationStore } from "./stores/navigation"
+import { useAcquisitionsStore } from "./stores/acquisitions"
 
 const pinia = createPinia()
 const mainStore = useMainStore(pinia)
+const acquisitionsStore = useAcquisitionsStore(pinia)
 const navigationStore = useNavigationStore(pinia)
 const routes = navigationStore.setRoutes(routesDef)
 
@@ -23,6 +25,7 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.provide("navigationStore", navigationStore)
+app.provide("acquisitionsStore", acquisitionsStore)
 app.provide("mainStore", mainStore)
 app.component("v-select", vSelect);
 

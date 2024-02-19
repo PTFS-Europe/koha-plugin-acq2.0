@@ -26,7 +26,8 @@ import Breadcrumbs from "./Breadcrumbs.vue"
 import Help from "./Help.vue"
 import Dialog from "./Dialog.vue"
 import "vue-select/dist/vue-select.css"
-
+import { inject } from "vue"
+import { storeToRefs } from "pinia"
 
 export default {
     components: {
@@ -34,7 +35,19 @@ export default {
         Breadcrumbs,
         Dialog,
         Help,
-    }
+    },
+    setup() {
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { user, settings } = storeToRefs(acquisitionsStore)
+        user.logged_in_user = logged_in_user
+        user.userflags = userflags
+
+        return {
+            settings,
+            user
+        }
+    },
+
 }
 </script>
 
