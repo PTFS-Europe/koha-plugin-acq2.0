@@ -42,8 +42,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $patron = Koha::Patrons->find({ borrowernumber => $borrowernumber });
 my $userflags = haspermission($patron->userid);
 
-# my $branch = Koha::Libraries->find({ branchcode => $patron->branchcode });
-
 my $acquisitions_library_groups = Koha::Library::Groups->search({ ft_acquisitions => 1 });
 my @user_library_groups;
 

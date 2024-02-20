@@ -1,7 +1,7 @@
 <template>
     <Toolbar>
         <ToolbarButton
-            :to="{ name: 'SettingsHome' }"
+            :to="{ name: 'FiscalYearFormAdd' }"
             icon="plus"
             title="New fiscal year"
         />
