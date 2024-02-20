@@ -72,10 +72,10 @@ export default {
     },
     methods: {
         redraw: function (url) {
-            this.$refs.table.dt().ajax.url(url).draw()
+            this.$refs.table.dt.ajax.url(url).draw()
         },
         useTableObject: function () {
-            let dt = this.$refs.table.dt()
+            let dt = this.$refs.table.dt
             return dt
         },
     },
@@ -150,7 +150,7 @@ export default {
         }
     },
     mounted() {
-        let dt = this.$refs.table.dt()
+        let dt = this.$refs.table.dt
         let table_node = dt.table().node()
         let add_filters = this.add_filters
         if (add_filters) {
@@ -195,7 +195,7 @@ export default {
         }
     },
     beforeUnmount() {
-        const dt = this.$refs.table.dt()
+        const dt = this.$refs.table.dt
         dt.destroy()
     },
     components: {
