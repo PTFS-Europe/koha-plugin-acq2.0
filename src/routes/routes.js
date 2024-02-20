@@ -5,6 +5,7 @@ import SettingsHome from '../components/Settings/SettingsHome.vue'
 import ModuleSettings from '../components/Settings/ModuleSettings.vue'
 import FundsHome from '../components/FundManagement/FundsHome.vue'
 import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
+import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
 import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vue'
 
 export const routes = [
@@ -40,6 +41,12 @@ export const routes = [
                                 path: "",
                                 component: markRaw(FiscalYearList),
                                 name: "FiscalYearList",
+                                title: "Add"
+                            },
+                            {
+                                path: ":fiscal_yr_id",
+                                component: markRaw(FiscalYearShow),
+                                name: "FiscalYearShow",
                                 title: "Add"
                             },
                             {
