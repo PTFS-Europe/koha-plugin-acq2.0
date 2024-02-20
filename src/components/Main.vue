@@ -47,7 +47,12 @@ export default {
         const { loading, loaded, setError } = mainStore
 
         const acquisitionsStore = inject("acquisitionsStore")
-        const { user, settings, acquisitions_library_groups } = storeToRefs(acquisitionsStore)
+        const { 
+            user,
+            settings,
+            acquisitions_library_groups,
+            permittedUsers 
+        } = storeToRefs(acquisitionsStore)
 
         return {
             setError,
@@ -55,7 +60,8 @@ export default {
             loaded,
             settings,
             user,
-            acquisitions_library_groups
+            acquisitions_library_groups,
+            permittedUsers
         }
     },
     data() {
@@ -67,8 +73,18 @@ export default {
     beforeCreate() {
         this.loading()
 
-        const client = APIClient.acquisition
-        client.settings
+        const fetch_config = async () => {
+            const patron_client = APIClient.patron
+            await patron_client.patrons.getPermittedPatrons().then(
+                patrons => {
+                    this.permittedUsers = patrons
+                },
+                error => {}
+            )
+        }
+
+        const acq_client = APIClient.acquisition
+        acq_client.settings
             .getAll()
             .then(settings => {
                 this.settings = settings
@@ -83,7 +99,7 @@ export default {
                     )
                 }
                 this.userPermitted = true
-                return
+                return fetch_config()
             })
             .then(() => {
                 this.loaded()
