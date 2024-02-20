@@ -50,7 +50,7 @@ code for the fiscal year
 
 =head2 start_date
 
-  data_type: 'datetime'
+  data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -58,7 +58,7 @@ start date of the event
 
 =head2 end_date
 
-  data_type: 'datetime'
+  data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -108,17 +108,9 @@ __PACKAGE__->add_columns(
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "start_date",
-    {
-        data_type                 => "datetime",
-        datetime_undef_if_invalid => 1,
-        is_nullable               => 1,
-    },
+    { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
     "end_date",
-    {
-        data_type                 => "datetime",
-        datetime_undef_if_invalid => 1,
-        is_nullable               => 1,
-    },
+    { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
     "status",
     { data_type => "tinyint", default_value => 1, is_nullable => 1 },
     "last_updated",
@@ -168,8 +160,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-20 10:05:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GQ+622n3N6Y7NU7aqJJG+A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-20 14:59:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZJLpMp0O+n4A/X5TZ1Rilg
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

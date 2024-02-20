@@ -50,7 +50,7 @@ export default {
         const { 
             user,
             settings,
-            acquisitions_library_groups,
+            library_groups,
             permittedUsers 
         } = storeToRefs(acquisitionsStore)
 
@@ -60,7 +60,7 @@ export default {
             loaded,
             settings,
             user,
-            acquisitions_library_groups,
+            library_groups,
             permittedUsers
         }
     },
@@ -90,7 +90,7 @@ export default {
                 this.settings = settings
                 this.user.logged_in_user = logged_in_user
                 this.user.userflags = userflags
-                this.user.library_groups = library_groups
+                this.library_groups = library_groups
                 const { acquisition, superlibrarian } = this.user.userflags
                 if (!acquisition && !superlibrarian) {
                     return this.setError(

@@ -4,6 +4,8 @@ import Homepage from '../components/Homepage.vue'
 import SettingsHome from '../components/Settings/SettingsHome.vue'
 import ModuleSettings from '../components/Settings/ModuleSettings.vue'
 import FundsHome from '../components/FundManagement/FundsHome.vue'
+import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
+import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vue'
 
 export const routes = [
     {
@@ -19,14 +21,41 @@ export const routes = [
                 is_navigation_item: false,
             },
             {
-                path: "/acquisitions/funds",
-                name: "FundManagement",
+                path: "/acquisitions/fund_management",
                 title: "Funds and ledgers",
-                component: markRaw(FundsHome),
-                is_end_node: true,
                 icon: "fa fa-money-check-dollar",
                 children: [
-
+                    {
+                        path: "",
+                        component: markRaw(FundsHome),
+                        name: "FundsHome",
+                        is_navigation_item: false,
+                    },
+                    {
+                        path: "fiscal_year",
+                        title: "Fiscal year",
+                        is_navigation_item: false,
+                        children: [
+                            {
+                                path: "",
+                                component: markRaw(FiscalYearList),
+                                name: "FiscalYearList",
+                                title: "Add"
+                            },
+                            {
+                                path: "add",
+                                component: markRaw(FiscalYearFormAdd),
+                                name: "FiscalYearFormAdd",
+                                title: "Add"
+                            },
+                            {
+                                path: "edit/:fiscal_yr_id",
+                                component: markRaw(FiscalYearFormAdd),
+                                name: "FiscalYearFormEdit",
+                                title: "Edit"
+                            }
+                        ]
+                    },
                 ]
             },
             {
