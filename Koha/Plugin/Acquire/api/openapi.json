@@ -96,6 +96,56 @@
             }
         }
     },
+    "/permitted_patrons": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::Patrons::Patrons#get_permitted_patrons",
+            "operationId": "AcquireGetPermittedPatrons",
+            "description": "Retrieves a list of patrons who have acquisitions permissions",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Patron permission data",
+                    "schema": {
+                        "type": "array"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "parameters": "1"
+                }
+            }
+        }
+    },
     "/fiscal_years": {
         "get": {
             "x-mojo-to": "Acquire::Controllers::FundManagement::FiscalYears#list",

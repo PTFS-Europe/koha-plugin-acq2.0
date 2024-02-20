@@ -8,5 +8,6 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             library_groups: null
         },
         settings: null,
+        permittedUsers: null
     })
 });
