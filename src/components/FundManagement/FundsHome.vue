@@ -1,19 +1,19 @@
 <template>
     <Toolbar>
         <ToolbarButton
-            :to="{ name: 'FiscalYearFormAdd' }"
-            icon="plus"
-            title="New fiscal year"
+            :to="{ name: 'FiscalYearList' }"
+            icon="pencil"
+            title="Manage fiscal years"
         />
         <ToolbarButton
             :to="{ name: 'SettingsHome' }"
-            icon="plus"
-            title="New ledger"
+            icon="pencil"
+            title="Manage ledgers"
         />
         <ToolbarButton
             :to="{ name: 'SettingsHome' }"
-            icon="plus"
-            title="New fund"
+            icon="pencil"
+            title="Manage funds"
         />
     </Toolbar>
     <h1>Fund management</h1>
