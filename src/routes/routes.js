@@ -29,6 +29,7 @@ export const routes = [
                     {
                         path: "",
                         component: markRaw(FundsHome),
+                        permissions: ['budget_add_del'],
                         name: "FundsHome",
                         is_navigation_item: false,
                     },

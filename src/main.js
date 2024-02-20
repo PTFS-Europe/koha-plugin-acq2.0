@@ -10,10 +10,11 @@ import {
     faPencil,
     faTrash,
     faSpinner,
+    faPenToSquare
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
+library.add(faPlus, faMinus, faPencil, faTrash, faSpinner, faPenToSquare);
 
 import App from "./components/Main.vue"
 import { routes as routesDef } from './routes/routes.js'
