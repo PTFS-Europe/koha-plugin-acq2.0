@@ -3,6 +3,18 @@ import { createWebHistory, createRouter } from "vue-router"
 import { createPinia } from "pinia"
 import vSelect from "vue-select";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+    faPlus,
+    faMinus,
+    faPencil,
+    faTrash,
+    faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
+
 import App from "./components/Main.vue"
 import { routes as routesDef } from './routes/routes.js'
 import { useMainStore } from "./stores/main"
@@ -27,7 +39,8 @@ app.use(pinia)
 app.provide("navigationStore", navigationStore)
 app.provide("acquisitionsStore", acquisitionsStore)
 app.provide("mainStore", mainStore)
-app.component("v-select", vSelect);
+app.component("v-select", vSelect)
+app.component("font-awesome-icon", FontAwesomeIcon)
 
 app.mount("#__app")
 

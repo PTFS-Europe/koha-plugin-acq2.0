@@ -1,13 +1,39 @@
 <template>
-  <h1>Fund management</h1>
+    <Toolbar>
+        <ToolbarButton
+            :to="{ name: 'SettingsHome' }"
+            icon="plus"
+            title="New fiscal year"
+        />
+        <ToolbarButton
+            :to="{ name: 'SettingsHome' }"
+            icon="plus"
+            title="New ledger"
+        />
+        <ToolbarButton
+            :to="{ name: 'SettingsHome' }"
+            icon="plus"
+            title="New fund"
+        />
+    </Toolbar>
+    <h1>Fund management</h1>
 </template>
 
 <script>
-export default {
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 
+export default {
+    setup() {
+        
+    },
+    components: {
+        Toolbar,
+        ToolbarButton
+    }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
