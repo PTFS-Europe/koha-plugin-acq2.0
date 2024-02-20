@@ -11,7 +11,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         permittedUsers: null
     }),
     actions: {
-        getLibGroupsForUser(groups) {
+        getLibGroupsForUser() {
             const branch = this.user.logged_in_user.branchcode
             const filteredGroups = []
             this.library_groups.forEach(group => {
@@ -21,11 +21,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             })
             return filteredGroups
         },
-        getUsersFilteredByPermission(permissions, all) {
+        getUsersFilteredByPermission(permissions, returnAll) {
             const filteredUsers = []
             this.permittedUsers.forEach(user => {
                 user.displayName = user.firstname + ' ' + user.surname
-                if(all) {
+                if(returnAll) {
                     filteredUsers.push(user)
                 } else {
                     const { acquisition, superlibrarian } = user.permissions
@@ -43,17 +43,21 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             return filteredUsers
         },
         isUserPermitted(permissions) {
+            if(permissions.length === 0) return true
             const { acquisition, superlibrarian } = this.user.userflags
             if (acquisition === 1 || superlibrarian) {
                 return true
             } else {
-                permissions.forEach(permission => {
+                const checks = permissions.map(permission => {
                     if (acquisition[permission]) {
                         return true
+                    } else {
+                        return false
                     }
                 })
+                const failedChecks = checks.filter(check => !check).length
+                return failedChecks ? false :  true
             }
-            return false
         }
     }
 });
