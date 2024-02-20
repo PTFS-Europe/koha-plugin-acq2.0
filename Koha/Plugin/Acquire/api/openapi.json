@@ -43,9 +43,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         },
         "post": {
@@ -90,9 +88,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         }
     },
@@ -140,9 +136,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         }
     },
@@ -234,9 +228,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         },
         "post": {
@@ -281,9 +273,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         }
     },
@@ -391,9 +381,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         },
         "put": {
@@ -508,9 +496,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         },
         "delete": {
@@ -616,9 +602,7 @@
                 }
             },
             "x-koha-authorization": {
-                "permissions": {
-                    "parameters": "1"
-                }
+                "permissions": {}
             }
         }
     }

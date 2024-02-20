@@ -6,6 +6,7 @@
                 :to="{ name: 'FiscalYearFormAdd' }"
                 icon="plus"
                 title="New fiscal year"
+                v-if="isUserPermitted(['period_manage', 'planning_manage'])"
             />
         </Toolbar>
         <div v-if="fiscal_yr_count > 0" class="page-section">
@@ -33,6 +34,10 @@ import KohaTable from "../KohaTable.vue"
 export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            isUserPermitted,
+        } = acquisitionsStore
 
         const table = ref()
 
@@ -40,9 +45,11 @@ export default {
             table,
             setConfirmationDialog,
             setMessage,
+            isUserPermitted
         }
     },
-    data: function () {
+    data() {
+        const actionButtons = this.isUserPermitted(['period_manage', 'planning_manage']) ? ["edit","delete"] : []
         return {
             fiscal_yr_count: 0,
             initialized: false,
@@ -53,7 +60,7 @@ export default {
                 add_filters: true,
                 actions: {
                     0: ["show"],
-                    "-1": ["edit", "delete"],
+                    "-1": actionButtons,
                 },
             },
         }

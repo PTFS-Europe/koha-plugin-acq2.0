@@ -106,7 +106,7 @@
                                 id="fiscal_yr_visible_to"
                                 v-model="fiscal_yr.visible_to"
                                 :reduce="av => av.id"
-                                :options="getLibGroupsForUser(fiscal_yr.visible_to)"
+                                :options="getLibGroupsForUser()"
                                 label="title"
                                 multiple
                             >
@@ -212,6 +212,11 @@ export default {
         },
         onSubmit(e) {
             e.preventDefault()
+            
+            if(!this.isUserPermitted(['planning_manage', 'period_manage'])) {
+                setWarning('You do not have the required permissions to create fiscal years.')
+                return
+            }
 
             const fiscal_yr = JSON.parse(JSON.stringify(this.fiscal_yr))
             const fiscal_yr_id = fiscal_yr.fiscal_yr_id
