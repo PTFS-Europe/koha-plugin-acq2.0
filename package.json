@@ -17,7 +17,7 @@
     "pinia": "^2.0.13",
     "style-loader": "^3.3.3",
     "vue": "^3.2.31",
-    "vue-flatpickr-component": "^11.0.4",
+    "vue-flatpickr-component": "^9",
     "vue-router": "^4.2.5",
     "vue-select": "^4.0.0-beta.3",
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
