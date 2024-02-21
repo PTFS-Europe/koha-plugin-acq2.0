@@ -4,19 +4,19 @@
             :to="{ name: 'FiscalYearList' }"
             icon="pen-to-square"
             title="Manage fiscal years"
-            v-if="isUserPermitted(['period_manage', 'planning_manage'])"
+            v-if="isUserPermitted('manage_fiscal_years')"
         />
         <ToolbarButton
             :to="{ name: 'SettingsHome' }"
             icon="pen-to-square"
             title="Manage ledgers"
-            v-if="isUserPermitted(['period_manage'])"
+            v-if="isUserPermitted('manage_ledgers')"
         />
         <ToolbarButton
             :to="{ name: 'SettingsHome' }"
             icon="pen-to-square"
             title="Manage funds"
-            v-if="isUserPermitted(['budget_manage'])"
+            v-if="isUserPermitted('manage_funds')"
         />
     </Toolbar>
     <h1>Fund management</h1>
