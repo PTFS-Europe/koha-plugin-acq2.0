@@ -29,25 +29,55 @@ use Koha::Patrons;
 use C4::Auth qw( haspermission );
 
 sub get_permitted_patrons {
-    my $c = shift->openapi->valid_input or return;
+    my $c    = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
 
-    my @permitted_patrons;
+    return try {
+        my @permitted_patrons;
+        my @patrons_with_flags = Koha::Patrons->search( { flags => { '!=' => undef } } )->as_list;
 
-    my @patrons_with_flags = Koha::Patrons->search({
-        flags => { '!=' => undef }
-    })->as_list;
-
-    foreach my $patron ( @patrons_with_flags ) {
-        my $userflags = haspermission( $patron->userid );
-        if($userflags->{acquisition} || $userflags->{superlibrarian}) {
-            my $p = $patron->unblessed;
-            $p->{permissions} = $userflags;
-            push(@permitted_patrons, $p);
+        foreach my $patron (@patrons_with_flags) {
+            my $userflags = haspermission( $patron->userid );
+            if ( $userflags->{acquisition} || $userflags->{superlibrarian} ) {
+                my $p = $patron->unblessed;
+                $p->{permissions} = $userflags;
+                push( @permitted_patrons, $p );
+            }
         }
-    }
 
-    return $c->render( status => 200, openapi => \@permitted_patrons );
+        my $acquisitions_library_groups = Koha::Library::Groups->search( { ft_acquisitions => 1 } );
+        if ( scalar( @{ $acquisitions_library_groups->as_list } == 0 ) ) {
+            return $c->render( status => 200, openapi => \@permitted_patrons );
+        } else {
+            my @user_branchcodes = _get_lib_group_branchcodes( $user->unblessed );
+            my @permitted_patrons_in_group;
+            foreach my $patron (@permitted_patrons) {
+                push( @permitted_patrons_in_group, $patron ) if grep( $patron->{branchcode} eq $_, @user_branchcodes );
+            }
+            return $c->render( status => 200, openapi => \@permitted_patrons_in_group );
+        }
+    } catch {
+        $c->unhandled_exception($_);
+    }
 }
 
+sub _get_lib_group_branchcodes {
+    my ($patron) = @_;
+
+    my $branch         = Koha::Libraries->find( { branchcode => $patron->{branchcode} } );
+    my $library_groups = $branch->library_groups;
+
+    my @branchcodes;
+
+    foreach my $group ( @{ $library_groups->as_list } ) {
+        my @libs_or_sub_groups = Koha::Library::Groups->search( { parent_id => $group->parent_id } )->as_list;
+        foreach my $lib (@libs_or_sub_groups) {
+            if ( $lib->branchcode ) {
+                push( @branchcodes, $lib->branchcode ) unless grep( $_ eq $lib->branchcode, @branchcodes );
+            }
+        }
+    }
+    return @branchcodes;
+}
 
 1;
