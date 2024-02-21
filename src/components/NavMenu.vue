@@ -17,7 +17,9 @@
 
 <script>
 import { inject } from "vue"
+import { storeToRefs } from "pinia"
 import NavigationItem from "./NavigationItem.vue"
+
 export default {
     name: "NavMenu",
     data() {
@@ -25,16 +27,34 @@ export default {
             navigationTree: this.leftNavigation,
         }
     },
-    setup: () => {
+    setup() {
         const navigationStore = inject("navigationStore")
         const { leftNavigation } = navigationStore
+
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            settings,
+            modulesEnabled
+        } = storeToRefs(acquisitionsStore)
+
         return {
+            settings,
+            modulesEnabled,
             leftNavigation,
         }
     },
     async beforeMount() {
+        let modulesToShow = []
+        if(this.modulesEnabled) {
+            const selectedModules = this.modulesEnabled.split("|")
+            modulesToShow = [...selectedModules]
+        }
+        modulesToShow.push('settings')
+        this.navigationTree = this.navigationTree.filter(route => modulesToShow.includes(route.moduleName))
+
         if (this.condition)
             this.navigationTree = await this.condition(this.navigationTree)
+
     },
     props: {
         title: String,

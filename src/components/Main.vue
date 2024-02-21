@@ -15,6 +15,7 @@
                 <div class="col-sm-2 col-sm-pull-10">
                     <NavMenu
                         :title="'Acquisitions'"
+                        :key="modulesEnabled"
                     ></NavMenu>
                 </div>
             </div>
@@ -51,7 +52,8 @@ export default {
             user,
             settings,
             library_groups,
-            permittedUsers 
+            permittedUsers,
+            modulesEnabled
         } = storeToRefs(acquisitionsStore)
 
         return {
@@ -61,7 +63,8 @@ export default {
             settings,
             user,
             library_groups,
-            permittedUsers
+            permittedUsers,
+            modulesEnabled
         }
     },
     data() {

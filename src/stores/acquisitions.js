@@ -90,5 +90,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return failedChecks ? false :  true
             }
         }
+    },
+    getters: {
+        modulesEnabled() {
+            const { value: modulesEnabled } = this.settings.find(setting => setting.variable === 'modulesEnabled')
+            return modulesEnabled
+        }
     }
 });
