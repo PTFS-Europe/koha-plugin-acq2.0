@@ -45,6 +45,20 @@ my $userflags = haspermission($patron->userid);
 my $acquisitions_library_groups = Koha::Library::Groups->search({ ft_acquisitions => 1 });
 my @user_library_groups;
 
+if(scalar(@{$acquisitions_library_groups->as_list} == 0)) {
+    my @branches = Koha::Libraries->search()->as_list;
+    my $lib_group = {
+        title => 'All branches',
+        id    => 1,
+    };
+    my @libraries;
+    foreach my $branch ( @branches ) {
+        push( @libraries, $branch->unblessed );
+    }
+    $lib_group->{libraries} = \@libraries;
+    push( @user_library_groups, $lib_group);
+}
+
 foreach my $alg ( @{$acquisitions_library_groups->as_list } ) {
     my $lib_group = _map_library_group({ group => $alg });
     push @user_library_groups, $lib_group;
@@ -65,6 +79,7 @@ sub _map_library_group {
         title => $group->title,
         id    => $group->id,
     };
+    $lib_group->{is_sub_group} = 1 if $args->{sub};
     my @libs_or_sub_groups = Koha::Library::Groups->search(
         {
             parent_id       => $group->id
@@ -77,7 +92,7 @@ sub _map_library_group {
         if ($lib->branchcode) {
             push( @libraries, $lib->unblessed );
         } else {
-            push( @sub_groups, _map_library_group({ group => $lib }) );
+            push( @sub_groups, _map_library_group({ group => $lib, sub => 1 }) );
         }
     }
     $lib_group->{libraries} = \@libraries;
