@@ -11,15 +11,33 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         permittedUsers: null
     }),
     actions: {
+        mapSubGroups(group, groupObject, branch) {
+            let matched = false
+            if (group.libraries.find(lib => lib.branchcode === branch)) {
+                groupObject[group.id] = group
+                matched = true
+            }
+            if(group.sub_groups && group.sub_groups.length) {
+                group.sub_groups.forEach(grp => {
+                    const result = this.mapSubGroups(grp, groupObject, branch)
+                    matched = matched ? matched : result
+                })
+            }
+            return matched
+        },
         getLibGroupsForUser() {
             const branch = this.user.logged_in_user.branchcode
-            const filteredGroups = []
+            const filteredGroups = {}
             this.library_groups.forEach(group => {
-                if(group.libraries.find(lib => lib.branchcode === branch)) {
-                    filteredGroups.push(group)
+                const matched = this.mapSubGroups(group, filteredGroups, branch)
+                // If a sub group has been matched but the parent level group did not, then we should add the parent level group as well
+                if (matched && !Object.keys(filteredGroups).find(id => id === group.id)) {
+                    filteredGroups[group.id] = group
                 }
             })
-            return filteredGroups
+            return Object.keys(filteredGroups).map(key => {
+                return filteredGroups[key]
+            }).sort((a,b) => a.id - b.id)
         },
         getUsersFilteredByPermission(permissions, returnAll) {
             const filteredUsers = []
