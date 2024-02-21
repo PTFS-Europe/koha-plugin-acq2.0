@@ -9,6 +9,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         library_groups: null,
         settings: null,
         permittedUsers: null,
+        visibleGroups: null,
+        owners: null,
         permissions_matrix: {
             manage_fiscal_years: ['period_manage', 'planning_manage'],
             create_fiscal_year: ['planning_manage', 'period_manage'],
@@ -38,7 +40,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             }
             return matched
         },
-        getLibGroupsForUser(branchcode) {
+        filterLibGroupsByUsersBranchcode(branchcode) {
             const branch = this.determineBranch(branchcode)
             const filteredGroups = {}
             this.library_groups.forEach(group => {
@@ -52,7 +54,18 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return filteredGroups[key]
             }).sort((a,b) => a.id - b.id)
         },
-        getUsersFilteredByPermission(operation, returnAll) {
+        findBranchcodesInGroup(groups) {
+            const codes = []
+            groups.forEach(group => {
+                group.libraries.forEach(lib => {
+                    if(!codes.find(code => code === lib.branchcode)) {
+                        codes.push(lib.branchcode)
+                    }
+                })
+            })
+            return codes
+        },
+        filterUsersByPermissions(operation, returnAll, branchcodes) {
             const filteredUsers = []
             this.permittedUsers.forEach(user => {
                 user.displayName = user.firstname + ' ' + user.surname
@@ -71,7 +84,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                     }
                 }
             })
-            return filteredUsers
+            if(branchcodes) {
+                return filteredUsers.filter(user => branchcodes.includes(user.branchcode))
+            } else {
+                return filteredUsers
+            }
         },
         isUserPermitted(operation) {
             if(this.permissions_matrix[operation].length === 0) return true
@@ -89,12 +106,43 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 const failedChecks = checks.filter(check => !check).length
                 return failedChecks ? false :  true
             }
+        },
+        filterGroupsBasedOnOwner(e, data) {
+            const libGroups = this.filterLibGroupsByUsersBranchcode()
+            const permittedUsers = this.filterUsersByPermissions(null, true)
+            if (!e) {
+                this.visibleGroups = libGroups
+                this.owners = permittedUsers
+                data.visible_to = null
+            } else {
+                const { branchcode } = permittedUsers.find(user => user.borrowernumber === e)
+                this.visibleGroups = this.filterLibGroupsByUsersBranchcode(branchcode)
+            }
+        },
+        filterOwnersBasedOnGroup(e, data) {
+            const libGroups = this.filterLibGroupsByUsersBranchcode()
+            const permittedUsers = this.filterUsersByPermissions(null, true)
+            if (!e.length) {
+                this.visibleGroups = libGroups
+                this.owners = permittedUsers
+                data.owner = null
+            } else {
+                const groups = libGroups.filter(group => e.includes(group.id))
+                const branchcodes = this.findBranchcodesInGroup(groups)
+                this.owners = this.filterUsersByPermissions(null, true, branchcodes)
+            }
         }
     },
     getters: {
         modulesEnabled() {
             const { value: modulesEnabled } = this.settings.find(setting => setting.variable === 'modulesEnabled')
             return modulesEnabled
+        },
+        getVisibleGroups() {
+            return this.visibleGroups
+        },
+        getOwners() {
+            return this.owners
         }
     }
 });
