@@ -84,7 +84,7 @@
                                 id="fiscal_yr_owner"
                                 v-model="fiscal_yr.owner"
                                 :reduce="av => av.borrowernumber"
-                                :options="getUsersFilteredByPermission([], true)"
+                                :options="getUsersFilteredByPermission(null, true)"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
@@ -213,7 +213,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted(['planning_manage', 'period_manage'])) {
+            if(!this.isUserPermitted('create_fiscal_year')) {
                 setWarning('You do not have the required permissions to create fiscal years.')
                 return
             }

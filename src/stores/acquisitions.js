@@ -8,7 +8,15 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         library_groups: null,
         settings: null,
-        permittedUsers: null
+        permittedUsers: null,
+        permissions_matrix: {
+            manage_fiscal_years: ['period_manage', 'planning_manage'],
+            create_fiscal_year: ['planning_manage', 'period_manage'],
+            edit_fiscal_year: ['period_manage', 'planning_manage'],
+            delete_fiscal_year: ['period_manage', 'planning_manage'],
+            manage_ledgers: ['period_manage'],
+            manage_funds: ['budget_manage']
+        }
     }),
     actions: {
         mapSubGroups(group, groupObject, branch) {
@@ -39,7 +47,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return filteredGroups[key]
             }).sort((a,b) => a.id - b.id)
         },
-        getUsersFilteredByPermission(permissions, returnAll) {
+        getUsersFilteredByPermission(operation, returnAll) {
             const filteredUsers = []
             this.permittedUsers.forEach(user => {
                 user.displayName = user.firstname + ' ' + user.surname
@@ -50,7 +58,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                     if(acquisition === 1 || superlibrarian) {
                         filteredUsers.push(user)
                     } else {
-                        permissions.forEach(permission => {
+                        this.permissions_matrix[operation].forEach(permission => {
                             if(acquisition[permission]) {
                                 filteredUsers.push(user)
                             }
@@ -60,13 +68,13 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             })
             return filteredUsers
         },
-        isUserPermitted(permissions) {
-            if(permissions.length === 0) return true
+        isUserPermitted(operation) {
+            if(this.permissions_matrix[operation].length === 0) return true
             const { acquisition, superlibrarian } = this.user.userflags
             if (acquisition === 1 || superlibrarian) {
                 return true
             } else {
-                const checks = permissions.map(permission => {
+                const checks = this.permissions_matrix[operation].map(permission => {
                     if (acquisition[permission]) {
                         return true
                     } else {

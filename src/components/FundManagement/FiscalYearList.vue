@@ -6,7 +6,7 @@
                 :to="{ name: 'FiscalYearFormAdd' }"
                 icon="plus"
                 title="New fiscal year"
-                v-if="isUserPermitted(['period_manage', 'planning_manage'])"
+                v-if="isUserPermitted('create_fiscal_year')"
             />
         </Toolbar>
         <div v-if="fiscal_yr_count > 0" class="page-section">
@@ -49,7 +49,9 @@ export default {
         }
     },
     data() {
-        const actionButtons = this.isUserPermitted(['period_manage', 'planning_manage']) ? ["edit","delete"] : []
+        const actionButtons = []
+        if(this.isUserPermitted('edit_fiscal_year')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('delete_fiscal_year')) { actionButtons.push("delete") }
         return {
             fiscal_yr_count: 0,
             initialized: false,
