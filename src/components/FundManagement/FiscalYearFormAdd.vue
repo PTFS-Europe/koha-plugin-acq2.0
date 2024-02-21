@@ -84,7 +84,8 @@
                                 id="fiscal_yr_owner"
                                 v-model="fiscal_yr.owner"
                                 :reduce="av => av.borrowernumber"
-                                :options="getUsersFilteredByPermission(null, true)"
+                                :options="getOwners"
+                                @update:modelValue="filterGroupsBasedOnOwner($event, fiscal_yr)"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
@@ -106,8 +107,9 @@
                                 id="fiscal_yr_visible_to"
                                 v-model="fiscal_yr.visible_to"
                                 :reduce="av => av.id"
-                                :options="getLibGroupsForUser()"
+                                :options="getVisibleGroups"
                                 label="title"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, fiscal_yr)"
                                 multiple
                             >
                                 <template #search="{ attributes, events }">
@@ -149,23 +151,31 @@ export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
-            user,
             settings,
             library_groups,
-            permittedUsers
+            getVisibleGroups,
+            getOwners
         } = storeToRefs(acquisitionsStore)
 
         const { 
-            getUsersFilteredByPermission,
+            filterUsersByPermissions,
             isUserPermitted,
-            getLibGroupsForUser
+            filterLibGroupsByUsersBranchcode,
+            findBranchcodesInGroup,
+            filterGroupsBasedOnOwner,
+            filterOwnersBasedOnGroup
         } = acquisitionsStore
 
         return {
-            getUsersFilteredByPermission,
+            filterUsersByPermissions,
             isUserPermitted,
-            getLibGroupsForUser,
-            library_groups
+            filterLibGroupsByUsersBranchcode,
+            findBranchcodesInGroup,
+            library_groups,
+            filterGroupsBasedOnOwner,
+            filterOwnersBasedOnGroup,
+            getVisibleGroups,
+            getOwners
         }
     },
     data() {
@@ -186,6 +196,8 @@ export default {
                 start_date: undefined,
                 end_date: undefined,
             },
+            ownerOptions: this.filterUsersByPermissions(null, true),
+            visibilityOptions: this.filterLibGroupsByUsersBranchcode()
         }
     },
     beforeRouteEnter(to, from, next) {

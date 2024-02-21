@@ -48,12 +48,18 @@ export default {
         const { loading, loaded, setError } = mainStore
 
         const acquisitionsStore = inject("acquisitionsStore")
+        const {
+            filterUsersByPermissions,
+            filterLibGroupsByUsersBranchcode
+        } = acquisitionsStore
         const { 
             user,
             settings,
             library_groups,
             permittedUsers,
-            modulesEnabled
+            modulesEnabled,
+            visibleGroups,
+            owners
         } = storeToRefs(acquisitionsStore)
 
         return {
@@ -64,7 +70,11 @@ export default {
             user,
             library_groups,
             permittedUsers,
-            modulesEnabled
+            modulesEnabled,
+            visibleGroups,
+            owners,
+            filterUsersByPermissions,
+            filterLibGroupsByUsersBranchcode
         }
     },
     data() {
@@ -81,6 +91,8 @@ export default {
             await patron_client.patrons.getPermittedPatrons().then(
                 patrons => {
                     this.permittedUsers = patrons
+                    this.owners = this.filterUsersByPermissions(null, true)
+                    this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
                 },
                 error => {}
             )
