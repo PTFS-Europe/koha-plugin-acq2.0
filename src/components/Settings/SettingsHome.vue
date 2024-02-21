@@ -13,10 +13,18 @@
 import settingsJSON from '../../../Koha/Plugin/Acquire/installer/sysprefs/sysprefs.json'
 import SettingsCard from './SettingsCard.vue'
 import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue"
+import { storeToRefs } from "pinia"
 
 export default {
     setup() {
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            settings,
+        } = storeToRefs(acquisitionsStore)
+
         return {
+            settings,
             settingsJSON
         }
     },
@@ -36,6 +44,7 @@ export default {
             const client = APIClient.acquisition
             const settings = await client.settings.getAll().then(
                 settings => {
+                    this.settings = settings
                     return settings
                 },
                 error => {}
