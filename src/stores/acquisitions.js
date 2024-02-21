@@ -19,6 +19,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         }
     }),
     actions: {
+        determineBranch(code) {
+            if(code) { return code }
+            const { logged_in_user: { logged_in_branchcode, branchcode } } = this.user
+            return logged_in_branchcode ? logged_in_branchcode : branchcode 
+        },
         mapSubGroups(group, groupObject, branch) {
             let matched = false
             if (group.libraries.find(lib => lib.branchcode === branch)) {
@@ -33,8 +38,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             }
             return matched
         },
-        getLibGroupsForUser() {
-            const branch = this.user.logged_in_user.branchcode
+        getLibGroupsForUser(branchcode) {
+            const branch = this.determineBranch(branchcode)
             const filteredGroups = {}
             this.library_groups.forEach(group => {
                 const matched = this.mapSubGroups(group, filteredGroups, branch)
