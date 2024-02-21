@@ -26,6 +26,7 @@ use Try::Tiny;
 use Koha::Acquire::Funds::FiscalYear;
 use Koha::Acquire::Funds::FiscalYears;
 
+use C4::Context;
 
 =head1 API
 
@@ -37,17 +38,18 @@ use Koha::Acquire::Funds::FiscalYears;
 
 sub list {
     my $c = shift->openapi->valid_input or return;
-    my $user = $c->stash('koha.user');
+
+    my $logged_in_branch = C4::Context::mybranch();
 
     return try {
         my $fiscal_years_set = Koha::Acquire::Funds::FiscalYears->new;
         my $fiscal_years     = $c->objects->search($fiscal_years_set);
 
-        my $branch = Koha::Libraries->find({ branchcode => $user->branchcode });
+        my $branch         = Koha::Libraries->find( { branchcode => $logged_in_branch } );
         my $library_groups = $branch->library_groups;
         my @group_ids;
-        if(scalar(@{ $library_groups->as_list }) == 0) {
-            push(@group_ids, 1);
+        if ( scalar( @{ $library_groups->as_list } ) == 0 ) {
+            push( @group_ids, 1 );
         } else {
             @group_ids = map( $_->parent_id, @{ $library_groups->as_list } );
             foreach my $group_id (@group_ids) {
@@ -58,12 +60,12 @@ sub list {
 
 
         my @filtered_fiscal_years;
-        foreach my $fiscal_year ( @$fiscal_years ) {
-            my @visible_groups = split(/\|/, $fiscal_year->{visible_to});
-            my $already_added = 0;
-            foreach my $visible_group ( @visible_groups ) {
-                if( grep( "$_" eq $visible_group, @group_ids ) && !$already_added ) {
-                    push(@filtered_fiscal_years, $fiscal_year);
+        foreach my $fiscal_year (@$fiscal_years) {
+            my @visible_groups = split( /\|/, $fiscal_year->{visible_to} );
+            my $already_added  = 0;
+            foreach my $visible_group (@visible_groups) {
+                if ( grep( "$_" eq $visible_group, @group_ids ) && !$already_added ) {
+                    push( @filtered_fiscal_years, $fiscal_year );
                     $already_added = 1;
                 }
             }
@@ -83,8 +85,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $fiscal_year =
-            Koha::Acquire::Funds::FiscalYears->find( $c->param('id') );
+        my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( $c->param('id') );
 
         unless ($fiscal_year) {
             return $c->render(
@@ -117,8 +118,7 @@ sub add {
 
                 my $fiscal_year = Koha::Acquire::Funds::FiscalYear->new_from_api($body)->store;
 
-                $c->res->headers->location(
-                    $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
                 return $c->render(
                     status  => 201,
                     openapi => $fiscal_year->to_api
@@ -156,8 +156,7 @@ sub update {
 
                 $fiscal_year->set_from_api($body)->store;
 
-                $c->res->headers->location(
-                    $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
                 return $c->render(
                     status  => 200,
                     openapi => $fiscal_year->to_api

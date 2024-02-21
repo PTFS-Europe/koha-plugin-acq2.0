@@ -27,10 +27,12 @@ use Try::Tiny;
 use Koha::Patrons;
 
 use C4::Auth qw( haspermission );
+use C4::Context;
 
 sub get_permitted_patrons {
-    my $c    = shift->openapi->valid_input or return;
-    my $user = $c->stash('koha.user');
+    my $c = shift->openapi->valid_input or return;
+
+    my $logged_in_branch = C4::Context::mybranch();
 
     return try {
         my @permitted_patrons;
@@ -49,7 +51,7 @@ sub get_permitted_patrons {
         if ( scalar( @{ $acquisitions_library_groups->as_list } == 0 ) ) {
             return $c->render( status => 200, openapi => \@permitted_patrons );
         } else {
-            my @user_branchcodes = _get_lib_group_branchcodes( $user->unblessed );
+            my @user_branchcodes = _get_lib_group_branchcodes($logged_in_branch);
             my @permitted_patrons_in_group;
             foreach my $patron (@permitted_patrons) {
                 push( @permitted_patrons_in_group, $patron ) if grep( $patron->{branchcode} eq $_, @user_branchcodes );
@@ -62,9 +64,9 @@ sub get_permitted_patrons {
 }
 
 sub _get_lib_group_branchcodes {
-    my ($patron) = @_;
+    my ($logged_in_branch) = @_;
 
-    my $branch         = Koha::Libraries->find( { branchcode => $patron->{branchcode} } );
+    my $branch         = Koha::Libraries->find( { branchcode => $logged_in_branch } );
     my $library_groups = $branch->library_groups;
 
     my @branchcodes;

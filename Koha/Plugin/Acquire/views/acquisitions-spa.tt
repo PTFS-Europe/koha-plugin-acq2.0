@@ -20,6 +20,7 @@
   <div id="__app"></div>
       <script>
         const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+        const logged_in_branch = [% To.json(logged_in_branch) | $raw %];
         const userflags = [% To.json(userflags) | $raw %];
         const library_groups = [% To.json(library_groups) | $raw %];
 

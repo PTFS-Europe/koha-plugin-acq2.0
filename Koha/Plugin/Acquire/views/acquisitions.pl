@@ -66,6 +66,7 @@ foreach my $alg ( @{$acquisitions_library_groups->as_list } ) {
 
 $template->param(
     userflags => $userflags,
+    logged_in_branch => { branchcode => C4::Context::mybranch },
     library_groups => \@user_library_groups
 );
 
