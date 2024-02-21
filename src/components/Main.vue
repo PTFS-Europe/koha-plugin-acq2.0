@@ -89,6 +89,7 @@ export default {
             .then(settings => {
                 this.settings = settings
                 this.user.logged_in_user = logged_in_user
+                this.user.logged_in_user.logged_in_branch = logged_in_branch.branchcode
                 this.user.userflags = userflags
                 this.library_groups = library_groups
                 const { acquisition, superlibrarian } = this.user.userflags
