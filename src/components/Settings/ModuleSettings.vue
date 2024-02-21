@@ -120,6 +120,10 @@ export default {
             client.settings.create(verifiedConfig).then(
                 success => {
                     setMessage("Settings updated")
+                    if(verifiedConfig.hasOwnProperty('modulesEnabled')) {
+                        const modulesEnabled = this.settings.find(i => i.variable === 'modulesEnabled')
+                        modulesEnabled.value = verifiedConfig.modulesEnabled
+                    }
                     this.$router.push({ name: "SettingsHome" })
                 },
                 error => {}
