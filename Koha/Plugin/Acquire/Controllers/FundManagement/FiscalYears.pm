@@ -37,12 +37,38 @@ use Koha::Acquire::Funds::FiscalYears;
 
 sub list {
     my $c = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
 
     return try {
         my $fiscal_years_set = Koha::Acquire::Funds::FiscalYears->new;
         my $fiscal_years     = $c->objects->search($fiscal_years_set);
 
-        return $c->render( status => 200, openapi => $fiscal_years );
+        my $branch = Koha::Libraries->find({ branchcode => $user->branchcode });
+        my $library_groups = $branch->library_groups;
+        my @group_ids;
+        if(scalar(@{ $library_groups->as_list }) == 0) {
+            push(@group_ids, 1);
+        } else {
+            @group_ids = map( $_->parent_id, @{ $library_groups->as_list } );
+            foreach my $group_id (@group_ids) {
+                my $group = Koha::Library::Groups->find({ id => $group_id });
+                push( @group_ids, $group->parent_id ) if $group && $group->parent_id && !grep( $_ eq $group->parent_id, @group_ids );
+            }
+        }
+
+
+        my @filtered_fiscal_years;
+        foreach my $fiscal_year ( @$fiscal_years ) {
+            my @visible_groups = split(/\|/, $fiscal_year->{visible_to});
+            my $already_added = 0;
+            foreach my $visible_group ( @visible_groups ) {
+                if( grep( "$_" eq $visible_group, @group_ids ) && !$already_added ) {
+                    push(@filtered_fiscal_years, $fiscal_year);
+                    $already_added = 1;
+                }
+            }
+        }
+        return $c->render( status => 200, openapi => \@filtered_fiscal_years );
     } catch {
         $c->unhandled_exception($_);
     };
