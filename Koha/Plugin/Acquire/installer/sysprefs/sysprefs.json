@@ -7,7 +7,8 @@
                 "value": "",
                 "options": "",
                 "explanation": "Select which modules you wish to use in the acquisitions portal",
-                "type": "multiple"
+                "type": "multiple",
+                "needsSplit": true
             }
         }
     },
