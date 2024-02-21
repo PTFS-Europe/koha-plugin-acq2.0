@@ -3,7 +3,7 @@ import { markRaw } from "vue";
 import Homepage from '../components/Homepage.vue'
 import SettingsHome from '../components/Settings/SettingsHome.vue'
 import ModuleSettings from '../components/Settings/ModuleSettings.vue'
-import FundsHome from '../components/FundManagement/FundsHome.vue'
+import FundManagementHome from '../components/FundManagement/FundManagementHome.vue'
 import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
 import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
 import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vue'
@@ -23,14 +23,15 @@ export const routes = [
             },
             {
                 path: "/acquisitions/fund_management",
+                moduleName: "funds",
                 title: "Funds and ledgers",
                 icon: "fa fa-money-check-dollar",
                 children: [
                     {
                         path: "",
-                        component: markRaw(FundsHome),
+                        component: markRaw(FundManagementHome),
                         permissions: ['budget_add_del'],
-                        name: "FundsHome",
+                        name: "FundManagementHome",
                         is_navigation_item: false,
                     },
                     {
@@ -69,6 +70,7 @@ export const routes = [
             {
                 path: "/acquisitions/settings",
                 title: "Settings",
+                moduleName: "settings",
                 icon: "fa fa-cog",
                 is_end_node: true,
                 children: [
