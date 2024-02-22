@@ -69,6 +69,13 @@ sub get {
             );
         }
 
+        $task = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
+            { data => $task, field => 'owned_by', key => 'owner' } );
+        $task = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
+            { data => $task, field => 'creator', key => 'created_by' } );
+        $task =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $task } );
+
         return $c->render(
             status  => 200,
             openapi => $task
