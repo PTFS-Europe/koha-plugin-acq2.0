@@ -3,6 +3,9 @@ import { markRaw } from "vue";
 import Homepage from '../components/Homepage.vue'
 import SettingsHome from '../components/Settings/SettingsHome.vue'
 import ModuleSettings from '../components/Settings/ModuleSettings.vue'
+import TaskList from '../components/TaskManagement/TaskList.vue'
+import TaskShow from '../components/TaskManagement/TaskShow.vue'
+import TaskFormAdd from '../components/TaskManagement/TaskFormAdd.vue'
 import FundManagementHome from '../components/FundManagement/FundManagementHome.vue'
 import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
 import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
@@ -76,8 +79,26 @@ export const routes = [
                 children: [
                     {
                         path: "",
-                        component: markRaw(SettingsHome),
+                        component: markRaw(TaskList),
                         name: "TasksHome",
+                        is_navigation_item: false,
+                    },
+                    {
+                        path: ":task_id",
+                        component: markRaw(TaskShow),
+                        name: "TaskShow",
+                        is_navigation_item: false,
+                    },
+                    {
+                        path: "add",
+                        component: markRaw(SettingsHome),
+                        name: "TaskFormAdd",
+                        is_navigation_item: false,
+                    },
+                    {
+                        path: "edit/:task_id",
+                        component: markRaw(FundManagementHome),
+                        name: "TaskFormEdit",
                         is_navigation_item: false,
                     }
                 ]
