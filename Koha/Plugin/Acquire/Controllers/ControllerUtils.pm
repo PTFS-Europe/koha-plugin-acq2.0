@@ -20,7 +20,9 @@ package Koha::Plugin::Acquire::Controllers::ControllerUtils;
 use Modern::Perl;
 
 use Mojo::JSON qw(decode_json);
-use JSON       qw ( encode_json );
+use Scalar::Util qw( blessed );
+use JSON qw ( encode_json );
+
 
 use C4::Context;
 
@@ -62,5 +64,40 @@ sub filter_data_by_group {
 
     return \@filtered_dataset;
 }
+
+sub _get_unblessed {
+    my ($data) = @_;
+
+    return blessed $data ? $data->unblessed : $data;
+}
+
+sub add_owner_data {
+    my ( $self, $args ) = @_;
+
+    my $data = _get_unblessed( $args->{data} );
+
+    my $patron = Koha::Patrons->find( { borrowernumber => $data->{owner} } );
+    $data->{patron_data} = $patron->unblessed;
+
+    return $data;
+}
+
+sub add_lib_group_data {
+    my ( $self, $args ) = @_;
+
+    my $data = _get_unblessed( $args->{data} );
+
+    my @ids = split( /\|/, $data->{visible_to} );
+    my @lib_groups;
+
+    foreach my $id (@ids) {
+        my $lib_group = Koha::Library::Groups->find( { id => $id } );
+        push( @lib_groups, $lib_group->unblessed );
+    }
+
+    $data->{lib_groups} = \@lib_groups;
+    return $data;
+}
+
 
 1;

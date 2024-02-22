@@ -25,18 +25,6 @@ use JSON         qw ( encode_json );
 
 use Koha::Acquire::Settings::Setting;
 
-=head3 test
-
-=cut
-
-sub test_class {
-    my ( $self, $args ) = @_;
-
-    my $sysprefs = $self->find({ variable => 'modulesEnabled' });
-
-}
-
-
 =head2 Internal methods
 
 =head3 _type

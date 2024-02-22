@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import settingsJSON from '../../../Koha/Plugin/Acquire/installer/sysprefs/sysprefs.json'
+import settingsJSON from '../../../Koha/Plugin/Acquire/installer/config/sysprefs.json'
 import SettingsCard from './SettingsCard.vue'
 import { APIClient } from "../../fetch/api-client.js"
 import { inject } from "vue"

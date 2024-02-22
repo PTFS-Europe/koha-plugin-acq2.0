@@ -46,13 +46,13 @@ export const routes = [
                                 path: "",
                                 component: markRaw(FiscalYearList),
                                 name: "FiscalYearList",
-                                title: "Add"
+                                title: "List"
                             },
                             {
                                 path: ":fiscal_yr_id",
                                 component: markRaw(FiscalYearShow),
                                 name: "FiscalYearShow",
-                                title: "Add"
+                                title: "Show",
                             },
                             {
                                 path: "add",
