@@ -282,7 +282,7 @@
             "x-mojo-to": "Acquire::Controllers::FundManagement::FiscalYears#get",
             "operationId": "getFiscalYear",
             "tags": [
-                "events"
+                "acquire"
             ],
             "description": "Get a single fiscal year",
             "parameters": [
@@ -299,7 +299,7 @@
             ],
             "responses": {
                 "200": {
-                    "description": "Event",
+                    "description": "Fiscal year",
                     "schema": {
                         "type": "object"
                     }
@@ -388,9 +388,9 @@
             "x-mojo-to": "Acquire::Controllers::FundManagement::FiscalYears#update",
             "operationId": "updateEvent",
             "tags": [
-                "events"
+                "acquire"
             ],
-            "description": "Update an fiscal year",
+            "description": "Update a fiscal year",
             "parameters": [
                 {
                     "name": "id",
@@ -402,7 +402,7 @@
                 {
                     "name": "body",
                     "in": "body",
-                    "description": "Event object that needs to be added",
+                    "description": "Fiscal year object that needs to be added",
                     "required": true,
                     "schema": {
                         "type": "object"
@@ -414,7 +414,7 @@
             ],
             "responses": {
                 "200": {
-                    "description": "Event",
+                    "description": "Fiscal year",
                     "schema": {
                         "type": "object"
                     }
@@ -503,9 +503,9 @@
             "x-mojo-to": "Acquire::Controllers::FundManagement::FiscalYears#delete",
             "operationId": "deleteEvent",
             "tags": [
-                "events"
+                "acquire"
             ],
-            "description": "Delete an fiscal year",
+            "description": "Delete a fiscal year",
             "parameters": [
                 {
                     "name": "id",
@@ -521,6 +521,479 @@
             "responses": {
                 "204": {
                     "description": "Event",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
+    "/tasks": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::TaskManagement::Tasks#list",
+            "operationId": "AcquireGetTasks",
+            "description": "Retrieves the tasks for the Acquisitions plugin module",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "parameters": [
+                {
+                    "name": "owner",
+                    "in": "query",
+                    "description": "Owner of the task",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "_match",
+                    "description": "Matching criteria",
+                    "enum": [
+                        "contains",
+                        "exact",
+                        "starts_with",
+                        "ends_with"
+                    ],
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "_order_by",
+                    "collectionFormat": "csv",
+                    "description": "Sorting criteria",
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "_page",
+                    "description": "Page number, for paginated object listing",
+                    "in": "query",
+                    "required": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "_per_page",
+                    "description": "Page size, for paginated object listing",
+                    "in": "query",
+                    "required": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "q",
+                    "description": "Query filter sent as a request parameter",
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task data",
+                    "schema": {
+                        "type": "array"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "post": {
+            "x-mojo-to": "Acquire::Controllers::TaskManagement::Tasks#add",
+            "operationId": "AcquireStoreTask",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "201": {
+                    "description": "Task",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
+    "/tasks/{id}": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::TaskManagement::Tasks#get",
+            "operationId": "getTask",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Get a single task",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of task to fetch",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "put": {
+            "x-mojo-to": "Acquire::Controllers::TaskManagement::Tasks#update",
+            "operationId": "updateTask",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Update a task",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of task to update",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "description": "Task object that needs to be added",
+                    "required": true,
+                    "schema": {
+                        "type": "object"
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "delete": {
+            "x-mojo-to": "Acquire::Controllers::TaskManagement::Tasks#delete",
+            "operationId": "deleteTask",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Delete a task",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of task to delete",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "204": {
+                    "description": "Task",
                     "schema": {
                         "type": "string"
                     }

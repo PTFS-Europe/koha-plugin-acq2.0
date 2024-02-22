@@ -23,6 +23,45 @@ export class AcquisitionAPIClient extends HttpClient {
         };
     }
 
+    get tasks() {
+        return {
+            get: id =>
+                this.get({
+                    endpoint: "tasks/" + id,
+                }),
+            getAll: (query, params) =>
+                this.getAll({
+                    endpoint: "tasks",
+                    query,
+                    params,
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "tasks/" + id,
+                }),
+            create: fiscal_year =>
+                this.post({
+                    endpoint: "tasks",
+                    body: fiscal_year,
+                }),
+            update: (fiscal_year, id) =>
+                this.put({
+                    endpoint: "tasks/" + id,
+                    body: fiscal_year,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "tasks?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
     get fiscal_years() {
         return {
             get: id =>
