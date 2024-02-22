@@ -87,6 +87,13 @@ export const routes = [
                         title: "General",
                         is_navigation_item: false,
                     },
+                    {
+                        path: "funds",
+                        component: markRaw(ModuleSettings),
+                        name: "ModuleSettingsFunds",
+                        title: "General",
+                        is_navigation_item: false,
+                    },
                 ]
             },
         ]
