@@ -27,6 +27,10 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireFiscalYear;
     Koha::Schema->register_class( KohaPluginAcquireFiscalYear => 'Koha::Schema::Result::KohaPluginAcquireFiscalYear' );
 
+    require Koha::Acquire::TaskManagement::Tasks;
+    require Koha::Schema::Result::KohaPluginAcquireWorkflowTask;
+    Koha::Schema->register_class( KohaPluginAcquireWorkflowTask => 'Koha::Schema::Result::KohaPluginAcquireWorkflowTask' );
+
     Koha::Database->schema( { new => 1 } );
 }
 our $VERSION = "0.0";
