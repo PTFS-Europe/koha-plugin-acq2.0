@@ -1,5 +1,5 @@
 <template>
-    <div v-if="config">
+    <div v-if="initialized">
         <h1>{{ moduleTitle }} Settings</h1>
         <form @submit="onSubmit($event)">
             <fieldset class="rows">
@@ -55,7 +55,8 @@ export default {
                 modulesEnabled: null
             },
             moduleTitle: null,
-            settingsRenderingData: []
+            settingsRenderingData: [],
+            initialized: false
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -98,6 +99,7 @@ export default {
                 return setting
             })
             this.settingsRenderingData = this.mapSettingsToUI(settings, settingsRenderingData)
+            this.initialized = true
         },
         mapSettingsToUI(settings, settingsRenderingData) {
             const settingsToRenderWithValues = settingsRenderingData.map(setting => {
