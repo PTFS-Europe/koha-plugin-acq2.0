@@ -1,7 +1,7 @@
 <template>
     <div v-if="initialized">
         <h1>{{ moduleTitle }} Settings</h1>
-        <form @submit="onSubmit($event)">
+        <form @submit="onSubmit($event)" v-if="settingsRenderingData.length">
             <fieldset class="rows">
                 <ol>
                     <SettingFormElement
@@ -29,7 +29,7 @@
 import settingsJSON from '../../../Koha/Plugin/Acquire/installer/sysprefs/sysprefs.json'
 import SettingFormElement from './SettingFormElement.vue'
 import ButtonSubmit from "../ButtonSubmit.vue"
-import { setMessage } from "../../messages"
+import { setMessage, removeMessages } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
@@ -80,17 +80,17 @@ export default {
             const settings = await this.getSettings()
 
             const urlParams = path.split("/").filter(param => param !== '/')
-            const module = urlParams.pop()
-            this.moduleTitle = module.charAt(0).toUpperCase() + module.slice(1)
+            const moduleName = urlParams.pop()
+            this.moduleTitle = moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
 
-            const { prefs: settingsBaseData } = settingsJSON[module]
-            if(module === 'general') {
-                const moduleOptions = Object.keys(settingsJSON).map(module => {
+            const { prefs: settingsBaseData } = settingsJSON[moduleName]
+            if(moduleName === 'general') {
+                const moduleOptions = Object.keys(settingsJSON).map(moduleName => {
                     return {
-                        option: module,
-                        description: settingsJSON[module].title
+                        option: moduleName,
+                        description: settingsJSON[moduleName].title
                     }
-                }).filter(module => module.option !== 'general')
+                }).filter(moduleName => moduleName.option !== 'general')
                 settingsBaseData.modulesEnabled.options = moduleOptions
             }
             const settingsRenderingData = Object.keys(settingsBaseData).map(key => {
@@ -99,6 +99,9 @@ export default {
                 return setting
             })
             this.settingsRenderingData = this.mapSettingsToUI(settings, settingsRenderingData)
+            if(!this.settingsRenderingData.length) {
+                setMessage("There are no settings to configure for the " + settingsJSON[moduleName].title + " module", true)
+            }
             this.initialized = true
         },
         mapSettingsToUI(settings, settingsRenderingData) {
@@ -142,6 +145,9 @@ export default {
             })
             return config
         }
+    },
+    unmounted() {
+        removeMessages()
     }
 }
 </script>
