@@ -54,7 +54,7 @@ sub install {
 sub _handle_sysprefs {
     my ( $self, $args ) = @_;
 
-    my $sysprefs_dir = File::Spec->catdir( $self->{bundle_path}, 'installer/sysprefs' );
+    my $sysprefs_dir = File::Spec->catdir( $self->{bundle_path}, 'installer/config' );
     my @sysprefs_files = glob "$sysprefs_dir/sysprefs.json";
     my $file = $sysprefs_files[0];
 

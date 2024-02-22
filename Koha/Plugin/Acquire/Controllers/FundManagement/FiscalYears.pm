@@ -73,6 +73,10 @@ sub get {
             );
         }
 
+        $fiscal_year = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_owner_data( { data => $fiscal_year } );
+        $fiscal_year =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fiscal_year } );
+
         return $c->render(
             status  => 200,
             openapi => $fiscal_year
