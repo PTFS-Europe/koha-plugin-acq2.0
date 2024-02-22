@@ -158,20 +158,14 @@ export default {
         } = storeToRefs(acquisitionsStore)
 
         const { 
-            filterUsersByPermissions,
             isUserPermitted,
-            filterLibGroupsByUsersBranchcode,
-            findBranchcodesInGroup,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
             resetOwnersAndVisibleGroups
         } = acquisitionsStore
 
         return {
-            filterUsersByPermissions,
             isUserPermitted,
-            filterLibGroupsByUsersBranchcode,
-            findBranchcodesInGroup,
             library_groups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
@@ -198,8 +192,6 @@ export default {
                 start_date: undefined,
                 end_date: undefined,
             },
-            ownerOptions: this.filterUsersByPermissions(null, true),
-            visibilityOptions: this.filterLibGroupsByUsersBranchcode()
         }
     },
     beforeRouteEnter(to, from, next) {
