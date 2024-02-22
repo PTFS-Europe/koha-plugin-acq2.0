@@ -91,13 +91,13 @@ export const routes = [
                     },
                     {
                         path: "add",
-                        component: markRaw(SettingsHome),
+                        component: markRaw(TaskFormAdd),
                         name: "TaskFormAdd",
                         is_navigation_item: false,
                     },
                     {
                         path: "edit/:task_id",
-                        component: markRaw(FundManagementHome),
+                        component: markRaw(TaskFormAdd),
                         name: "TaskFormEdit",
                         is_navigation_item: false,
                     }

@@ -12,7 +12,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         visibleGroups: null,
         owners: null,
         moduleList: {
-            funds: 'Funds and ledgers'
+            funds: { name: 'Funds and ledgers', code: "funds" }
         },
         permissions_matrix: {
             add_task: [],

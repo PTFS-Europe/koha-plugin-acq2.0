@@ -55,7 +55,6 @@ export default {
             const client = APIClient.acquisition
             await client.tasks.get(task_id).then(
                 task => {
-                    console.log(task)
                     this.task = task
                     this.initialized = true
                 },

@@ -99,6 +99,8 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
+                delete $body->{owned_by} if $body->{owned_by};
+                delete $body->{lib_groups} if $body->{lib_groups};
 
                 my $fiscal_year = Koha::Acquire::Funds::FiscalYear->new_from_api($body)->store;
 
@@ -137,6 +139,10 @@ sub update {
             sub {
 
                 my $body = $c->req->json;
+
+                delete $body->{owned_by}   if $body->{owned_by};
+                delete $body->{lib_groups} if $body->{lib_groups};
+                delete $body->{last_updated} if $body->{last_updated};
 
                 $fiscal_year->set_from_api($body)->store;
 

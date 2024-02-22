@@ -25,6 +25,7 @@ use Try::Tiny;
 
 use Koha::Acquire::TaskManagement::Task;
 use Koha::Acquire::TaskManagement::Tasks;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Plugin::Acquire::Controllers::ControllerUtils;
 
@@ -101,6 +102,16 @@ sub add {
 
                 my $body = $c->req->json;
 
+                my $date = dt_from_string();
+                $body->{created_on} = $date;
+                $body->{created_by} = $c->stash('koha.user')->borrowernumber;
+
+                $body->{closed_on} = $date if $body->{status} eq 'completed';
+
+                delete $body->{creator} if $body->{creator};
+                delete $body->{owned_by} if $body->{owned_by};
+                delete $body->{lib_groups} if $body->{lib_groups};
+
                 my $task = Koha::Acquire::TaskManagement::Task->new_from_api($body)->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $task->task_id );
@@ -139,6 +150,13 @@ sub update {
 
                 my $body = $c->req->json;
 
+                my $date = dt_from_string();
+                $body->{closed_on} = $date if $body->{status} eq 'complete' && $task->{status} ne 'complete';
+
+                delete $body->{creator}  if $body->{creator};
+                delete $body->{owned_by} if $body->{owned_by};
+                delete $body->{lib_groups} if $body->{lib_groups};
+
                 $task->set_from_api($body)->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $task->task_id );
@@ -149,27 +167,6 @@ sub update {
             }
         );
     } catch {
-        my $to_api_mapping = Koha::Acquire::TaskManagement::Task->new->to_api_mapping;
-
-        if ( blessed $_ ) {
-            if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
-                );
-            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
-                );
-            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
-                return $c->render(
-                    status  => 413,
-                    openapi => { error => $_->error }
-                );
-            }
-        }
-
         $c->unhandled_exception($_);
     };
 }

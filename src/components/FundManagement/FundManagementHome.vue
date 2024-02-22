@@ -1,11 +1,6 @@
 <template>
     <Toolbar>
         <ToolbarButton
-            :to="{ name: 'SettingsHome' }"
-            icon="plus"
-            title="Create task"
-        />
-        <ToolbarButton
             :to="{ name: 'FiscalYearList' }"
             icon="pen-to-square"
             title="Manage fiscal years"
@@ -22,6 +17,11 @@
             icon="pen-to-square"
             title="Manage funds"
             v-if="isUserPermitted('manage_funds')"
+        />
+        <ToolbarButton
+            :to="{ name: 'TaskFormAdd' }"
+            icon="plus"
+            title="Create task"
         />
     </Toolbar>
     <h1>Fund management</h1>

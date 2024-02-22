@@ -1,6 +1,13 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="task_list">
+        <Toolbar>
+            <ToolbarButton
+                :to="{ name: 'TaskFormAdd' }"
+                icon="plus"
+                title="New task"
+            />
+        </Toolbar>
         <div v-if="task_count > 0" class="page-section">
             <KohaTable
                 ref="table"
@@ -136,7 +143,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return moduleList[row.module]
+                        return moduleList[row.module].name
                     },
                 },
                 {

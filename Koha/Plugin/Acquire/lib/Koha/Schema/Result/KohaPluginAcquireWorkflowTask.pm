@@ -58,7 +58,7 @@ description for the task
 
 =head2 created_on
 
-  data_type: 'datetime'
+  data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -74,7 +74,7 @@ person who created the task
 
 =head2 end_date
 
-  data_type: 'datetime'
+  data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -91,7 +91,7 @@ is the task complete
 
 =head2 closed_on
 
-  data_type: 'datetime'
+  data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -117,19 +117,11 @@ __PACKAGE__->add_columns(
     "description",
     { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "created_on",
-    {
-        data_type                 => "datetime",
-        datetime_undef_if_invalid => 1,
-        is_nullable               => 1,
-    },
+    { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
     "created_by",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "end_date",
-    {
-        data_type                 => "datetime",
-        datetime_undef_if_invalid => 1,
-        is_nullable               => 1,
-    },
+    { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
     "status",
     {
         data_type     => "enum",
@@ -138,11 +130,7 @@ __PACKAGE__->add_columns(
         is_nullable   => 0,
     },
     "closed_on",
-    {
-        data_type                 => "datetime",
-        datetime_undef_if_invalid => 1,
-        is_nullable               => 1,
-    },
+    { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
     "owner",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
@@ -201,8 +189,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-22 16:39:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z+Nonp1RbrzdtZL2rO9tkQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-22 19:05:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GkeTWe4Q6qOfUWkFYjfAnA
+
 
 
 sub koha_object_class {
