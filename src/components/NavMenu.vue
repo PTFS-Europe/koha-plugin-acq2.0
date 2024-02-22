@@ -50,6 +50,7 @@ export default {
             modulesToShow = [...selectedModules]
         }
         modulesToShow.push('settings')
+        modulesToShow.push('tasks')
         this.navigationTree = this.navigationTree.filter(route => modulesToShow.includes(route.moduleName))
 
         if (this.condition)

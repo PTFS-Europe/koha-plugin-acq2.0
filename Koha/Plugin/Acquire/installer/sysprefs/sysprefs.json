@@ -12,6 +12,13 @@
             }
         }
     },
+    "tasks": {
+        "title": "Task management",
+        "icon": "fa fa-list-check",
+        "prefs": {
+
+        }
+    },
     "funds": {
         "title": "Funds and ledgers",
         "icon": "fa fa-money-check-dollar",
