@@ -137,6 +137,10 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 const branchcodes = this.findBranchcodesInGroup(groups)
                 this.owners = this.filterUsersByPermissions(null, true, branchcodes)
             }
+        },
+        resetOwnersAndVisibleGroups() {
+            this.owners = this.filterUsersByPermissions(null, true)
+            this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
         }
     },
     getters: {
