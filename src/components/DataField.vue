@@ -5,13 +5,19 @@
             {{ item.value }}
         </span>
     </li>
-    <li v-if="item.type === 'boolean'">
+    <li v-if="item.type === 'enum'">
         <label>{{ item.label }}:</label>
         <span>
             {{ item.options[item.value] }}
         </span>
     </li>
-    <li v-if="item.type === 'patron'">
+    <li v-if="item.type === 'owner'">
+        <label>{{ item.label }}:</label>
+        <span>
+            {{ `${item.value.firstname} ${item.value.surname}` }}
+        </span>
+    </li>
+    <li v-if="item.type === 'creator'">
         <label>{{ item.label }}:</label>
         <span>
             {{ `${item.value.firstname} ${item.value.surname}` }}
@@ -40,6 +46,9 @@
 export default {
     props:{
         item: Object
+    },
+    data() {
+        return {}
     }
 }
 </script>

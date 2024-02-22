@@ -71,13 +71,15 @@ sub _get_unblessed {
     return blessed $data ? $data->unblessed : $data;
 }
 
-sub add_owner_data {
+sub add_patron_data {
     my ( $self, $args ) = @_;
 
     my $data = _get_unblessed( $args->{data} );
+    my $field = $args->{field};
+    my $key = $args->{key};
 
-    my $patron = Koha::Patrons->find( { borrowernumber => $data->{owner} } );
-    $data->{patron_data} = $patron->unblessed;
+    my $patron = Koha::Patrons->find( { borrowernumber => $data->{$key} } );
+    $data->{$field} = $patron->unblessed;
 
     return $data;
 }

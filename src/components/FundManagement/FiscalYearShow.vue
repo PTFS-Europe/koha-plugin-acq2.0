@@ -32,14 +32,9 @@ import DisplayDataFields from "../DisplayDataFields.vue"
 
 export default {
     setup() {
-        const format_date = $date
-        const patron_to_html = $patron_to_html
-
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
         return {
-            format_date,
-            patron_to_html,
             setConfirmationDialog,
             setMessage,
         }
@@ -60,7 +55,6 @@ export default {
             const client = APIClient.acquisition
             await client.fiscal_years.get(fiscal_yr_id).then(
                 fiscal_yr => {
-                  console.log(fiscal_yr)
                     this.fiscal_yr = fiscal_yr
                     this.initialized = true
                 },

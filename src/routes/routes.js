@@ -80,7 +80,7 @@ export const routes = [
                     {
                         path: "",
                         component: markRaw(TaskList),
-                        name: "TasksHome",
+                        name: "TaskList",
                         is_navigation_item: false,
                     },
                     {

@@ -42,8 +42,11 @@ export default {
             const result = Object.keys(fields).map(key => {
                 const value = this.data[key]
                 fields[key].value = value
-                if(fields[key].type === 'patron') {
-                    fields[key].value = this.data.patron_data
+                if(fields[key].type === 'owner') {
+                    fields[key].value = this.data.owned_by
+                }
+                if(fields[key].type === 'creator') {
+                    fields[key].value = this.data.creator
                 }
                 if(fields[key].type === 'visibility_table') {
                     fields[key].value = this.data.lib_groups

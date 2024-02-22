@@ -1,4 +1,44 @@
 {
+    "task": {
+        "module": {
+            "label": "Module",
+            "type": "string"
+        },
+        "description": {
+            "label": "Description",
+            "type": "string"
+        },
+        "created_on": {
+            "label": "Date created",
+            "type": "string"
+        },
+        "created_by": {
+            "label": "Requestor",
+            "type": "creator"
+        },
+        "end_date": {
+            "label": "Target close date",
+            "type": "string"
+        },
+        "owner": {
+            "label": "Owner",
+            "type": "owner"
+        },
+        "status": {
+            "label": "Status",
+            "type": "enum",
+            "options": {
+                "assigned": "Assigned",
+                "complete": "Complete",
+                "cancelled": "Cancelled",
+                "on_hold": "On hold"
+            }
+        },
+        "closed_on": {
+            "label": "Date closed",
+            "type": "string"
+        }
+    },
     "fiscal_year": {
         "code": {
             "label": "Code",
