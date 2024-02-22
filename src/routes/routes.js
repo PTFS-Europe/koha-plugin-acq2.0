@@ -68,6 +68,21 @@ export const routes = [
                 ]
             },
             {
+                path: "/acquisitions/tasks",
+                title: "Tasks",
+                moduleName: "tasks",
+                icon: "fa fa-list-check",
+                is_end_node: true,
+                children: [
+                    {
+                        path: "",
+                        component: markRaw(SettingsHome),
+                        name: "TasksHome",
+                        is_navigation_item: false,
+                    }
+                ]
+            },
+            {
                 path: "/acquisitions/settings",
                 title: "Settings",
                 moduleName: "settings",
@@ -88,10 +103,17 @@ export const routes = [
                         is_navigation_item: false,
                     },
                     {
+                        path: "tasks",
+                        component: markRaw(ModuleSettings),
+                        name: "ModuleSettingsTasks",
+                        title: "Tasks",
+                        is_navigation_item: false,
+                    },
+                    {
                         path: "funds",
                         component: markRaw(ModuleSettings),
                         name: "ModuleSettingsFunds",
-                        title: "General",
+                        title: "Funds",
                         is_navigation_item: false,
                     },
                 ]

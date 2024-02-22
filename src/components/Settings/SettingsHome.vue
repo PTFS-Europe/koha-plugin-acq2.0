@@ -60,6 +60,7 @@ export default {
                 modulesEnabled = [...selectedModules]
             }
             modulesEnabled.push('general')
+            modulesEnabled.push('tasks')
 
             const modules = Object.keys(settingsJSON)
             const navPanes = modules.map(moduleName => {

@@ -1,6 +1,6 @@
 <template>
     <div v-if="initialized">
-        <h1>{{ moduleTitle }} Settings</h1>
+        <h1>{{ moduleTitle }} settings</h1>
         <form @submit="onSubmit($event)" v-if="settingsRenderingData.length">
             <fieldset class="rows">
                 <ol>
@@ -81,16 +81,16 @@ export default {
 
             const urlParams = path.split("/").filter(param => param !== '/')
             const moduleName = urlParams.pop()
-            this.moduleTitle = moduleName.charAt(0).toUpperCase() + moduleName.slice(1)
 
-            const { prefs: settingsBaseData } = settingsJSON[moduleName]
+            const { title, prefs: settingsBaseData } = settingsJSON[moduleName]
+            this.moduleTitle = title
             if(moduleName === 'general') {
                 const moduleOptions = Object.keys(settingsJSON).map(moduleName => {
                     return {
                         option: moduleName,
                         description: settingsJSON[moduleName].title
                     }
-                }).filter(moduleName => moduleName.option !== 'general')
+                }).filter(moduleName => !['general', 'tasks'].includes(moduleName.option))
                 settingsBaseData.modulesEnabled.options = moduleOptions
             }
             const settingsRenderingData = Object.keys(settingsBaseData).map(key => {
@@ -100,7 +100,7 @@ export default {
             })
             this.settingsRenderingData = this.mapSettingsToUI(settings, settingsRenderingData)
             if(!this.settingsRenderingData.length) {
-                setMessage("There are no settings to configure for the " + settingsJSON[moduleName].title + " module", true)
+                setMessage("There are no settings to configure for the " + title + " module", true)
             }
             this.initialized = true
         },
