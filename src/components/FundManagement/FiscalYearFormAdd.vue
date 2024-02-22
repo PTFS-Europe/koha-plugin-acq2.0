@@ -163,7 +163,8 @@ export default {
             filterLibGroupsByUsersBranchcode,
             findBranchcodesInGroup,
             filterGroupsBasedOnOwner,
-            filterOwnersBasedOnGroup
+            filterOwnersBasedOnGroup,
+            resetOwnersAndVisibleGroups
         } = acquisitionsStore
 
         return {
@@ -174,6 +175,7 @@ export default {
             library_groups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
+            resetOwnersAndVisibleGroups,
             getVisibleGroups,
             getOwners
         }
@@ -260,6 +262,9 @@ export default {
                     )
             }
         }
+    },
+    unmounted() {
+        this.resetOwnersAndVisibleGroups()
     },
     components: {
         flatPickr
