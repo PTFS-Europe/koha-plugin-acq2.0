@@ -40,12 +40,15 @@ use C4::Context;
 
 sub list {
     my $c = shift->openapi->valid_input or return;
+    my $user = $c->stash("koha.user");
 
     return try {
         my $tasks_set = Koha::Acquire::TaskManagement::Tasks->new;
         my $tasks     = $c->objects->search($tasks_set);
 
-        return $c->render( status => 200, openapi => $tasks_set );
+        my @tasks_filtered_by_owner = grep( $_->{owner} eq $user->borrowernumber, @$tasks );
+
+        return $c->render( status => 200, openapi => \@tasks_filtered_by_owner );
     } catch {
         $c->unhandled_exception($_);
     };

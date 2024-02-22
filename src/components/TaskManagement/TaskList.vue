@@ -32,7 +32,8 @@ export default {
             isUserPermitted,
         } = acquisitionsStore
         const { 
-            moduleList
+            moduleList,
+            user
         } = storeToRefs(acquisitionsStore)
 
         const table = ref()
@@ -42,7 +43,8 @@ export default {
             setConfirmationDialog,
             setMessage,
             isUserPermitted,
-            moduleList
+            moduleList,
+            user
         }
     },
     data() {
@@ -54,7 +56,7 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: "/api/v1/contrib/acquire/tasks",
+                url: () => this.tableURL(),
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -78,6 +80,12 @@ export default {
                 },
                 error => {}
             )
+        },
+        tableURL() {
+            const borrowernumber = this.user.logged_in_user.borrowernumber
+            const url = "/api/v1/contrib/acquire/tasks?owner=" + borrowernumber
+            console.log(url)
+            return url
         },
         doShow: function ({ task_id }, dt, event) {
             event.preventDefault()
