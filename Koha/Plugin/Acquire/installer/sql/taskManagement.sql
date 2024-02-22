@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS { { workflow_tasks } } (
     `task_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `short_name` VARCHAR(50) DEFAULT '' COMMENT 'short name for the task',
     `module` VARCHAR(255) DEFAULT '' COMMENT 'module the task relates to',
     `description` longtext DEFAULT '' COMMENT 'description for the task',
     `created_on` DATETIME DEFAULT NULL COMMENT 'creation date of the task',

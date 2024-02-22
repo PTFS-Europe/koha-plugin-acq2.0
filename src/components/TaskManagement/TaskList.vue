@@ -56,7 +56,7 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: () => this.tableURL(),
+                url: "/api/v1/contrib/acquire/tasks",
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -80,12 +80,6 @@ export default {
                 },
                 error => {}
             )
-        },
-        tableURL() {
-            const borrowernumber = this.user.logged_in_user.borrowernumber
-            const url = "/api/v1/contrib/acquire/tasks?owner=" + borrowernumber
-            console.log(url)
-            return url
         },
         doShow: function ({ task_id }, dt, event) {
             event.preventDefault()
@@ -122,8 +116,8 @@ export default {
 
             return [
                 {
-                    title: __("ID"),
-                    data: "task_id",
+                    title: __("Name"),
+                    data: "short_name",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
@@ -131,7 +125,7 @@ export default {
                             '<a href="/acquisitions/tasks/task/' +
                             row.task_id +
                             '" class="show">' +
-                            escape_str(`Task ${row.task_id}`) +
+                            escape_str(`${row.short_name}`) +
                             "</a>"
                         )
                     },
@@ -144,12 +138,6 @@ export default {
                     render: function (data, type, row, meta) {
                         return moduleList[row.module]
                     },
-                },
-                {
-                    title: __("Description"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
                 },
                 {
                     title: __("Status"),

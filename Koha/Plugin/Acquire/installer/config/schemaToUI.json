@@ -1,5 +1,9 @@
 {
     "task": {
+        "short_name": {
+            "label": "Task name",
+            "type": "string"
+        },
         "module": {
             "label": "Module",
             "type": "string"

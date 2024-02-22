@@ -1,4 +1,5 @@
 use utf8;
+
 package Koha::Schema::Result::KohaPluginAcquireWorkflowTask;
 
 # Created by DBIx::Class::Schema::Loader
@@ -28,6 +29,15 @@ __PACKAGE__->table("koha_plugin_acquire_workflow_tasks");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+
+=head2 short_name
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 1
+  size: 50
+
+short name for the task
 
 =head2 module
 
@@ -98,41 +108,43 @@ person the task is assigned to
 =cut
 
 __PACKAGE__->add_columns(
-  "task_id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "module",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "description",
-  { data_type => "longtext", default_value => "''", is_nullable => 1 },
-  "created_on",
-  {
-    data_type => "datetime",
-    datetime_undef_if_invalid => 1,
-    is_nullable => 1,
-  },
-  "created_by",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "end_date",
-  {
-    data_type => "datetime",
-    datetime_undef_if_invalid => 1,
-    is_nullable => 1,
-  },
-  "status",
-  {
-    data_type => "enum",
-    default_value => "assigned",
-    extra => { list => ["assigned", "complete", "cancelled", "on_hold"] },
-    is_nullable => 0,
-  },
-  "closed_on",
-  {
-    data_type => "datetime",
-    datetime_undef_if_invalid => 1,
-    is_nullable => 1,
-  },
-  "owner",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "task_id",
+    { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+    "short_name",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 50 },
+    "module",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "description",
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
+    "created_on",
+    {
+        data_type                 => "datetime",
+        datetime_undef_if_invalid => 1,
+        is_nullable               => 1,
+    },
+    "created_by",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "end_date",
+    {
+        data_type                 => "datetime",
+        datetime_undef_if_invalid => 1,
+        is_nullable               => 1,
+    },
+    "status",
+    {
+        data_type     => "enum",
+        default_value => "assigned",
+        extra         => { list => [ "assigned", "complete", "cancelled", "on_hold" ] },
+        is_nullable   => 0,
+    },
+    "closed_on",
+    {
+        data_type                 => "datetime",
+        datetime_undef_if_invalid => 1,
+        is_nullable               => 1,
+    },
+    "owner",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -158,15 +170,15 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "created_by",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "created_by" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
-  },
+    "created_by",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "created_by" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
 );
 
 =head2 owner
@@ -178,20 +190,20 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "owner",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "owner" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
-  },
+    "owner",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "owner" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
 );
 
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-22 16:39:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z+Nonp1RbrzdtZL2rO9tkQ
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-22 11:50:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nJTxSE3qPB/hKvEXFDFcwQ
 
 sub koha_object_class {
     'Koha::Acquire::TaskManagement::Task';
