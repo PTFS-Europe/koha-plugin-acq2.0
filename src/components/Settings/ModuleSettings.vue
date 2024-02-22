@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import settingsJSON from '../../../Koha/Plugin/Acquire/installer/sysprefs/sysprefs.json'
+import settingsJSON from '../../../Koha/Plugin/Acquire/installer/config/sysprefs.json'
 import SettingFormElement from './SettingFormElement.vue'
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { setMessage, removeMessages } from "../../messages"

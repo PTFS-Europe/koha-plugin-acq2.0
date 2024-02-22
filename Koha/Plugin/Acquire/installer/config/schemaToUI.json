@@ -1,0 +1,37 @@
+{
+    "fiscal_year": {
+        "code": {
+            "label": "Code",
+            "type": "string"
+        },
+        "description": {
+            "label": "Description",
+            "type": "string"
+        },
+        "start_date": {
+            "label": "Start date",
+            "type": "string"
+        },
+        "end_date": {
+            "label": "End date",
+            "type": "string"
+        },
+        "owner": {
+            "label": "Owner",
+            "type": "patron"
+        },
+        "visible_to": {
+            "label": "Library groups covered by fiscal year",
+            "type": "visibility_table"
+        },
+        "status": {
+            "label": "Status",
+            "type": "boolean",
+            "options": { "1": "Active", "0": "Inactive" }
+        },
+        "last_updated": {
+            "label": "Last updated",
+            "type": "string"
+        }
+    }
+}
