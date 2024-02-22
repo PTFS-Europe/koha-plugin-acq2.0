@@ -73,7 +73,8 @@ sub get {
             );
         }
 
-        $fiscal_year = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_owner_data( { data => $fiscal_year } );
+        $fiscal_year = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
+            { data => $fiscal_year, field => 'owned_by', key => "owner" } );
         $fiscal_year =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fiscal_year } );
 
