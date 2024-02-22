@@ -11,7 +11,13 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         permittedUsers: null,
         visibleGroups: null,
         owners: null,
+        moduleList: {
+            funds: 'Funds and ledgers'
+        },
         permissions_matrix: {
+            add_task: [],
+            edit_task: [],
+            delete_task: [],
             manage_fiscal_years: ['period_manage', 'planning_manage'],
             create_fiscal_year: ['planning_manage', 'period_manage'],
             edit_fiscal_year: ['period_manage', 'planning_manage'],
