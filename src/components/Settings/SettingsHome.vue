@@ -62,13 +62,13 @@ export default {
             modulesEnabled.push('general')
 
             const modules = Object.keys(settingsJSON)
-            const navPanes = modules.map(module => {
-                const moduleData = settingsJSON[module]
+            const navPanes = modules.map(moduleName => {
+                const moduleData = settingsJSON[moduleName]
                 return {
-                    path: "/acquisitions/settings/" + module,
+                    path: "/acquisitions/settings/" + moduleName,
                     icon: moduleData.icon,
                     title: moduleData.title,
-                    module
+                    module: moduleName
                 }
             }).filter(m => modulesEnabled.includes(m.module))
             this.navPanes = navPanes
