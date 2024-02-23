@@ -47,9 +47,7 @@ sub list {
         my $tasks_set = Koha::Acquire::TaskManagement::Tasks->new;
         my $tasks     = $c->objects->search($tasks_set);
 
-        my @tasks_filtered_by_owner = grep( $_->{owner} eq $user->borrowernumber, @$tasks );
-
-        return $c->render( status => 200, openapi => \@tasks_filtered_by_owner );
+        return $c->render( status => 200, openapi => $tasks );
     } catch {
         $c->unhandled_exception($_);
     };
