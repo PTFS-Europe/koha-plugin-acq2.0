@@ -10,6 +10,9 @@ import FundManagementHome from '../components/FundManagement/FundManagementHome.
 import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
 import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
 import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vue'
+import LedgerList from '../components/FundManagement/LedgerList.vue'
+import LedgerShow from '../components/FundManagement/LedgerShow.vue'
+import LedgerFormAdd from '../components/FundManagement/LedgerFormAdd.vue'
 
 export const routes = [
     {
@@ -33,7 +36,6 @@ export const routes = [
                     {
                         path: "",
                         component: markRaw(FundManagementHome),
-                        permissions: ['budget_add_del'],
                         name: "FundManagementHome",
                         is_navigation_item: false,
                     },
@@ -64,6 +66,37 @@ export const routes = [
                                 path: "edit/:fiscal_yr_id",
                                 component: markRaw(FiscalYearFormAdd),
                                 name: "FiscalYearFormEdit",
+                                title: "Edit"
+                            }
+                        ]
+                    },
+                    {
+                        path: "ledger",
+                        title: "Ledger",
+                        is_navigation_item: false,
+                        children: [
+                            {
+                                path: "",
+                                component: markRaw(LedgerList),
+                                name: "LedgerList",
+                                title: "List"
+                            },
+                            {
+                                path: ":ledger_id",
+                                component: markRaw(LedgerShow),
+                                name: "LedgerShow",
+                                title: "Show",
+                            },
+                            {
+                                path: "add",
+                                component: markRaw(LedgerFormAdd),
+                                name: "LedgerFormAdd",
+                                title: "Add"
+                            },
+                            {
+                                path: "edit/:ledger_id",
+                                component: markRaw(LedgerFormAdd),
+                                name: "LedgerFormEdit",
                                 title: "Edit"
                             }
                         ]

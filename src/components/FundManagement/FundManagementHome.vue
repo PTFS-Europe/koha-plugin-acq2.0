@@ -7,7 +7,7 @@
             v-if="isUserPermitted('manage_fiscal_years')"
         />
         <ToolbarButton
-            :to="{ name: 'SettingsHome' }"
+            :to="{ name: 'LedgerList' }"
             icon="pen-to-square"
             title="Manage ledgers"
             v-if="isUserPermitted('manage_ledgers')"

@@ -160,7 +160,8 @@ export default {
             isUserPermitted,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
-            resetOwnersAndVisibleGroups
+            resetOwnersAndVisibleGroups,
+            formatLibraryGroupIds
         } = acquisitionsStore
 
         return {
@@ -168,6 +169,7 @@ export default {
             library_groups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
+            formatLibraryGroupIds,
             resetOwnersAndVisibleGroups,
             getVisibleGroups,
             getOwners
@@ -207,11 +209,7 @@ export default {
             const client = APIClient.acquisition
             client.fiscal_years.get(fiscal_yr_id).then(fiscal_yr => {
                 this.fiscal_yr = fiscal_yr
-                const groups = fiscal_yr.visible_to.includes("|") ? fiscal_yr.visible_to.split("|") : [ fiscal_yr.visible_to ]
-                const groupIds = groups.map(group => {
-                    return parseInt(group)
-                })
-                this.fiscal_yr.visible_to = groupIds
+                this.fiscal_yr.visible_to = this.formatLibraryGroupIds(fiscal_yr.visible_to)
                 this.initialized = true
             })
         },

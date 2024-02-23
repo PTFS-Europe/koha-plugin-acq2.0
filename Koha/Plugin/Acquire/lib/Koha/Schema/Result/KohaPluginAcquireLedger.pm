@@ -1,4 +1,5 @@
 use utf8;
+
 package Koha::Schema::Result::KohaPluginAcquireLedger;
 
 # Created by DBIx::Class::Schema::Loader
@@ -75,8 +76,10 @@ external id for the ledger for use with external accounting systems
 
 =head2 currency
 
-  data_type: 'integer'
+  data_type: 'varchar'
+  default_value: (empty string)
   is_nullable: 1
+  size: 10
 
 currency of the ledger
 
@@ -148,7 +151,7 @@ percentage limit for overencumbrance
 
 limit for overspend
 
-=head2 oe_warning_sum
+=head2 os_warning_sum
 
   data_type: 'decimal'
   default_value: 0.000000
@@ -157,7 +160,7 @@ limit for overspend
 
 amount to trigger a warning for overspend
 
-=head2 oe_limit_sum
+=head2 os_limit_sum
 
   data_type: 'decimal'
   default_value: 0.000000
@@ -169,65 +172,65 @@ amount to trigger a block on the ledger for overspend
 =cut
 
 __PACKAGE__->add_columns(
-  "ledger_id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "fiscal_yr_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "name",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "description",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "code",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "external_id",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "currency",
-  { data_type => "integer", is_nullable => 1 },
-  "status",
-  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-  "last_updated",
-  {
-    data_type => "timestamp",
-    datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
-    is_nullable => 1,
-  },
-  "owner",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "visible_to",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "over_spend_allowed",
-  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-  "over_encumbrance_allowed",
-  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-  "oe_warning_percent",
-  {
-    data_type => "decimal",
-    default_value => "0.0000",
-    is_nullable => 1,
-    size => [5, 4],
-  },
-  "oe_limit_amount",
-  {
-    data_type => "decimal",
-    default_value => "0.000000",
-    is_nullable => 1,
-    size => [28, 6],
-  },
-  "oe_warning_sum",
-  {
-    data_type => "decimal",
-    default_value => "0.000000",
-    is_nullable => 1,
-    size => [28, 6],
-  },
-  "oe_limit_sum",
-  {
-    data_type => "decimal",
-    default_value => "0.000000",
-    is_nullable => 1,
-    size => [28, 6],
-  },
+    "ledger_id",
+    { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+    "fiscal_yr_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "name",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "description",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "code",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "external_id",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "currency",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
+    "status",
+    { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+    "last_updated",
+    {
+        data_type                 => "timestamp",
+        datetime_undef_if_invalid => 1,
+        default_value             => \"current_timestamp",
+        is_nullable               => 1,
+    },
+    "owner",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "visible_to",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "over_spend_allowed",
+    { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+    "over_encumbrance_allowed",
+    { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+    "oe_warning_percent",
+    {
+        data_type     => "decimal",
+        default_value => "0.0000",
+        is_nullable   => 1,
+        size          => [ 5, 4 ],
+    },
+    "oe_limit_amount",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
+    "os_warning_sum",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
+    "os_limit_sum",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
 );
 
 =head1 PRIMARY KEY
@@ -253,20 +256,21 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "owner",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "owner" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
-  },
+    "owner",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "owner" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
 );
 
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-23 17:19:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ci9x8027l+J6rO+gznWJ2Q
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-23 15:37:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qBlcIULVF/3+UOMdqjAP+Q
+
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';
