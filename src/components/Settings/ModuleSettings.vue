@@ -41,7 +41,7 @@ export default {
     },
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
-        const { formatSettings } = acquisitionsStore
+        const { convertSettingsToObject } = acquisitionsStore
         const { 
             settings,
             modulesEnabled
@@ -50,7 +50,7 @@ export default {
         return {
             settings,
             modulesEnabled,
-            formatSettings
+            convertSettingsToObject
         }
     },
     data() {
@@ -73,7 +73,7 @@ export default {
             const client = APIClient.acquisition
             const settings = await client.settings.getAll().then(
                 settings => {
-                    this.settings = this.formatSettings(settings)
+                    this.settings = this.convertSettingsToObject(settings)
                     return settings
                 },
                 error => {}

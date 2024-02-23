@@ -70,12 +70,77 @@
         },
         "status": {
             "label": "Status",
-            "type": "boolean",
+            "type": "enum",
             "options": { "1": "Active", "0": "Inactive" }
         },
         "last_updated": {
             "label": "Last updated",
             "type": "string"
+        }
+    },
+    "ledger": {
+        "name": {
+            "label": "name",
+            "type": "string"
+        },
+        "description": {
+            "label": "Description",
+            "type": "string"
+        },
+        "code": {
+            "label": "Code",
+            "type": "string"
+        },
+        "owner": {
+            "label": "Owner",
+            "type": "patron"
+        },
+        "visible_to": {
+            "label": "Library groups covered by fiscal year",
+            "type": "visibility_table"
+        },
+        "status": {
+            "label": "Status",
+            "type": "enum",
+            "options": { "1": "Active", "0": "Inactive" }
+        },
+        "last_updated": {
+            "label": "Last updated",
+            "type": "string"
+        },
+        "currency": {
+            "label": "Currency",
+            "type": "string"
+        },
+        "external_id": {
+            "label": "External ID",
+            "type": "string"
+        },
+        "over_spend_allowed": {
+            "label": "Overspend allowed",
+            "type": "enum",
+            "options": { "1": "Allowed", "0": "Not allowed" }
+        },
+        "over_encumbrance_allowed": {
+            "label": "Overencumbrance allowed",
+            "type": "enum",
+            "options": { "1": "Allowed", "0": "Not allowed" }
+        },
+        "oe_warning_percent": {
+            "label": "Overencumbrance warning percentage",
+            "type": "percentage"
+        },
+        "oe_limit_amount": {
+            "label": "Overencumbrance limit amount",
+            "type": "number"
+        },
+        "os_warning_sum": {
+            "label": "Overspend warning amount",
+            "type": "number"
+        },
+        "os_limit_sum": {
+            "label": "Overspend limit amount",
+            "type": "number"
         }
     }
 }

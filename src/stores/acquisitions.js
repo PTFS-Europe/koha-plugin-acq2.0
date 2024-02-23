@@ -23,7 +23,13 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             edit_fiscal_year: ['period_manage', 'planning_manage'],
             delete_fiscal_year: ['period_manage', 'planning_manage'],
             manage_ledgers: ['period_manage'],
-            manage_funds: ['budget_manage']
+            create_ledger: ['planning_manage', 'period_manage'],
+            edit_ledger: ['period_manage', 'planning_manage'],
+            delete_ledger: ['period_manage', 'planning_manage'],
+            manage_funds: ['budget_manage'],
+            create_fund: ['planning_manage', 'period_manage'],
+            edit_fund: ['period_manage', 'planning_manage'],
+            delete_fund: ['period_manage', 'planning_manage'],
         }
     }),
     actions: {
@@ -151,12 +157,19 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 })
             }
         },
-        formatSettings(settings) {
+        convertSettingsToObject(settings) {
             const settingsObject = {}
             settings.forEach(setting => {
                 settingsObject[setting.variable] = setting
             })
             return settingsObject
+        },
+        formatLibraryGroupIds(ids) {
+            const groups = ids.includes("|") ? ids.split("|") : [ids]
+            const groupIds = groups.map(group => {
+                return parseInt(group)
+            })
+            return groupIds
         }
     },
     getters: {

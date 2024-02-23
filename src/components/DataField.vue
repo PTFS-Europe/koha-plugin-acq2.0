@@ -11,6 +11,18 @@
             {{ item.options[item.value] }}
         </span>
     </li>
+    <li v-if="item.type === 'percentage'">
+        <label>{{ item.label }}:</label>
+        <span>
+            {{ parseFloat(item.value) * 100 }}%
+        </span>
+    </li>
+    <li v-if="item.type === 'number'">
+        <label>{{ item.label }}:</label>
+        <span>
+            {{ parseFloat(item.value).toFixed(2) }}
+        </span>
+    </li>
     <li v-if="item.type === 'owner'">
         <label>{{ item.label }}:</label>
         <span>
@@ -54,5 +66,7 @@ export default {
 </script>
 
 <style scoped>
-
+fieldset.rows label {
+    width: 15em;
+}
 </style>
