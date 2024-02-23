@@ -7,6 +7,17 @@ export class AcquisitionAPIClient extends HttpClient {
         });
     }
 
+    get currencies() {
+        return {
+            getAll: (query, params) =>
+                this.get({
+                    endpoint: "currencies",
+                    query,
+                    params,
+                }),
+        };
+    }
+
     get settings() {
         return {
             getAll: (query, params) =>
@@ -92,6 +103,45 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.count({
                     endpoint:
                         "fiscal_years?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get ledgers() {
+        return {
+            get: id =>
+                this.get({
+                    endpoint: "ledgers/" + id,
+                }),
+            getAll: (query, params) =>
+                this.getAll({
+                    endpoint: "ledgers",
+                    query,
+                    params,
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "ledgers/" + id,
+                }),
+            create: fiscal_year =>
+                this.post({
+                    endpoint: "ledgers",
+                    body: fiscal_year,
+                }),
+            update: (fiscal_year, id) =>
+                this.put({
+                    endpoint: "ledgers/" + id,
+                    body: fiscal_year,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "ledgers?" +
                         new URLSearchParams({
                             _page: 1,
                             _per_page: 1,

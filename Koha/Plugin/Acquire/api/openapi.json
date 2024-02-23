@@ -92,6 +92,54 @@
             }
         }
     },
+    "/currencies": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::Currencies::Currencies#list",
+            "operationId": "AcquireGetCurrencies",
+            "description": "Retrieves the currencies for the Acquisitions plugin module",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Currencies data",
+                    "schema": {
+                        "type": "array"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
     "/permitted_patrons": {
         "get": {
             "x-mojo-to": "Acquire::Controllers::Patrons::Patrons#get_permitted_patrons",
@@ -622,7 +670,7 @@
     },
     "/fiscal_years": {
         "get": {
-            "x-mojo-to": "Acquire::Controllers::FundManagement::Ledgers#list",
+            "x-mojo-to": "Acquire::Controllers::FundManagement::FiscalYears#list",
             "operationId": "AcquireGetFiscalYears",
             "description": "Retrieves the fiscal years for the Acquisitions plugin module",
             "tags": [
