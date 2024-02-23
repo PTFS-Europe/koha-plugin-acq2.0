@@ -50,7 +50,8 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const {
             filterUsersByPermissions,
-            filterLibGroupsByUsersBranchcode
+            filterLibGroupsByUsersBranchcode,
+            formatSettings
         } = acquisitionsStore
         const { 
             user,
@@ -74,7 +75,8 @@ export default {
             visibleGroups,
             owners,
             filterUsersByPermissions,
-            filterLibGroupsByUsersBranchcode
+            filterLibGroupsByUsersBranchcode,
+            formatSettings
         }
     },
     data() {
@@ -102,7 +104,7 @@ export default {
         acq_client.settings
             .getAll()
             .then(settings => {
-                this.settings = settings
+                this.settings = this.formatSettings(settings)
                 this.user.logged_in_user = logged_in_user
                 this.user.logged_in_user.logged_in_branch = logged_in_branch.branchcode
                 this.user.userflags = userflags

@@ -41,12 +41,16 @@ export default {
     },
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
+        const { formatSettings } = acquisitionsStore
         const { 
             settings,
+            modulesEnabled
         } = storeToRefs(acquisitionsStore)
 
         return {
             settings,
+            modulesEnabled,
+            formatSettings
         }
     },
     data() {
@@ -69,7 +73,7 @@ export default {
             const client = APIClient.acquisition
             const settings = await client.settings.getAll().then(
                 settings => {
-                    this.settings = settings
+                    this.settings = this.formatSettings(settings)
                     return settings
                 },
                 error => {}
@@ -126,8 +130,8 @@ export default {
                 success => {
                     setMessage("Settings updated")
                     if(verifiedConfig.hasOwnProperty('modulesEnabled')) {
-                        const modulesEnabled = this.settings.find(i => i.variable === 'modulesEnabled')
-                        modulesEnabled.value = verifiedConfig.modulesEnabled
+                       let currentValue = this.modulesEnabled
+                       currentValue = verifiedConfig.modulesEnabled
                     }
                     this.$router.push({ name: "SettingsHome" })
                 },
