@@ -8,7 +8,16 @@
                 title="New task"
             />
         </Toolbar>
+        <fieldset v-if="task_count > 0" class="filters">
+            <input
+                @click="showUserCreatedTasks"
+                id="filter_table"
+                type="button"
+                :value="buttonText"
+            />
+        </fieldset>
         <div v-if="task_count > 0" class="page-section">
+            <h2>{{ tableName }}</h2>
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
@@ -51,7 +60,8 @@ export default {
             setMessage,
             isUserPermitted,
             moduleList,
-            user
+            user,
+            showCreatedTasks: false
         }
     },
     data() {
@@ -63,7 +73,7 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: "/api/v1/contrib/acquire/tasks",
+                url: this.tableUrl(),
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -71,6 +81,8 @@ export default {
                     "-1": actionButtons,
                 },
             },
+            tableName: "Your tasks",
+            buttonText: "Show tasks created by you"
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -87,6 +99,32 @@ export default {
                 },
                 error => {}
             )
+        },
+        tableUrl() {
+            let url = "/api/v1/contrib/acquire/tasks?q="
+            const param = this.user.logged_in_user.borrowernumber
+            const query = {
+                owner: param
+            }
+            if(this.showCreatedTasks) {
+                delete query.owner
+                query.created_by = param
+            }
+            const queryObject = JSON.stringify(query)
+            return url + queryObject
+        },
+        showUserCreatedTasks() {
+            if(this.showCreatedTasks) {
+                this.showCreatedTasks = false
+                this.tableName = "Tasks created by you"
+                this.buttonText = "Show tasks created by you"
+                this.$refs.table.redraw(this.tableUrl())
+            } else {
+                this.showCreatedTasks = true
+                this.tableName = "Your tasks"
+                this.buttonText = "Show tasks assigned to you"
+                this.$refs.table.redraw(this.tableUrl())
+            }
         },
         doShow: function ({ task_id }, dt, event) {
             event.preventDefault()
