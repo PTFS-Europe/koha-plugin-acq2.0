@@ -623,7 +623,14 @@
                     "in": "query",
                     "description": "Owner of the task",
                     "required": false,
-                    "type": "string"
+                    "type": "integer"
+                },
+                {
+                    "name": "created_by",
+                    "in": "query",
+                    "description": "Creator of the task",
+                    "required": false,
+                    "type": "integer"
                 },
                 {
                     "name": "_match",
