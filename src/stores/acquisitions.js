@@ -141,12 +141,28 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         resetOwnersAndVisibleGroups() {
             this.owners = this.filterUsersByPermissions(null, true)
             this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
+        },
+        getSetting(input) {
+            if( typeof input === 'string') {
+                return this.settings[input]
+            } else {
+                return input.map(setting => {
+                    return this.settings[setting]
+                })
+            }
+        },
+        formatSettings(settings) {
+            const settingsObject = {}
+            settings.forEach(setting => {
+                settingsObject[setting.variable] = setting
+            })
+            return settingsObject
         }
     },
     getters: {
         modulesEnabled() {
-            const { value: modulesEnabled } = this.settings.find(setting => setting.variable === 'modulesEnabled')
-            return modulesEnabled
+            const modulesEnabled = this.settings.modulesEnabled
+            return modulesEnabled.value ? modulesEnabled.value : ''
         },
         getVisibleGroups() {
             return this.visibleGroups
