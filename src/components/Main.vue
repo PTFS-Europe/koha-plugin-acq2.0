@@ -51,7 +51,7 @@ export default {
         const {
             filterUsersByPermissions,
             filterLibGroupsByUsersBranchcode,
-            formatSettings
+            convertSettingsToObject
         } = acquisitionsStore
         const { 
             user,
@@ -76,7 +76,7 @@ export default {
             owners,
             filterUsersByPermissions,
             filterLibGroupsByUsersBranchcode,
-            formatSettings
+            convertSettingsToObject
         }
     },
     data() {
@@ -104,7 +104,7 @@ export default {
         acq_client.settings
             .getAll()
             .then(settings => {
-                this.settings = this.formatSettings(settings)
+                this.settings = this.convertSettingsToObject(settings)
                 this.user.logged_in_user = logged_in_user
                 this.user.logged_in_user.logged_in_branch = logged_in_branch.branchcode
                 this.user.userflags = userflags
