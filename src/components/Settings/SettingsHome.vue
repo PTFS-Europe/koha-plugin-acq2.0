@@ -19,12 +19,14 @@ import { storeToRefs } from "pinia"
 export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
+        const { formatSettings } = acquisitionsStore
         const { 
             settings,
         } = storeToRefs(acquisitionsStore)
 
         return {
             settings,
+            formatSettings,
             settingsJSON
         }
     },
@@ -44,7 +46,7 @@ export default {
             const client = APIClient.acquisition
             const settings = await client.settings.getAll().then(
                 settings => {
-                    this.settings = settings
+                    this.settings = this.formatSettings(settings)
                     return settings
                 },
                 error => {}

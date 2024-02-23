@@ -33,12 +33,10 @@ export default {
 
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
-            settings,
-            modulesEnabled
+            modulesEnabled,
         } = storeToRefs(acquisitionsStore)
 
         return {
-            settings,
             modulesEnabled,
             leftNavigation,
         }

@@ -150,8 +150,7 @@ import { setMessage, setWarning } from "../../messages"
 export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
-        const { 
-            settings,
+        const {
             library_groups,
             getVisibleGroups,
             getOwners
