@@ -10,10 +10,16 @@
         </Toolbar>
         <fieldset v-if="task_count > 0" class="filters">
             <input
-                @click="showUserCreatedTasks"
+                @click="filterTable('owner')"
                 id="filter_table"
                 type="button"
-                :value="buttonText"
+                :value="showUserCreatedTasksButtonText"
+            />
+            <input
+                @click="filterTable('status')"
+                id="filter_table"
+                type="button"
+                :value="showCompletedTasksButtonText"
             />
         </fieldset>
         <div v-if="task_count > 0" class="page-section">
@@ -61,7 +67,6 @@ export default {
             isUserPermitted,
             moduleList,
             user,
-            showCreatedTasks: false
         }
     },
     data() {
@@ -81,8 +86,11 @@ export default {
                     "-1": actionButtons,
                 },
             },
+            showCreatedTasks: false,
+            showCompletedTasks: false,
             tableName: "Your tasks",
-            buttonText: "Show tasks created by you"
+            showUserCreatedTasksButtonText: "Show tasks created by you",
+            showCompletedTasksButtonText: "Show completed tasks"
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -104,26 +112,43 @@ export default {
             let url = "/api/v1/contrib/acquire/tasks?q="
             const param = this.user.logged_in_user.borrowernumber
             const query = {
-                owner: param
+                owner: param,
+                status: ['assigned', 'on_hold', 'cancelled']
             }
             if(this.showCreatedTasks) {
                 delete query.owner
                 query.created_by = param
             }
+            if(this.showCompletedTasks) {
+                query.status.push('complete')
+            }
             const queryObject = JSON.stringify(query)
             return url + queryObject
         },
-        showUserCreatedTasks() {
-            if(this.showCreatedTasks) {
-                this.showCreatedTasks = false
-                this.tableName = "Tasks created by you"
-                this.buttonText = "Show tasks created by you"
-                this.$refs.table.redraw(this.tableUrl())
-            } else {
-                this.showCreatedTasks = true
-                this.tableName = "Your tasks"
-                this.buttonText = "Show tasks assigned to you"
-                this.$refs.table.redraw(this.tableUrl())
+        filterTable(button) {
+            if(button === 'owner') {
+                if(this.showCreatedTasks) {
+                    this.showCreatedTasks = false
+                    this.tableName = "Your tasks"
+                    this.showUserCreatedTasksButtonText = "Show tasks created by you"
+                    this.$refs.table.redraw(this.tableUrl())
+                } else {
+                    this.showCreatedTasks = true
+                    this.tableName = "Tasks created by you"
+                    this.showUserCreatedTasksButtonText = "Show tasks assigned to you"
+                    this.$refs.table.redraw(this.tableUrl())
+                }
+            }
+            if(button === 'status') {
+                if(this.showCompletedTasks) {
+                    this.showCompletedTasks = false
+                    this.showCompletedTasksButtonText = "Show completed tasks"
+                    this.$refs.table.redraw(this.tableUrl())
+                } else {
+                    this.showCompletedTasks = true
+                    this.showCompletedTasksButtonText = "Hide completed tasks"
+                    this.$refs.table.redraw(this.tableUrl())
+                }
             }
         },
         doShow: function ({ task_id }, dt, event) {
@@ -217,3 +242,11 @@ export default {
     components: { Toolbar, ToolbarButton, KohaTable },
 }
 </script>
+
+<style scoped>
+.filters > label[for="by_mine_filter"],
+.filters > input[type="checkbox"],
+.filters > input[type="button"] {
+    margin-left: 1rem;
+}
+</style>
