@@ -11,6 +11,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         permittedUsers: null,
         visibleGroups: null,
         owners: null,
+        navigationBlocked: false,
         moduleList: {
             funds: { name: 'Funds and ledgers', code: "funds" }
         },
@@ -84,15 +85,9 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 if(returnAll) {
                     filteredUsers.push(user)
                 } else {
-                    const { acquisition, superlibrarian } = user.permissions
-                    if(acquisition === 1 || superlibrarian) {
+                    const userPermitted = this.isUserPermitted(operation, user.permissions)
+                    if (userPermitted) {
                         filteredUsers.push(user)
-                    } else {
-                        this.permissions_matrix[operation].forEach(permission => {
-                            if(acquisition[permission]) {
-                                filteredUsers.push(user)
-                            }
-                        })
                     }
                 }
             })
@@ -102,9 +97,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return filteredUsers
             }
         },
-        isUserPermitted(operation) {
+        isUserPermitted(operation, flags) {
+            const userflags = flags ? flags : this.user.userflags
             if(this.permissions_matrix[operation].length === 0) return true
-            const { acquisition, superlibrarian } = this.user.userflags
+
+            const { acquisition, superlibrarian } = userflags
             if (acquisition === 1 || superlibrarian) {
                 return true
             } else {
@@ -116,7 +113,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                     }
                 })
                 const failedChecks = checks.filter(check => !check).length
-                return failedChecks ? false :  true
+                return failedChecks > 0 ? false :  true
             }
         },
         filterGroupsBasedOnOwner(e, data) {
@@ -142,6 +139,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 const groups = libGroups.filter(group => e.includes(group.id))
                 const branchcodes = this.findBranchcodesInGroup(groups)
                 this.owners = this.filterUsersByPermissions(null, true, branchcodes)
+            }
+        },
+        setOwnersBasedOnPermission(permission) {
+            if(this.permittedUsers) {
+                this.owners = this.filterUsersByPermissions(permission, null, null)
             }
         },
         resetOwnersAndVisibleGroups() {
