@@ -52,11 +52,12 @@ router.beforeEach((to, from) => {
     } else {
         const endRoute = [...to.matched].pop().meta.self
         if(endRoute.permission) {
+            acquisitionsStore.$patch({ currentPermission: endRoute.permission })
             setOwnersBasedOnPermission(endRoute.permission)
             const userPermitted = isUserPermitted(endRoute.permission, userflags)
             if(!userPermitted) {
                 // Redirect to the homepage
-                acquisitionsStore.$patch({ navigationBlocked: true })
+                acquisitionsStore.$patch({ navigationBlocked: true, currentPermission: null })
                 return ({ name: "Homepage" })
             } else {
                 navigationStore.$patch({ current: to.matched, params: to.params || {} })

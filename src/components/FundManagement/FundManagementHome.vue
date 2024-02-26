@@ -24,7 +24,7 @@
             title="Create task"
         />
     </Toolbar>
-    <h1>Fund management</h1>
+    <h1>Funds and ledgers</h1>
 </template>
 
 <script>
