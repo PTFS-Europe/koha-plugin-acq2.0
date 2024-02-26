@@ -12,6 +12,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         visibleGroups: null,
         owners: null,
         navigationBlocked: false,
+        currentPermission: null,
         moduleList: {
             funds: { name: 'Funds and ledgers', code: "funds" }
         },
@@ -36,8 +37,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
     actions: {
         determineBranch(code) {
             if(code) { return code }
-            const { logged_in_user: { logged_in_branchcode, branchcode } } = this.user
-            return logged_in_branchcode ? logged_in_branchcode : branchcode 
+            const { logged_in_user: { logged_in_branch, branchcode } } = this.user
+            return logged_in_branch ? logged_in_branch : branchcode 
         },
         mapSubGroups(group, groupObject, branch) {
             let matched = false
@@ -118,7 +119,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         filterGroupsBasedOnOwner(e, data) {
             const libGroups = this.filterLibGroupsByUsersBranchcode()
-            const permittedUsers = this.filterUsersByPermissions(null, true)
+            const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false)
             if (!e) {
                 this.visibleGroups = libGroups
                 this.owners = permittedUsers
@@ -130,7 +131,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         filterOwnersBasedOnGroup(e, data) {
             const libGroups = this.filterLibGroupsByUsersBranchcode()
-            const permittedUsers = this.filterUsersByPermissions(null, true)
+            const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false, null)
             if (!e.length) {
                 this.visibleGroups = libGroups
                 this.owners = permittedUsers
@@ -138,16 +139,16 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             } else {
                 const groups = libGroups.filter(group => e.includes(group.id))
                 const branchcodes = this.findBranchcodesInGroup(groups)
-                this.owners = this.filterUsersByPermissions(null, true, branchcodes)
+                this.owners = this.filterUsersByPermissions(this.currentPermission, false, branchcodes)
             }
         },
         setOwnersBasedOnPermission(permission) {
             if(this.permittedUsers) {
-                this.owners = this.filterUsersByPermissions(permission, null, null)
+                this.owners = this.filterUsersByPermissions(permission, false, null)
             }
         },
         resetOwnersAndVisibleGroups() {
-            this.owners = this.filterUsersByPermissions(null, true)
+            this.owners = this.filterUsersByPermissions(this.currentPermission, false)
             this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
         },
         getSetting(input) {
