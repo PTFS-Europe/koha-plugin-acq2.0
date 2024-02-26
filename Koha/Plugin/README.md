@@ -1,3 +1,12 @@
+# Enable plugin
+```
+sed -i 's/<\!--pluginsdir>\/kohadevbox\/koha_plugin<\/pluginsdir-->/<pluginsdir>\/kohadevbox\/koha_plugin<\/pluginsdir>/g' /etc/koha/sites/kohadev/koha-conf.xml
+```
+
+```
+perl /kohadevbox/koha/misc/devel/install_plugins.pl
+```
+
 # Apache config updates
 
 etc/apache2/sites-available/kohadev.conf

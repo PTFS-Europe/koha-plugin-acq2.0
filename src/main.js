@@ -1,9 +1,9 @@
 import { createApp } from "vue"
 import { createWebHistory, createRouter } from "vue-router"
 import { createPinia } from "pinia"
-import vSelect from "vue-select";
+import vSelect from "vue-select"
 
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { library } from "@fortawesome/fontawesome-svg-core"
 import {
     faPlus,
     faMinus,
@@ -11,10 +11,10 @@ import {
     faTrash,
     faSpinner,
     faPenToSquare
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 
-library.add(faPlus, faMinus, faPencil, faTrash, faSpinner, faPenToSquare);
+library.add(faPlus, faMinus, faPencil, faTrash, faSpinner, faPenToSquare)
 
 import App from "./components/Main.vue"
 import { routes as routesDef } from './routes/routes.js'
@@ -43,15 +43,39 @@ app.provide("mainStore", mainStore)
 app.component("v-select", vSelect)
 app.component("font-awesome-icon", FontAwesomeIcon)
 
-app.mount("#__app")
-
-const { removeMessages } = mainStore;
+const { removeMessages, setWarning } = mainStore
+const { setOwnersBasedOnPermission, isUserPermitted } = acquisitionsStore
 router.beforeEach((to, from) => {
     if(to.matched.length === 0) {
         // The Apache redirect does not render breadcrumbs so we need to push to the correct route
         router.push({ name: "Homepage" })
     } else {
-        navigationStore.$patch({ current: to.matched, params: to.params || {} })
+        const endRoute = [...to.matched].pop().meta.self
+        if(endRoute.permission) {
+            setOwnersBasedOnPermission(endRoute.permission)
+            const userPermitted = isUserPermitted(endRoute.permission, userflags)
+            if(!userPermitted) {
+                // Redirect to the homepage
+                acquisitionsStore.$patch({ navigationBlocked: true })
+                return ({ name: "Homepage" })
+            } else {
+                navigationStore.$patch({ current: to.matched, params: to.params || {} })
+                removeMessages() // This will actually flag the messages as displayed already
+            }
+        } else {
+            navigationStore.$patch({ current: to.matched, params: to.params || {} })
+            removeMessages()
+        }
     }
-    removeMessages(); // This will actually flag the messages as displayed already
 })
+
+const loadRouterAndMount = async () => {
+    try {
+        await router.isReady()
+        app.mount("#__app")
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+loadRouterAndMount()
