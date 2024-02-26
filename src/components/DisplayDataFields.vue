@@ -48,8 +48,13 @@ export default {
                 if(fields[key].type === 'creator') {
                     fields[key].value = this.data.creator
                 }
-                if(fields[key].type === 'visibility_table') {
-                    fields[key].value = this.data.lib_groups
+                if(fields[key].type === 'table') {
+                    const value = this.data[fields[key].dataType]
+                    if(Array.isArray(value)) {
+                        fields[key].value = value
+                    } else {
+                        fields[key].value = [ value ]
+                    }
                 }
                 return fields[key]
             })
