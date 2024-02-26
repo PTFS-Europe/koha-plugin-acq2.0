@@ -48,25 +48,29 @@ export const routes = [
                                 path: "",
                                 component: markRaw(FiscalYearList),
                                 name: "FiscalYearList",
-                                title: "List"
+                                title: "List",
+                                permission: "manage_fiscal_years"
                             },
                             {
                                 path: ":fiscal_yr_id",
                                 component: markRaw(FiscalYearShow),
                                 name: "FiscalYearShow",
                                 title: "Show",
+                                permission: "manage_fiscal_years"
                             },
                             {
                                 path: "add",
                                 component: markRaw(FiscalYearFormAdd),
                                 name: "FiscalYearFormAdd",
-                                title: "Add"
+                                title: "Add",
+                                permission: "create_fiscal_year"
                             },
                             {
                                 path: "edit/:fiscal_yr_id",
                                 component: markRaw(FiscalYearFormAdd),
                                 name: "FiscalYearFormEdit",
-                                title: "Edit"
+                                title: "Edit",
+                                permission: "edit_fiscal_year"
                             }
                         ]
                     },
@@ -79,25 +83,29 @@ export const routes = [
                                 path: "",
                                 component: markRaw(LedgerList),
                                 name: "LedgerList",
-                                title: "List"
+                                title: "List",
+                                permission: "manage_ledgers"
                             },
                             {
                                 path: ":ledger_id",
                                 component: markRaw(LedgerShow),
                                 name: "LedgerShow",
                                 title: "Show",
+                                permission: "manage_ledgers"
                             },
                             {
                                 path: "add",
                                 component: markRaw(LedgerFormAdd),
                                 name: "LedgerFormAdd",
-                                title: "Add"
+                                title: "Add",
+                                permission: "create_ledger"
                             },
                             {
                                 path: "edit/:ledger_id",
                                 component: markRaw(LedgerFormAdd),
                                 name: "LedgerFormEdit",
-                                title: "Edit"
+                                title: "Edit",
+                                permission: "edit_ledger"
                             }
                         ]
                     },
