@@ -56,7 +56,6 @@ export default {
             await client.ledgers.get(ledger_id).then(
                 ledger => {
                     this.ledger = ledger
-                    console.log(this.ledger)
                     this.initialized = true
                 },
                 error => {}

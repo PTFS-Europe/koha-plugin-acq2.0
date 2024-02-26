@@ -65,8 +65,17 @@
             "type": "patron"
         },
         "visible_to": {
-            "label": "Library groups covered by fiscal year",
-            "type": "visibility_table"
+            "label": "Library groups covered",
+            "type": "table",
+            "dataType": "lib_groups",
+            "columns": [
+                "ID",
+                "Title"
+            ],
+            "keys": [
+                "id",
+                "title"
+            ]
         },
         "status": {
             "label": "Status",
@@ -80,7 +89,7 @@
     },
     "ledger": {
         "name": {
-            "label": "name",
+            "label": "Name",
             "type": "string"
         },
         "description": {
@@ -91,13 +100,35 @@
             "label": "Code",
             "type": "string"
         },
+        "fiscal_yr_id": {
+            "label": "Fiscal year",
+            "type": "table",
+            "dataType": "fiscal_year",
+            "columns": [
+                "ID",
+                "Code"
+            ],
+            "keys": [
+                "fiscal_yr_id",
+                "code"
+            ]
+        },
         "owner": {
             "label": "Owner",
             "type": "patron"
         },
         "visible_to": {
-            "label": "Library groups covered by fiscal year",
-            "type": "visibility_table"
+            "label": "Library groups covered",
+            "type": "table",
+            "dataType": "lib_groups",
+            "columns": [
+                "ID",
+                "Title"
+            ],
+            "keys": [
+                "id",
+                "title"
+            ]
         },
         "status": {
             "label": "Status",

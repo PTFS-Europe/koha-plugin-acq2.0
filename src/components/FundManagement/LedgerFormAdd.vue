@@ -364,6 +364,7 @@ export default {
             const client = APIClient.acquisition
             await client.ledgers.get(ledger_id).then(ledger => {
                 this.ledger = ledger
+                this.ledger.oe_warning_percent = ledger.oe_warning_percent * 100
                 this.ledger.visible_to = this.formatLibraryGroupIds(ledger.visible_to)
             })
         },

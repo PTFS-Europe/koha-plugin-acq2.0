@@ -77,6 +77,9 @@ sub get {
         $ledger =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $ledger } );
 
+        my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( { fiscal_yr_id => $ledger->{fiscal_yr_id} } );
+        $ledger->{fiscal_year} = $fiscal_year->unblessed;
+
         return $c->render(
             status  => 200,
             openapi => $ledger
@@ -141,6 +144,7 @@ sub update {
 
                 delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
+                delete $body->{fiscal_year}  if $body->{fiscal_year};
                 delete $body->{last_updated} if $body->{last_updated};
 
                 $ledger->set_from_api($body)->store;

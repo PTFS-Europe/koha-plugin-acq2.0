@@ -35,19 +35,19 @@
             {{ `${item.value.firstname} ${item.value.surname}` }}
         </span>
     </li>
-    <li v-if="item.type === 'visibility_table'">
+    <li v-if="item.type === 'table'">
         <label>{{ item.label }}:</label>
         <table>
             <thead>
-                <th>ID</th>
-                <th>Title</th>
+                <th>{{ item.columns[0]}}</th>
+                <th>{{ item.columns[1]}}</th>
             </thead>
             <tr
-                v-for="(item, key) in item.value"
+                v-for="(arrayItem, key) in item.value"
                 v-bind:key="key"
             >
-                <td>{{ item.id }}</td>
-                <td>{{ item.title }}</td>
+                <td>{{ arrayItem[item.keys[0]] }}</td>
+                <td>{{ arrayItem[item.keys[1]] }}</td>
             </tr>
         </table>
     </li>
