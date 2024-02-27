@@ -681,6 +681,19 @@
             ],
             "parameters": [
                 {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "koha_plugin_acquire_ledgers"
+                        ]
+                    }
+                },
+                {
                     "name": "_match",
                     "description": "Matching criteria",
                     "enum": [
@@ -820,6 +833,17 @@
                     "description": "ID of fiscal year to fetch",
                     "required": true,
                     "type": "integer"
+                },
+                {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": ["koha_plugin_acquire_ledgers"]
+                    }
                 }
             ],
             "produces": [
@@ -1147,6 +1171,19 @@
             ],
             "parameters": [
                 {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "fiscal_yr"
+                        ]
+                    }
+                },
+                {
                     "name": "_match",
                     "description": "Matching criteria",
                     "enum": [
@@ -1286,6 +1323,19 @@
                     "description": "ID of ledger to fetch",
                     "required": true,
                     "type": "integer"
+                },
+                {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "fiscal_yr"
+                        ]
+                    }
                 }
             ],
             "produces": [

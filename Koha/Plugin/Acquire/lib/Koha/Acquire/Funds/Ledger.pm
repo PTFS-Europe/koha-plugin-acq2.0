@@ -23,6 +23,20 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+
+=head3 fiscal_yr
+
+Method to embed the fiscal year to a given ledger
+
+=cut
+
+sub fiscal_yr {
+    my ($self) = @_;
+    my $fiscal_year_rs = $self->_result->fiscal_yr;
+    return Koha::Acquire::Funds::FiscalYear->_new_from_dbic($fiscal_year_rs);
+}
+
+
 =head2 Internal methods
 
 =head3 _type
