@@ -93,7 +93,9 @@ export default {
             await patron_client.patrons.getPermittedPatrons().then(
                 patrons => {
                     this.permittedUsers = patrons
-                    this.owners = this.filterUsersByPermissions(null, true)
+                    const { permission } = this.$route.meta.self
+                    const permissionRequired = permission ? permission : null
+                    this.owners = this.filterUsersByPermissions(permissionRequired, false)
                     this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
                 },
                 error => {}
