@@ -56,6 +56,7 @@
                                 :reduce="av => av.fiscal_yr_id"
                                 :options="fiscal_years"
                                 label="code"
+                                @update:modelValue="filterGroupsBySelectedFiscalYear($event)"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -131,7 +132,7 @@
                                 v-model="ledger.owner"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
-                                @update:modelValue="filterGroupsBasedOnOwner($event, ledger)"
+                                @update:modelValue="filterGroupsBasedOnOwner($event, ledger, fiscal_year_groups)"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
@@ -155,8 +156,9 @@
                                 :reduce="av => av.id"
                                 :options="getVisibleGroups"
                                 label="title"
-                                @update:modelValue="filterOwnersBasedOnGroup($event, ledger)"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, ledger, fiscal_year_groups)"
                                 multiple
+                                :disabled="fiscal_year_groups.length === 0"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -341,7 +343,8 @@ export default {
                 os_limit_sum: null,
             },
             fiscal_years: [],
-            currencies: []
+            currencies: [],
+            fiscal_year_groups: [],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -385,6 +388,12 @@ export default {
                 },
                 error => {}
             )
+        },
+        filterGroupsBySelectedFiscalYear(e) {
+            const selectedFiscalyear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
+            const applicableGroups = this.formatLibraryGroupIds(selectedFiscalyear.visible_to)
+            this.fiscal_year_groups = applicableGroups
+            this.resetOwnersAndVisibleGroups(applicableGroups)
         },
         onSubmit(e) {
             e.preventDefault()
