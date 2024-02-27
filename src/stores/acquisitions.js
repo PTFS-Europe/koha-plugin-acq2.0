@@ -45,6 +45,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             this.library_groups.forEach(group => {
                 const matched = this.mapSubGroups(group, filteredGroups, branch)
                 // If a sub group has been matched but the parent level group did not, then we should add the parent level group as well
+                // This happens when a parent group doesn't have nay branchcodes assigned to it, only sub groups
                 if (matched && !Object.keys(filteredGroups).find(id => id === group.id)) {
                     filteredGroups[group.id] = group
                 }
@@ -85,6 +86,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         isUserPermitted(operation, flags) {
             const userflags = flags ? flags : this.user.userflags
+            if(!operation) return true
             if(this.permissions_matrix[operation].length === 0) return true
 
             const { acquisition, superlibrarian } = userflags
