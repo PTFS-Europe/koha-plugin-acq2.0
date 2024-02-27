@@ -23,6 +23,20 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+
+=head3 koha_plugin_acquire_ledgers
+
+Method to embed ledgers to the fiscal year
+
+=cut
+
+sub koha_plugin_acquire_ledgers {
+    my ($self) = @_;
+    my $ledger_rs = $self->_result->koha_plugin_acquire_ledgers;
+    return Koha::Acquire::Funds::Ledgers->_new_from_dbic($ledger_rs);
+}
+
+
 =head2 Internal methods
 
 =head3 _type

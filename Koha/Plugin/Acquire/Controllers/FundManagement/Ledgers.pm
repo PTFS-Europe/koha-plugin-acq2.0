@@ -48,7 +48,7 @@ sub list {
         my $filtered_ledgers =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $ledgers } );
 
-        return $c->render( status => 200, openapi => $filtered_ledgers );
+        return $c->render( status => 200, openapi => $ledgers );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -63,7 +63,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ledger = Koha::Acquire::Funds::Ledgers->find( $c->param('id') );
+        my $ledgers_set = Koha::Acquire::Funds::Ledgers->new;
+        my $ledger      = $c->objects->find( $ledgers_set, $c->param('id') );
 
         unless ($ledger) {
             return $c->render(
@@ -76,9 +77,6 @@ sub get {
             { data => $ledger, field => 'owned_by', key => "owner" } );
         $ledger =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $ledger } );
-
-        my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( { fiscal_yr_id => $ledger->{fiscal_yr_id} } );
-        $ledger->{fiscal_year} = $fiscal_year->unblessed;
 
         return $c->render(
             status  => 200,

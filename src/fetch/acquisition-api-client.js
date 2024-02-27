@@ -117,6 +117,9 @@ export class AcquisitionAPIClient extends HttpClient {
             get: id =>
                 this.get({
                     endpoint: "ledgers/" + id,
+                    headers: {
+                        "x-koha-embed": "fiscal_yr"
+                    }
                 }),
             getAll: (query, params) =>
                 this.getAll({

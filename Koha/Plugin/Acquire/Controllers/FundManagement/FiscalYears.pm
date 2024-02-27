@@ -64,7 +64,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( $c->param('id') );
+        my $fiscal_years_set = Koha::Acquire::Funds::FiscalYears->new;
+        my $fiscal_year      = $c->objects->find( $fiscal_years_set, $c->param('id') );
 
         unless ($fiscal_year) {
             return $c->render(
