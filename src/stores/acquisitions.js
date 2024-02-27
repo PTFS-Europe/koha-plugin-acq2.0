@@ -25,25 +25,31 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             const { logged_in_user: { logged_in_branch, branchcode } } = this.user
             return logged_in_branch ? logged_in_branch : branchcode 
         },
-        mapSubGroups(group, groupObject, branch) {
+        mapSubGroups(group, filteredGroups, branch, groupsToCheck) {
             let matched = false
             if (group.libraries.find(lib => lib.branchcode === branch)) {
-                groupObject[group.id] = group
-                matched = true
+                if(groupsToCheck && groupsToCheck.length && groupsToCheck.includes(group.id)) {
+                    filteredGroups[group.id] = group
+                    matched = true    
+                }
+                if(!groupsToCheck || groupsToCheck.length === 0) {
+                    filteredGroups[group.id] = group
+                    matched = true    
+                }
             }
             if(group.sub_groups && group.sub_groups.length) {
                 group.sub_groups.forEach(grp => {
-                    const result = this.mapSubGroups(grp, groupObject, branch)
+                    const result = this.mapSubGroups(grp, filteredGroups, branch, groupsToCheck)
                     matched = matched ? matched : result
                 })
             }
             return matched
         },
-        filterLibGroupsByUsersBranchcode(branchcode) {
+        filterLibGroupsByUsersBranchcode(branchcode, groupsToCheck) {
             const branch = this.determineBranch(branchcode)
             const filteredGroups = {}
             this.library_groups.forEach(group => {
-                const matched = this.mapSubGroups(group, filteredGroups, branch)
+                const matched = this.mapSubGroups(group, filteredGroups, branch, groupsToCheck)
                 // If a sub group has been matched but the parent level group did not, then we should add the parent level group as well
                 // This happens when a parent group doesn't have nay branchcodes assigned to it, only sub groups
                 if (matched && !Object.keys(filteredGroups).find(id => id === group.id)) {
@@ -104,8 +110,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return failedChecks > 0 ? false :  true
             }
         },
-        filterGroupsBasedOnOwner(e, data) {
-            const libGroups = this.filterLibGroupsByUsersBranchcode()
+        filterGroupsBasedOnOwner(e, data, groups) {
+            const libGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
             const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false)
             if (!e) {
                 this.visibleGroups = libGroups
@@ -113,11 +119,11 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 data.visible_to = null
             } else {
                 const { branchcode } = permittedUsers.find(user => user.borrowernumber === e)
-                this.visibleGroups = this.filterLibGroupsByUsersBranchcode(branchcode)
+                this.visibleGroups = this.filterLibGroupsByUsersBranchcode(branchcode, groups)
             }
         },
-        filterOwnersBasedOnGroup(e, data) {
-            const libGroups = this.filterLibGroupsByUsersBranchcode()
+        filterOwnersBasedOnGroup(e, data, groups) {
+            const libGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
             const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false, null)
             if (!e.length) {
                 this.visibleGroups = libGroups
@@ -134,9 +140,9 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 this.owners = this.filterUsersByPermissions(permission, false, null)
             }
         },
-        resetOwnersAndVisibleGroups() {
+        resetOwnersAndVisibleGroups(groups) {
             this.owners = this.filterUsersByPermissions(this.currentPermission, false)
-            this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
+            this.visibleGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
         },
         getSetting(input) {
             if( typeof input === 'string') {
