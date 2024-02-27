@@ -140,6 +140,21 @@ __PACKAGE__->set_primary_key("fiscal_yr_id");
 
 =head1 RELATIONS
 
+=head2 koha_plugin_acquire_ledgers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireLedger>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_ledgers",
+    "Koha::Schema::Result::KohaPluginAcquireLedger",
+    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -160,8 +175,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-20 14:59:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZJLpMp0O+n4A/X5TZ1Rilg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-27 14:37:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/jA/7c4NVEXwQalJ8M1Lcw
+
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

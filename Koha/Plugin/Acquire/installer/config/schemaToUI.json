@@ -103,7 +103,7 @@
         "fiscal_yr_id": {
             "label": "Fiscal year",
             "type": "table",
-            "dataType": "fiscal_year",
+            "dataType": "fiscal_yr",
             "columns": [
                 "ID",
                 "Code"
