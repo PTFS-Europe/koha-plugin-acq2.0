@@ -75,9 +75,14 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get fiscal_years() {
         return {
-            get: id =>
+            get: (id, embed) =>
                 this.get({
                     endpoint: "fiscal_years/" + id,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
                 }),
             getAll: (query, params) =>
                 this.getAll({
@@ -114,12 +119,12 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get ledgers() {
         return {
-            get: id =>
+            get: (id, embed) =>
                 this.get({
                     endpoint: "ledgers/" + id,
-                    headers: {
-                        "x-koha-embed": "fiscal_yr"
-                    }
+                    ...(embed && { headers: {
+                        "x-koha-embed": embed
+                    }})
                 }),
             getAll: (query, params) =>
                 this.getAll({
