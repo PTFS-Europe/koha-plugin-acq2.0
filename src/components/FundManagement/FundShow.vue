@@ -1,22 +1,22 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="funds_show">
-        <h2>
-            {{ "Fund " + fund.fund_id }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'FundFormEdit',
-                        params: { fund_id: fund.fund_id },
-                    }"
-                    title="Edit"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a @click="delete_fund(fund.fund_id, fund.code)"
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
-        </h2>
+        <Toolbar>
+            <ToolbarButton
+                :to="{ name: 'FundFormEdit', params: { fund_id: fund.fund_id } }"
+                icon="pencil"
+                title="Edit"
+                v-if="isUserPermitted('edit_fund')"
+            />
+            <ToolbarButton
+                to="#"
+                icon="trash"
+                title="Delete"
+                @clicked="delete_fund(fund.fund_id, fund.name)"
+                v-if="isUserPermitted('delete_fund')"
+            />
+        </Toolbar>
+        <h2>{{ "Fund " + fund.fund_id }}</h2>
         <DisplayDataFields 
             :data="fund"
             homeRoute="FundList"
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
@@ -34,9 +36,15 @@ export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            isUserPermitted,
+        } = acquisitionsStore
+
         return {
             setConfirmationDialog,
             setMessage,
+            isUserPermitted
         }
     },
     data() {
@@ -83,7 +91,9 @@ export default {
         },
     },
     components: {
-        DisplayDataFields
+        DisplayDataFields,
+        Toolbar,
+        ToolbarButton
     },
 }
 </script>

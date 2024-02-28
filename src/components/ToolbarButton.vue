@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="to" :class="class"
+    <router-link :to="to" :class="class" @click="handleClick"
         ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</router-link
     >
 </template>
@@ -9,6 +9,7 @@ export default {
     props: {
         to: {
             type: [String, Object],
+            required: false
         },
         class: {
             type: String,
@@ -20,7 +21,13 @@ export default {
         },
         title: {
             type: String,
-        },
+        }
+    },
+    emits: ['clicked'],
+    methods: {
+        handleClick() {
+            this.$emit('clicked')
+        }
     },
     name: "Toolbar",
 }

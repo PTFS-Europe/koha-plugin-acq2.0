@@ -1,22 +1,22 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="fiscal_yrs_show">
-        <h2>
-            {{ "Fiscal year " + fiscal_yr.fiscal_yr_id }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'FiscalYearFormEdit',
-                        params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id },
-                    }"
-                    title="Edit"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a @click="delete_fiscal_yr(fiscal_yr.fiscal_yr_id, fiscal_yr.code)"
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
-        </h2>
+        <Toolbar>
+            <ToolbarButton
+                :to="{ name: 'FiscalYearFormEdit', params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id } }"
+                icon="pencil"
+                title="Edit"
+                v-if="isUserPermitted('edit_fiscal_year')"
+            />
+            <ToolbarButton
+                to="#"
+                icon="trash"
+                title="Delete"
+                @clicked="delete_fiscal_yr(fiscal_yr.fiscal_yr_id, fiscal_yr.code)"
+                v-if="isUserPermitted('delete_fiscal_year')"
+            />
+        </Toolbar>
+        <h2>{{ "Fiscal year " + fiscal_yr.fiscal_yr_id }}</h2>
         <DisplayDataFields 
             :data="fiscal_yr"
             homeRoute="FiscalYearList"
@@ -29,14 +29,22 @@
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 
 export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            isUserPermitted,
+        } = acquisitionsStore
+
         return {
             setConfirmationDialog,
             setMessage,
+            isUserPermitted
         }
     },
     data() {
@@ -83,7 +91,9 @@ export default {
         },
     },
     components: {
-        DisplayDataFields
+        DisplayDataFields,
+        Toolbar,
+        ToolbarButton
     },
 }
 </script>
