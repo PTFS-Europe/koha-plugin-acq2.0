@@ -23,12 +23,23 @@
 <script>
 import schema from '../../Koha/Plugin/Acquire/installer/config/schemaToUI.json'
 import DataField from './DataField.vue'
+import { inject } from "vue"
 
 export default {
     props:{
         data: Object,
         dataType: String,
         homeRoute: String
+    },
+    setup() {
+        const AVStore = inject("AVStore")
+        const {
+            get_lib_from_av
+        } = AVStore
+
+        return {
+            get_lib_from_av
+        }
     },
     data() {
         const fields = this.mapValueToField(schema, this.dataType)
@@ -47,6 +58,10 @@ export default {
                 }
                 if(fields[key].type === 'creator') {
                     fields[key].value = this.data.creator
+                }
+                if(fields[key].type === 'av') {
+                    fields[key].value = this.get_lib_from_av(fields[key].av_type, value)
+                    fields[key].type = 'string'
                 }
                 if(fields[key].type === 'table') {
                     const value = this.data[fields[key].dataType]

@@ -21,11 +21,13 @@ import { routes as routesDef } from './routes/routes.js'
 import { useMainStore } from "./stores/main"
 import { useNavigationStore } from "./stores/navigation"
 import { useAcquisitionsStore } from "./stores/acquisitions"
+import { useAVStore } from "./stores/authorised-values"
 
 const pinia = createPinia()
 const mainStore = useMainStore(pinia)
 const acquisitionsStore = useAcquisitionsStore(pinia)
 const navigationStore = useNavigationStore(pinia)
+const AVStore = useAVStore(pinia)
 const routes = navigationStore.setRoutes(routesDef)
 
 const router = createRouter({
@@ -40,6 +42,7 @@ app.use(pinia)
 app.provide("navigationStore", navigationStore)
 app.provide("acquisitionsStore", acquisitionsStore)
 app.provide("mainStore", mainStore)
+app.provide("AVStore", AVStore)
 app.component("v-select", vSelect)
 app.component("font-awesome-icon", FontAwesomeIcon)
 
