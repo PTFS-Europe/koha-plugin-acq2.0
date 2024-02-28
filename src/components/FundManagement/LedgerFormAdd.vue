@@ -369,6 +369,7 @@ export default {
                 this.ledger = ledger
                 this.ledger.oe_warning_percent = ledger.oe_warning_percent * 100
                 this.ledger.visible_to = this.formatLibraryGroupIds(ledger.visible_to)
+                this.filterGroupsBySelectedFiscalYear(ledger.fiscal_yr_id)
             })
         },
         async getFiscalYears() {
@@ -390,6 +391,12 @@ export default {
             )
         },
         filterGroupsBySelectedFiscalYear(e) {
+            if(!e) {
+                this.fiscal_year_groups = []
+                this.ledger.visible_to = []
+                return
+            }
+            this.ledger.visible_to = []
             const selectedFiscalyear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
             const applicableGroups = this.formatLibraryGroupIds(selectedFiscalyear.visible_to)
             this.fiscal_year_groups = applicableGroups

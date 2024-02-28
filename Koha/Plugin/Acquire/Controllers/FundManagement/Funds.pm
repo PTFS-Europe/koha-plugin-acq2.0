@@ -25,6 +25,7 @@ use Try::Tiny;
 
 use Koha::Acquire::Funds::Fund;
 use Koha::Acquire::Funds::Funds;
+use Koha::Acquire::Funds::Ledgers;
 
 use Koha::Plugin::Acquire::Controllers::ControllerUtils;
 
@@ -102,6 +103,8 @@ sub add {
                 delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
+                $body = _inherit_currency_and_owner($body);
+
                 my $fund = Koha::Acquire::Funds::Fund->new_from_api($body)->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $fund->fund_id );
@@ -143,6 +146,8 @@ sub update {
                 delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
+
+                $body = _inherit_currency_and_owner($body);
 
                 $fund->set_from_api($body)->store;
 
@@ -203,6 +208,17 @@ sub delete {
     } catch {
         $c->unhandled_exception($_);
     };
+}
+
+sub _inherit_currency_and_owner {
+    my ($fund) = @_;
+
+    my $ledger = Koha::Acquire::Funds::Ledgers->find( { ledger_id => $fund->{ledger_id} } );
+
+    $fund->{currency} = $ledger->currency;
+    $fund->{owner}    = $ledger->owner;
+
+    return $fund;
 }
 
 1;
