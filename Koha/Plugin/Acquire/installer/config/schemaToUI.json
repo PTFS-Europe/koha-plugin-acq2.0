@@ -173,5 +173,83 @@
             "label": "Overspend limit amount",
             "type": "number"
         }
+    },
+    "fund": {
+        "name": {
+            "label": "Name",
+            "type": "string"
+        },
+        "description": {
+            "label": "Description",
+            "type": "string"
+        },
+        "code": {
+            "label": "Code",
+            "type": "string"
+        },
+        "fiscal_yr_id": {
+            "label": "Fiscal year",
+            "type": "table",
+            "dataType": "fiscal_yr",
+            "columns": [
+                "ID",
+                "Code"
+            ],
+            "keys": [
+                "fiscal_yr_id",
+                "code"
+            ]
+        },
+        "ledger_id": {
+            "label": "Ledger",
+            "type": "table",
+            "dataType": "ledger",
+            "columns": [
+                "ID",
+                "Code"
+            ],
+            "keys": [
+                "ledger_id",
+                "code"
+            ]
+        },
+        "owner": {
+            "label": "Owner",
+            "type": "patron"
+        },
+        "visible_to": {
+            "label": "Library groups covered",
+            "type": "table",
+            "dataType": "lib_groups",
+            "columns": [
+                "ID",
+                "Title"
+            ],
+            "keys": [
+                "id",
+                "title"
+            ]
+        },
+        "status": {
+            "label": "Status",
+            "type": "enum",
+            "options": { "1": "Active", "0": "Inactive" }
+        },
+        "last_updated": {
+            "label": "Last updated",
+            "type": "string"
+        },
+        "currency": {
+            "label": "Currency",
+            "type": "string"
+        },
+        "external_id": {
+            "label": "External ID",
+            "type": "string"
+        },
+        "fund_type": {
+            "label": "Fund type",
+            "type": "string"
+        }
     }
 }

@@ -1,0 +1,340 @@
+<template>
+    <div v-if="!initialized">Loading...</div>
+    <div v-else id="fund_add">
+        <h2 v-if="fund.fund_id">
+            {{ `Edit fund ${fund.fund_id}` }}
+        </h2>
+        <h2 v-else>New fund</h2>
+        <div>
+            <form @submit="onSubmit($event)">
+                <fieldset class="rows">
+                    <ol>
+                        <li>
+                            <label class="required" for="fund_name"
+                                >Name:</label
+                            >
+                            <input
+                                id="fund_name"
+                                v-model="fund.name"
+                                placeholder="Fund name"
+                                required
+                            />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_description"
+                                >Description:
+                            </label>
+                            <textarea
+                                id="fund_description"
+                                v-model="fund.description"
+                                placeholder="Description"
+                                rows="10"
+                                cols="50"
+                                required
+                            />
+                        </li>
+                        <li>
+                            <label class="required" for="fund_code"
+                                >Code:</label
+                            >
+                            <input
+                                id="fund_code"
+                                v-model="fund.code"
+                                placeholder="Fund code"
+                                required
+                            />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_fiscal_yr_id" class="required"
+                                >Fiscal year:</label
+                            >
+                            <v-select
+                                id="fund_fiscal_yr_id"
+                                v-model="fund.fiscal_yr_id"
+                                :reduce="av => av.fiscal_yr_id"
+                                :options="fiscal_years"
+                                label="code"
+                                @update:modelValue="filterLedgersBySelectedFiscalYear($event)"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!fund.fiscal_yr_id"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_ledger_id" class="required"
+                                >Ledger:</label
+                            >
+                            <v-select
+                                id="fund_ledger_id"
+                                v-model="fund.ledger_id"
+                                :reduce="av => av.ledger_id"
+                                :options="ledgers"
+                                label="name"
+                                @update:modelValue="filterGroupsBySelectedLedger($event)"
+                                :disabled="ledgers.length === 0"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!fund.ledger_id"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_status" class="required"
+                                >Status:</label
+                            >
+                            <v-select
+                                id="fund_status"
+                                v-model="fund.status"
+                                :reduce="av => av.value"
+                                :options="statusOptions"
+                                label="description"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!fund.status"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_external_id"
+                                >External ID:</label
+                            >
+                            <input
+                                id="fund_external_id"
+                                v-model="fund.external_id"
+                                placeholder="External id for use with third party accounting software"
+                            />
+                        </li>
+                        <li>
+                            <label for="fund_visible_to" class="required"
+                                >Visible to:</label
+                            >
+                            <v-select
+                                id="fund_visible_to"
+                                v-model="fund.visible_to"
+                                :reduce="av => av.id"
+                                :options="getVisibleGroups"
+                                label="title"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, fund, ledger_groups)"
+                                multiple
+                                :disabled="ledger_groups.length === 0"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!fund.visible_to"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">Required</span>
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Submit" />
+                    <router-link
+                        :to="{ name: 'FundList' }"
+                        role="button"
+                        class="cancel"
+                        >Cancel</router-link
+                    >
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</template>
+
+<script>
+import flatPickr from "vue-flatpickr-component"
+import { inject } from "vue"
+import { storeToRefs } from "pinia"
+import { APIClient } from "../../fetch/api-client.js"
+import { setMessage, setWarning } from "../../messages"
+
+export default {
+    setup() {
+        const acquisitionsStore = inject("acquisitionsStore")
+        const {
+            library_groups,
+            getVisibleGroups,
+            getOwners
+        } = storeToRefs(acquisitionsStore)
+
+        const { 
+            isUserPermitted,
+            filterGroupsBasedOnOwner,
+            filterOwnersBasedOnGroup,
+            resetOwnersAndVisibleGroups,
+            formatLibraryGroupIds
+        } = acquisitionsStore
+
+        return {
+            isUserPermitted,
+            library_groups,
+            filterGroupsBasedOnOwner,
+            filterOwnersBasedOnGroup,
+            formatLibraryGroupIds,
+            resetOwnersAndVisibleGroups,
+            getVisibleGroups,
+            getOwners
+        }
+    },
+    data() {
+        return {
+            initialized: false,
+            fp_config: flatpickr_defaults,
+            statusOptions: [
+                { description: 'Active', value: 1 },
+                { description: 'Inactive', value: 0 },
+            ],
+            allowedOptions: [
+                { description: 'Allowed', value: 1 },
+                { description: 'Not allowed', value: 0 },
+            ],
+            fund: {
+                fiscal_yr_id: null,
+                ledger_id: null,
+                name: '',
+                description: '',
+                code: '',
+                external_id: '',
+                status: null,
+                fund_type: '',
+                visible_to: [],
+            },
+            fiscal_years: [],
+            ledgers: [],
+            ledger_groups: [],
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getDataRequiredForPageLoad(to.params.fund_id)
+        })
+    },
+    methods: {
+        async getDataRequiredForPageLoad(fund_id) {
+            this.getFiscalYears().then(() => {
+                if(fund_id) {
+                    this.getFund(fund_id)
+                }
+                this.initialized = true
+            })
+        },
+        async getFund(fund_id) {
+            const client = APIClient.acquisition
+            await client.funds.get(fund_id).then(fund => {
+                this.fund = fund
+                this.fund.visible_to = this.formatLibraryGroupIds(fund.visible_to)
+                this.filterLedgersBySelectedFiscalYear(fund.fiscal_yr_id)
+            })
+        },
+        async getFiscalYears() {
+            const client = APIClient.acquisition
+            await client.fiscal_years.getAll(null, {}, "koha_plugin_acquire_ledgers").then(
+                fiscal_years => {
+                    this.fiscal_years = fiscal_years
+                },
+                error => {}
+            )
+        },
+        filterLedgersBySelectedFiscalYear(e) {
+            if(!e) {
+                this.ledgers = []
+                this.fund.ledger_id = null
+                this.fund.visible_to = []
+                return
+            }
+            this.fund.ledger_id = null
+            this.fund.visible_to = []
+            const fiscalYear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
+            const { koha_plugin_acquire_ledgers: ledgers } = fiscalYear
+            if(!ledgers || ledgers.length === 0) {
+                setWarning("There are no ledgers attached to this fiscal year. Please create one or select a different fiscal year.")
+                this.ledger.fiscal_yr_id = null
+                return
+            }
+            this.ledgers = ledgers
+        },
+        filterGroupsBySelectedLedger(e) {
+            const selectedLedger = this.ledgers.find(ledger => ledger.ledger_id === e)
+            const applicableGroups = this.formatLibraryGroupIds(selectedLedger.visible_to)
+            this.ledger_groups = applicableGroups
+            this.resetOwnersAndVisibleGroups(applicableGroups)
+        },
+        onSubmit(e) {
+            e.preventDefault()
+            
+            if(!this.isUserPermitted('create_fund')) {
+                setWarning('You do not have the required permissions to create funds.')
+                return
+            }
+
+            const fund = JSON.parse(JSON.stringify(this.fund))
+            const fund_id = fund.fund_id
+
+            const visibility = fund.visible_to.join("|")
+            fund.visible_to = visibility
+
+            delete fund.fund_id
+
+            if(fund_id) {
+                const acq_client = APIClient.acquisition
+                acq_client.funds
+                    .update(fund, fund_id).then(
+                        success => {
+                            setMessage("Fund updated")
+                            this.$router.push({ name: "FundList" })
+                        },
+                        error => {}
+                    )
+            } else {
+                const acq_client = APIClient.acquisition
+                acq_client.funds
+                    .create(fund).then(
+                        success => {
+                            setMessage("Fund created")
+                            this.$router.push({ name: "FundList" })
+                        },
+                        error => {}
+                    )
+            }
+        }
+    },
+    unmounted() {
+        this.resetOwnersAndVisibleGroups()
+    },
+    components: {
+        flatPickr
+    }
+}
+</script>
+
+<style scoped>
+fieldset.rows label {
+    width: 15em;
+}
+</style>

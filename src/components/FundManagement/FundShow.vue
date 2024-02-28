@@ -1,26 +1,26 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="ledgers_show">
+    <div v-else id="funds_show">
         <h2>
-            {{ "Ledger " + ledger.ledger_id }}
+            {{ "Fund " + fund.fund_id }}
             <span class="action_links">
                 <router-link
                     :to="{
-                        name: 'LedgerFormEdit',
-                        params: { ledger_id: ledger.ledger_id },
+                        name: 'FundFormEdit',
+                        params: { fund_id: fund.fund_id },
                     }"
                     title="Edit"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
-                <a @click="delete_ledger(ledger.ledger_id, ledger.code)"
+                <a @click="delete_fund(fund.fund_id, fund.code)"
                     ><i class="fa fa-trash"></i
                 ></a>
             </span>
         </h2>
         <DisplayDataFields 
-            :data="ledger"
-            homeRoute="LedgerList"
-            dataType="ledger"
+            :data="fund"
+            homeRoute="FundList"
+            dataType="fund"
         />
     </div>
 </template>
@@ -41,40 +41,40 @@ export default {
     },
     data() {
         return {
-            ledger: {},
+            fund: {},
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.ledger = vm.getLedger(to.params.ledger_id)
+            vm.fund = vm.getFund(to.params.fund_id)
         })
     },
     methods: {
-        async getLedger(ledger_id) {
+        async getFund(fund_id) {
             const client = APIClient.acquisition
-            await client.ledgers.get(ledger_id, "fiscal_yr").then(
-                ledger => {
-                    this.ledger = ledger
+            await client.funds.get(fund_id, "fiscal_yr,ledger").then(
+                fund => {
+                    this.fund = fund
                     this.initialized = true
                 },
                 error => {}
             )
         },
-        delete_ledger: function (ledger_id, ledger_code) {
+        delete_fund: function (fund_id, fund_code) {
             this.setConfirmationDialog(
                 {
-                    title: "Are you sure you want to remove this ledger?",
-                    message: ledger_code,
+                    title: "Are you sure you want to remove this fund?",
+                    message: fund_code,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.ledgers.delete(ledger_id).then(
+                    client.funds.delete(fund_id).then(
                         success => {
-                            this.setMessage("Ledger deleted")
-                            this.$router.push({ name: "LedgerList" })
+                            this.setMessage("Fund deleted")
+                            this.$router.push({ name: "FundList" })
                         },
                         error => {}
                     )

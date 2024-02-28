@@ -13,7 +13,7 @@
             v-if="isUserPermitted('manage_ledgers')"
         />
         <ToolbarButton
-            :to="{ name: 'SettingsHome' }"
+            :to="{ name: 'FundList' }"
             icon="pen-to-square"
             title="Manage funds"
             v-if="isUserPermitted('manage_funds')"

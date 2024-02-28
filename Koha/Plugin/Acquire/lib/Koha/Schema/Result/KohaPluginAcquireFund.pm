@@ -93,8 +93,10 @@ external id for the fund for use with external accounting systems
 
 =head2 currency
 
-  data_type: 'integer'
+  data_type: 'varchar'
+  default_value: (empty string)
   is_nullable: 1
+  size: 10
 
 currency of the fund
 
@@ -112,7 +114,7 @@ is the fund currently active
   is_foreign_key: 1
   is_nullable: 1
 
-owner of the ledger
+owner of the fund
 
 =head2 last_updated
 
@@ -152,7 +154,7 @@ __PACKAGE__->add_columns(
     "external_id",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "currency",
-    { data_type => "integer", is_nullable => 1 },
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
     "status",
     { data_type => "tinyint", default_value => 1, is_nullable => 1 },
     "owner",
@@ -242,8 +244,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-28 09:32:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ph2SZdq/yNWcpxueZaqrfA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-28 12:17:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fQlT+ECMVlTbhheMBxTQAQ
+
 
 
 sub koha_object_class {

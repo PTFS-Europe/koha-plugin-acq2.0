@@ -13,6 +13,9 @@ import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vu
 import LedgerList from '../components/FundManagement/LedgerList.vue'
 import LedgerShow from '../components/FundManagement/LedgerShow.vue'
 import LedgerFormAdd from '../components/FundManagement/LedgerFormAdd.vue'
+import FundList from '../components/FundManagement/FundList.vue'
+import FundShow from '../components/FundManagement/FundShow.vue'
+import FundFormAdd from '../components/FundManagement/FundFormAdd.vue'
 
 export const routes = [
     {
@@ -106,6 +109,41 @@ export const routes = [
                                 name: "LedgerFormEdit",
                                 title: "Edit",
                                 permission: "edit_ledger"
+                            }
+                        ]
+                    },
+                    {
+                        path: "fund",
+                        title: "Fund",
+                        is_navigation_item: false,
+                        children: [
+                            {
+                                path: "",
+                                component: markRaw(FundList),
+                                name: "FundList",
+                                title: "List",
+                                permission: "manage_funds"
+                            },
+                            {
+                                path: ":fund_id",
+                                component: markRaw(FundShow),
+                                name: "FundShow",
+                                title: "Show",
+                                permission: "manage_funds"
+                            },
+                            {
+                                path: "add",
+                                component: markRaw(FundFormAdd),
+                                name: "FundFormAdd",
+                                title: "Add",
+                                permission: "create_fund"
+                            },
+                            {
+                                path: "edit/:fund_id",
+                                component: markRaw(FundFormAdd),
+                                name: "FundFormEdit",
+                                title: "Edit",
+                                permission: "edit_fund"
                             }
                         ]
                     },
