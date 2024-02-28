@@ -35,6 +35,9 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireLedger;
     Koha::Schema->register_class( KohaPluginAcquireLedger => 'Koha::Schema::Result::KohaPluginAcquireLedger' );
 
+    require Koha::Acquire::Funds::Funds;
+    require Koha::Schema::Result::KohaPluginAcquireFund;
+    Koha::Schema->register_class( KohaPluginAcquireFund => 'Koha::Schema::Result::KohaPluginAcquireFund' );
 
     Koha::Database->schema( { new => 1 } );
 }

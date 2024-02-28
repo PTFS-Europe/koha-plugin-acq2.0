@@ -247,6 +247,41 @@ __PACKAGE__->set_primary_key("ledger_id");
 
 =head1 RELATIONS
 
+=head2 fiscal_yr
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "fiscal_yr",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
+    { fiscal_yr_id => "fiscal_yr_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
+);
+
+=head2 koha_plugin_acquire_funds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_funds",
+    "Koha::Schema::Result::KohaPluginAcquireFund",
+    { "foreign.ledger_id" => "self.ledger_id" },
+    { cascade_copy        => 0, cascade_delete => 0 },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -267,10 +302,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-23 17:19:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ci9x8027l+J6rO+gznWJ2Q
-
-
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-28 09:32:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZzytD7iILmfjLwsCq7rClA
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';
