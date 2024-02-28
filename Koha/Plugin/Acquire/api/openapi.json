@@ -689,9 +689,11 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "koha_plugin_acquire_ledgers"
+                            "koha_plugin_acquire_ledgers",
+                            "koha_plugin_acquire_funds"
                         ]
-                    }
+                    },
+                    "collectionFormat": "csv"
                 },
                 {
                     "name": "_match",
@@ -842,8 +844,12 @@
                     "type": "array",
                     "items": {
                         "type": "string",
-                        "enum": ["koha_plugin_acquire_ledgers"]
-                    }
+                        "enum": [
+                            "koha_plugin_acquire_ledgers",
+                            "koha_plugin_acquire_funds"
+                        ]
+                    },
+                    "collectionFormat": "csv"
                 }
             ],
             "produces": [
@@ -1179,9 +1185,11 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr"
+                            "fiscal_yr",
+                            "koha_plugin_acquire_funds"
                         ]
-                    }
+                    },
+                    "collectionFormat": "csv"
                 },
                 {
                     "name": "_match",
@@ -1333,9 +1341,11 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr"
+                            "fiscal_yr",
+                            "koha_plugin_acquire_funds"
                         ]
-                    }
+                    },
+                    "collectionFormat": "csv"
                 }
             ],
             "produces": [
@@ -1565,6 +1575,502 @@
             "responses": {
                 "204": {
                     "description": "Ledger",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
+    "/funds": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::Funds#list",
+            "operationId": "AcquireGetFunds",
+            "description": "Retrieves the funds for the Acquisitions plugin module",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "parameters": [
+                {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "fiscal_yr",
+                            "ledger"
+                        ]
+                    },
+                    "collectionFormat": "csv"
+                },
+                {
+                    "name": "_match",
+                    "description": "Matching criteria",
+                    "enum": [
+                        "contains",
+                        "exact",
+                        "starts_with",
+                        "ends_with"
+                    ],
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "_order_by",
+                    "collectionFormat": "csv",
+                    "description": "Sorting criteria",
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "_page",
+                    "description": "Page number, for paginated object listing",
+                    "in": "query",
+                    "required": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "_per_page",
+                    "description": "Page size, for paginated object listing",
+                    "in": "query",
+                    "required": false,
+                    "type": "integer"
+                },
+                {
+                    "name": "q",
+                    "description": "Query filter sent as a request parameter",
+                    "in": "query",
+                    "required": false,
+                    "type": "string"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Fund data",
+                    "schema": {
+                        "type": "array"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "post": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::Funds#add",
+            "operationId": "AcquireStoreFund",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "201": {
+                    "description": "Fund",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
+    "/funds/{id}": {
+        "get": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::Funds#get",
+            "operationId": "getFund",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Get a single fund",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of fund to fetch",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "fiscal_yr",
+                            "ledger"
+                        ]
+                    },
+                    "collectionFormat": "csv"
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Fund",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "put": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::Funds#update",
+            "operationId": "updateFund",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Update a fund",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of fund to update",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "description": "Fund object that needs to be added",
+                    "required": true,
+                    "schema": {
+                        "type": "object"
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Fund",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Forbidden",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "The object was not found",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "409": {
+                    "description": "Conflict",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        },
+        "delete": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::Funds#delete",
+            "operationId": "deleteFund",
+            "tags": [
+                "acquire"
+            ],
+            "description": "Delete a fund",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of fund to delete",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "204": {
+                    "description": "Fund",
                     "schema": {
                         "type": "string"
                     }
