@@ -396,11 +396,13 @@ export default {
                 this.ledger.visible_to = []
                 return
             }
-            this.ledger.visible_to = []
             const selectedFiscalyear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
             const applicableGroups = this.formatLibraryGroupIds(selectedFiscalyear.visible_to)
             this.fiscal_year_groups = applicableGroups
             this.resetOwnersAndVisibleGroups(applicableGroups)
+            if(e !== this.ledger.fiscal_yr_id) {
+                this.ledger.visible_to = []
+            }
         },
         onSubmit(e) {
             e.preventDefault()
