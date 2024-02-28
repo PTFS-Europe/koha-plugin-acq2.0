@@ -1,22 +1,22 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="ledgers_show">
-        <h2>
-            {{ "Ledger " + ledger.ledger_id }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'LedgerFormEdit',
-                        params: { ledger_id: ledger.ledger_id },
-                    }"
-                    title="Edit"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a @click="delete_ledger(ledger.ledger_id, ledger.code)"
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
-        </h2>
+        <Toolbar>
+            <ToolbarButton
+                :to="{ name: 'LedgerFormEdit', params: { ledger_id: ledger.ledger_id } }"
+                icon="pencil"
+                title="Edit"
+                v-if="isUserPermitted('edit_ledger')"
+            />
+            <ToolbarButton
+                to="#"
+                icon="trash"
+                title="Delete"
+                @clicked="delete_ledger(ledger.ledger_id, ledger.name)"
+                v-if="isUserPermitted('delete_ledger')"
+            />
+        </Toolbar>
+        <h2>{{ "Ledger " + ledger.ledger_id }}</h2>
         <DisplayDataFields 
             :data="ledger"
             homeRoute="LedgerList"
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
@@ -34,9 +36,15 @@ export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            isUserPermitted,
+        } = acquisitionsStore
+
         return {
             setConfirmationDialog,
             setMessage,
+            isUserPermitted
         }
     },
     data() {
@@ -83,15 +91,12 @@ export default {
         },
     },
     components: {
-        DisplayDataFields
+        DisplayDataFields,
+        Toolbar,
+        ToolbarButton
     },
 }
 </script>
 
 <style scoped>
-.action_links a {
-    padding-left: 0.2em;
-    font-size: 11px;
-    cursor: pointer;
-}
 </style>
