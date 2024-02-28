@@ -84,11 +84,16 @@ export class AcquisitionAPIClient extends HttpClient {
                         }
                     })
                 }),
-            getAll: (query, params) =>
+            getAll: (query, params, embed) =>
                 this.getAll({
                     endpoint: "fiscal_years",
                     query,
                     params,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
                 }),
             delete: id =>
                 this.delete({
@@ -126,11 +131,16 @@ export class AcquisitionAPIClient extends HttpClient {
                         "x-koha-embed": embed
                     }})
                 }),
-            getAll: (query, params) =>
+            getAll: (query, params, embed) =>
                 this.getAll({
                     endpoint: "ledgers",
                     query,
                     params,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
                 }),
             delete: id =>
                 this.delete({
@@ -150,6 +160,53 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.count({
                     endpoint:
                         "ledgers?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get funds() {
+        return {
+            get: (id, embed) =>
+                this.get({
+                    endpoint: "funds/" + id,
+                    ...(embed && { headers: {
+                        "x-koha-embed": embed
+                    }})
+                }),
+            getAll: (query, params, embed) =>
+                this.getAll({
+                    endpoint: "funds",
+                    query,
+                    params,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "funds/" + id,
+                }),
+            create: fiscal_year =>
+                this.post({
+                    endpoint: "funds",
+                    body: fiscal_year,
+                }),
+            update: (fiscal_year, id) =>
+                this.put({
+                    endpoint: "funds/" + id,
+                    body: fiscal_year,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "funds?" +
                         new URLSearchParams({
                             _page: 1,
                             _per_page: 1,
