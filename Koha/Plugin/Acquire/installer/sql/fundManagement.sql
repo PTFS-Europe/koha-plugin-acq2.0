@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
 CREATE TABLE IF NOT EXISTS { { funds } } (
     `fund_id` INT(11) NOT NULL AUTO_INCREMENT,
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
+    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund applies to',
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund',
     `description` VARCHAR(255) DEFAULT '' COMMENT 'description for the fund',
     `fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the fund',
@@ -43,10 +44,13 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the fund for use with external accounting systems',
     `currency` INT(11) DEFAULT NULL COMMENT 'currency of the fund',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fund currently active',
+    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
     PRIMARY KEY (`fund_id`),
-    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`)
+    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`),
+    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`),
+    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
