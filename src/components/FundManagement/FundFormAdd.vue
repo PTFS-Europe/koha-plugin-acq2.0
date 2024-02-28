@@ -266,8 +266,9 @@ export default {
             this.getFiscalYears().then(() => {
                 if(fund_id) {
                     this.getFund(fund_id)
+                } else {
+                    this.initialized = true
                 }
-                this.initialized = true
             })
         },
         async getFund(fund_id) {
@@ -276,6 +277,8 @@ export default {
                 this.fund = fund
                 this.fund.visible_to = this.formatLibraryGroupIds(fund.visible_to)
                 this.filterLedgersBySelectedFiscalYear(fund.fiscal_yr_id)
+                this.filterGroupsBySelectedLedger(fund.ledger_id)
+                this.initialized = true
             })
         },
         async getFiscalYears() {
@@ -294,8 +297,6 @@ export default {
                 this.fund.visible_to = []
                 return
             }
-            this.fund.ledger_id = null
-            this.fund.visible_to = []
             const fiscalYear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
             const { koha_plugin_acquire_ledgers: ledgers } = fiscalYear
             if(!ledgers || ledgers.length === 0) {
@@ -304,6 +305,10 @@ export default {
                 return
             }
             this.ledgers = ledgers
+            if(e !== this.fund.fiscal_yr_id) {
+                this.fund.ledger_id = null
+                this.fund.visible_to = []
+            }
         },
         filterGroupsBySelectedLedger(e) {
             const selectedLedger = this.ledgers.find(ledger => ledger.ledger_id === e)
