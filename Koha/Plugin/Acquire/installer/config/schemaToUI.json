@@ -249,7 +249,8 @@
         },
         "fund_type": {
             "label": "Fund type",
-            "type": "string"
+            "type": "av",
+            "av_type": "acquire_fund_types"
         }
     }
 }

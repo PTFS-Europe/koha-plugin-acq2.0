@@ -47,6 +47,8 @@ export default {
         const mainStore = inject("mainStore")
         const { loading, loaded, setError } = mainStore
 
+        const AVStore = inject("AVStore")
+
         const acquisitionsStore = inject("acquisitionsStore")
         const {
             filterUsersByPermissions,
@@ -76,7 +78,8 @@ export default {
             owners,
             filterUsersByPermissions,
             filterLibGroupsByUsersBranchcode,
-            convertSettingsToObject
+            convertSettingsToObject,
+            AVStore
         }
     },
     data() {
@@ -100,6 +103,29 @@ export default {
                 },
                 error => {}
             )
+
+            const authorised_values = {
+                acquire_fund_types: "ACQUIRE_FUND_TYPE"
+            }
+            const av_cat_array = Object.keys(authorised_values).map(function (
+                av_cat
+            ) {
+                return '"' + authorised_values[av_cat] + '"'
+            })
+            const av_client = APIClient.authorised_values
+            await av_client.values
+                .getCategoriesWithValues(av_cat_array)
+                .then(av_categories => {
+                    Object.entries(authorised_values).forEach(
+                        ([av_var, av_cat]) => {
+                            const av_match = av_categories.find(
+                                element => element.category_name == av_cat
+                            )
+                            this.AVStore[av_var] =
+                                av_match.authorised_values
+                        }
+                    )
+                })
         }
 
         const acq_client = APIClient.acquisition

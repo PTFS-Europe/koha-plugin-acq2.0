@@ -94,6 +94,26 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
+                            <label for="fund_fund_type"
+                                >Fund type:</label
+                            >
+                            <v-select
+                                id="fund_fund_type"
+                                v-model="fund.fund_type"
+                                :reduce="av => av.value"
+                                :options="acquire_fund_types"
+                                label="description"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                        </li>
+                        <li>
                             <label for="fund_status" class="required"
                                 >Status:</label
                             >
@@ -191,6 +211,11 @@ export default {
             formatLibraryGroupIds
         } = acquisitionsStore
 
+        const AVStore = inject("AVStore")
+        const {
+            acquire_fund_types
+        } = storeToRefs(AVStore)
+
         return {
             isUserPermitted,
             library_groups,
@@ -199,7 +224,8 @@ export default {
             formatLibraryGroupIds,
             resetOwnersAndVisibleGroups,
             getVisibleGroups,
-            getOwners
+            getOwners,
+            acquire_fund_types
         }
     },
     data() {
