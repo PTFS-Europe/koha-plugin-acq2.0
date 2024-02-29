@@ -46,7 +46,7 @@ export const routes = [
                     },
                     {
                         path: "fiscal_year",
-                        title: "Fiscal year",
+                        title: "Fiscal years",
                         is_navigation_item: false,
                         children: [
                             {
@@ -81,7 +81,7 @@ export const routes = [
                     },
                     {
                         path: "ledger",
-                        title: "Ledger",
+                        title: "Ledgers",
                         is_navigation_item: false,
                         children: [
                             {
@@ -116,7 +116,7 @@ export const routes = [
                     },
                     {
                         path: "fund",
-                        title: "Fund",
+                        title: "Funds",
                         is_navigation_item: false,
                         children: [
                             {
