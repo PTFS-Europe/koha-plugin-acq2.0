@@ -14,4 +14,8 @@ export const permissionsMatrix = {
     create_fund: ['planning_manage', 'period_manage'],
     edit_fund: ['period_manage', 'planning_manage'],
     delete_fund: ['period_manage', 'planning_manage'],
+    manage_fund_allocations: ['budget_manage'],
+    create_fund_allocation: ['planning_manage', 'period_manage'],
+    edit_fund_allocation: ['period_manage', 'planning_manage'],
+    delete_fund_allocation: ['period_manage', 'planning_manage'],
 }

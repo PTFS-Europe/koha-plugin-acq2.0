@@ -15,6 +15,12 @@
                 @clicked="delete_fund(fund.fund_id, fund.name)"
                 v-if="isUserPermitted('delete_fund')"
             />
+            <ToolbarButton
+                :to="{ name: 'FundAllocationFormAdd' }"
+                icon="plus"
+                title="New fund allocation"
+                v-if="isUserPermitted('create_fund_allocation')"
+            />
         </Toolbar>
         <h2>{{ "Fund " + fund.fund_id }}</h2>
         <DisplayDataFields 

@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund allocation applies to',
     `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund allocation applies to',
-    `allocation_amout` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',
+    `allocation_amount` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',
     `reference` VARCHAR(255) DEFAULT '' COMMENT 'allocation reference',
     `note` VARCHAR(255) DEFAULT '' COMMENT 'any notes associated to the allocation',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund allocation',
