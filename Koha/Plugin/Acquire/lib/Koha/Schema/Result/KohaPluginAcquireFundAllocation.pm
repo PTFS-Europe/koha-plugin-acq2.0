@@ -1,13 +1,13 @@
 use utf8;
 
-package Koha::Schema::Result::KohaPluginAcquireFund;
+package Koha::Schema::Result::KohaPluginAcquireFundAllocation;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::KohaPluginAcquireFund
+Koha::Schema::Result::KohaPluginAcquireFundAllocation
 
 =cut
 
@@ -16,21 +16,21 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<koha_plugin_acquire_funds>
+=head1 TABLE: C<koha_plugin_acquire_fund_allocation>
 
 =cut
 
-__PACKAGE__->table("koha_plugin_acquire_funds");
+__PACKAGE__->table("koha_plugin_acquire_fund_allocation");
 
 =head1 ACCESSORS
 
-=head2 fund_id
+=head2 fund_allocation_id
 
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 ledger_id
+=head2 fund_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -38,58 +38,48 @@ __PACKAGE__->table("koha_plugin_acquire_funds");
 
 ledger the fund applies to
 
+=head2 ledger_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+ledger the fund allocation applies to
+
 =head2 fiscal_yr_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-fiscal year the fund applies to
+fiscal year the fund allocation applies to
 
-=head2 name
+=head2 allocation_amout
+
+  data_type: 'decimal'
+  default_value: 0.000000
+  is_nullable: 1
+  size: [28,6]
+
+amount for the allocation
+
+=head2 reference
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 1
   size: 255
 
-name for the fund
+allocation reference
 
-=head2 description
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 1
-  size: 255
-
-description for the fund
-
-=head2 fund_type
+=head2 note
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 1
   size: 255
 
-type for the fund
-
-=head2 code
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 1
-  size: 255
-
-code for the fund
-
-=head2 external_id
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 1
-  size: 255
-
-external id for the fund for use with external accounting systems
+any notes associated to the allocation
 
 =head2 currency
 
@@ -98,15 +88,7 @@ external id for the fund for use with external accounting systems
   is_nullable: 1
   size: 10
 
-currency of the fund
-
-=head2 status
-
-  data_type: 'tinyint'
-  default_value: 1
-  is_nullable: 1
-
-is the fund currently active
+currency of the fund allocation
 
 =head2 owner
 
@@ -114,7 +96,7 @@ is the fund currently active
   is_foreign_key: 1
   is_nullable: 1
 
-owner of the fund
+owner of the fund allocation
 
 =head2 last_updated
 
@@ -123,7 +105,7 @@ owner of the fund
   default_value: current_timestamp
   is_nullable: 1
 
-time of the last update to the fund
+time of the last update to the fund allocation
 
 =head2 visible_to
 
@@ -132,31 +114,32 @@ time of the last update to the fund
   is_nullable: 1
   size: 255
 
-library groups the fund is visible to
+library groups the fund allocation is visible to
 
 =cut
 
 __PACKAGE__->add_columns(
-    "fund_id",
+    "fund_allocation_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+    "fund_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "ledger_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "fiscal_yr_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-    "name",
+    "allocation_amout",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
+    "reference",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-    "description",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-    "fund_type",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-    "code",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-    "external_id",
+    "note",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "currency",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
-    "status",
-    { data_type => "tinyint", default_value => 1, is_nullable => 1 },
     "owner",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "last_updated",
@@ -174,13 +157,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</fund_id>
+=item * L</fund_allocation_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("fund_id");
+__PACKAGE__->set_primary_key("fund_allocation_id");
 
 =head1 RELATIONS
 
@@ -204,19 +187,24 @@ __PACKAGE__->belongs_to(
     },
 );
 
-=head2 koha_plugin_acquire_fund_allocations
+=head2 fund
 
-Type: has_many
+Type: belongs_to
 
-Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
 
 =cut
 
-__PACKAGE__->has_many(
-    "koha_plugin_acquire_fund_allocations",
-    "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
-    { "foreign.fund_id" => "self.fund_id" },
-    { cascade_copy      => 0, cascade_delete => 0 },
+__PACKAGE__->belongs_to(
+    "fund",
+    "Koha::Schema::Result::KohaPluginAcquireFund",
+    { fund_id => "fund_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
 );
 
 =head2 ledger
@@ -259,15 +247,16 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 13:56:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7r9EkZcBQqtY9NH8jLoqKw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 14:11:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0+goxeD4EqsKAQ/Kc1yIfA
+
 
 sub koha_object_class {
-    'Koha::Acquire::Funds::Fund';
+    'Koha::Acquire::Fund::FundAllocation';
 }
 
 sub koha_objects_class {
-    'Koha::Acquire::Funds::Funds';
+    'Koha::Acquire::Fund::FundAllocations';
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
