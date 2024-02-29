@@ -267,6 +267,21 @@ __PACKAGE__->belongs_to(
     },
 );
 
+=head2 koha_plugin_acquire_fund_allocations
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_fund_allocations",
+    "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
+    { "foreign.ledger_id" => "self.ledger_id" },
+    { cascade_copy        => 0, cascade_delete => 0 },
+);
+
 =head2 koha_plugin_acquire_funds
 
 Type: has_many
@@ -302,8 +317,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-28 09:32:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZzytD7iILmfjLwsCq7rClA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 13:56:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/L/vF0OvAwqyX0PWC9u6Vw
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

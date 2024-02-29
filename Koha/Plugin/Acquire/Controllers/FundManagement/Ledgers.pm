@@ -48,7 +48,7 @@ sub list {
         my $filtered_ledgers =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $ledgers } );
 
-        return $c->render( status => 200, openapi => $ledgers );
+        return $c->render( status => 200, openapi => $filtered_ledgers );
     } catch {
         $c->unhandled_exception($_);
     };
