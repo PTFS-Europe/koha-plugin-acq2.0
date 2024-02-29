@@ -124,15 +124,15 @@ export default {
             const { params } = route
             this.getFunds(params).then(() => {
                 if(params.fund_allocation_id) {
-                    this.getFundAllocation()
+                    this.getFundAllocation(params.fund_allocation_id)
                 }
                 this.initialized = true
             })
         },
-        async getFundAllocation(fund_id) {
+        async getFundAllocation(fund_allocation_id) {
             const client = APIClient.acquisition
-            await client.funds.get(fund_id).then(fund_allocations => {
-                this.fund_allocations = fund_allocations
+            await client.fund_allocations.get(fund_allocation_id).then(fund_allocation => {
+                this.fund_allocation = fund_allocation
             })
         },
         async getFunds(params) {

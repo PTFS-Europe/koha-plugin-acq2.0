@@ -9,7 +9,7 @@
                     />
                 </ol>
             </fieldset>
-            <fieldset class="action">
+            <fieldset v-if="showClose" class="action">
                 <router-link
                     :to="{ name: homeRoute }"
                     role="button"
@@ -29,7 +29,11 @@ export default {
     props:{
         data: Object,
         dataType: String,
-        homeRoute: String
+        homeRoute: String,
+        showClose: {
+            type: Boolean,
+            default: true
+        }
     },
     setup() {
         const AVStore = inject("AVStore")
