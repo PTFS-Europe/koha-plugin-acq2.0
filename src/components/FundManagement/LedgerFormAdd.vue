@@ -31,7 +31,6 @@
                                 placeholder="Description"
                                 rows="10"
                                 cols="50"
-                                required
                             />
                         </li>
                         <li>
@@ -279,7 +278,6 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -316,7 +314,6 @@ export default {
     data() {
         return {
             initialized: false,
-            fp_config: flatpickr_defaults,
             statusOptions: [
                 { description: 'Active', value: 1 },
                 { description: 'Inactive', value: 0 },
@@ -447,9 +444,6 @@ export default {
     },
     unmounted() {
         this.resetOwnersAndVisibleGroups()
-    },
-    components: {
-        flatPickr
     }
 }
 </script>

@@ -39,6 +39,10 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireFund;
     Koha::Schema->register_class( KohaPluginAcquireFund => 'Koha::Schema::Result::KohaPluginAcquireFund' );
 
+    require Koha::Acquire::Funds::FundAllocations;
+    require Koha::Schema::Result::KohaPluginAcquireFundAllocation;
+    Koha::Schema->register_class( KohaPluginAcquireFundAllocation => 'Koha::Schema::Result::KohaPluginAcquireFundAllocation' );
+
     Koha::Database->schema( { new => 1 } );
 }
 our $VERSION = "0.0";

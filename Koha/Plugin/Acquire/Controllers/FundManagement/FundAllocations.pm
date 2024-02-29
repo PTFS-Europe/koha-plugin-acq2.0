@@ -103,7 +103,7 @@ sub add {
 
                 my $fund_allocation = Koha::Acquire::Funds::FundAllocation->new_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fundAllocation_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fund_allocation_id );
                 return $c->render(
                     status  => 201,
                     openapi => $fund_allocation->to_api
@@ -146,7 +146,7 @@ sub update {
 
                 $fund_allocation->set_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fundAllocation_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fund_allocation_id );
                 return $c->render(
                     status  => 200,
                     openapi => $fund_allocation->to_api

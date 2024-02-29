@@ -54,7 +54,7 @@ ledger the fund allocation applies to
 
 fiscal year the fund allocation applies to
 
-=head2 allocation_amout
+=head2 allocation_amount
 
   data_type: 'decimal'
   default_value: 0.000000
@@ -127,7 +127,7 @@ __PACKAGE__->add_columns(
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "fiscal_yr_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-    "allocation_amout",
+    "allocation_amount",
     {
         data_type     => "decimal",
         default_value => "0.000000",
