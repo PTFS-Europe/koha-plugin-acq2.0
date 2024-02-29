@@ -140,6 +140,21 @@ __PACKAGE__->set_primary_key("fiscal_yr_id");
 
 =head1 RELATIONS
 
+=head2 koha_plugin_acquire_fund_allocations
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_fund_allocations",
+    "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
+    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
+);
+
 =head2 koha_plugin_acquire_funds
 
 Type: has_many
@@ -190,8 +205,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-28 09:32:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G4dSJcn6lElvBEsWgw+N8w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 13:56:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pZX22PaZ285E8M2tFpNodg
+
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

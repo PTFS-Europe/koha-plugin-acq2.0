@@ -1,4 +1,4 @@
-package Koha::Plugin::Acquire::Controllers::FundManagement::Funds;
+package Koha::Plugin::Acquire::Controllers::FundManagement::FundAllocations;
 
 # Copyright 2024 PTFS Europe
 
@@ -23,9 +23,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
 use Try::Tiny;
 
-use Koha::Acquire::Funds::Fund;
-use Koha::Acquire::Funds::Funds;
-use Koha::Acquire::Funds::Ledgers;
+use Koha::Acquire::Funds::FundAllocation;
+use Koha::Acquire::Funds::FundAllocations;
 
 use Koha::Plugin::Acquire::Controllers::ControllerUtils;
 
@@ -43,13 +42,13 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $funds_set = Koha::Acquire::Funds::Funds->new;
-        my $funds     = $c->objects->search($funds_set);
+        my $fund_allocations_set = Koha::Acquire::Funds::FundAllocations->new;
+        my $fund_allocations     = $c->objects->search($fund_allocations_set);
 
-        my $filtered_funds =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $funds } );
+        my $filtered_fund_allocations =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $fund_allocations } );
 
-        return $c->render( status => 200, openapi => $filtered_funds );
+        return $c->render( status => 200, openapi => $fund_allocations );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -64,24 +63,23 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $funds_set = Koha::Acquire::Funds::Funds->new;
-        my $fund      = $c->objects->find( $funds_set, $c->param('id') );
+        my $fund_allocations_set = Koha::Acquire::Funds::FundAllocations->new;
+        my $fund_allocation      = $c->objects->find( $fund_allocations_set, $c->param('id') );
 
-        unless ($fund) {
+        unless ($fund_allocation) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "Fund not found" }
+                openapi => { error => "Fund allocation not found" }
             );
         }
 
-        $fund = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $fund, field => 'owned_by', key => "owner" } );
-        $fund =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund } );
+        $fund_allocation = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
+            { data => $fund_allocation, field => 'owned_by', key => "owner" } );
+        $fund_allocation = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund_allocation } );
 
         return $c->render(
             status  => 200,
-            openapi => $fund
+            openapi => $fund_allocation
         );
     } catch {
         $c->unhandled_exception($_);
@@ -103,14 +101,12 @@ sub add {
                 delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
-                $body = _inherit_currency_and_owner($body);
+                my $fund_allocation = Koha::Acquire::Funds::FundAllocation->new_from_api($body)->store;
 
-                my $fund = Koha::Acquire::Funds::Fund->new_from_api($body)->store;
-
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fund->fund_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fundAllocation_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $fund->to_api
+                    openapi => $fund_allocation->to_api
                 );
             }
         );
@@ -121,19 +117,19 @@ sub add {
 
 =head3 update
 
-Controller function that handles updating a Koha::Acquire::Funds::Fund object
+Controller function that handles updating a Koha::Acquire::Funds::FundAllocation object
 
 =cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $fund = Koha::Acquire::Funds::Funds->find( $c->param('id') );
+    my $fund_allocation = Koha::Acquire::Funds::FundAllocations->find( $c->param('id') );
 
-    unless ($fund) {
+    unless ($fund_allocation) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fund not found" }
+            openapi => { error => "Fund allocation not found" }
         );
     }
 
@@ -145,21 +141,20 @@ sub update {
 
                 delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
+                delete $body->{fiscal_year}  if $body->{fiscal_year};
                 delete $body->{last_updated} if $body->{last_updated};
 
-                $body = _inherit_currency_and_owner($body);
+                $fund_allocation->set_from_api($body)->store;
 
-                $fund->set_from_api($body)->store;
-
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fund->fund_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_allocation->fundAllocation_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $fund->to_api
+                    openapi => $fund_allocation->to_api
                 );
             }
         );
     } catch {
-        my $to_api_mapping = Koha::Acquire::Funds::Fund->new->to_api_mapping;
+        my $to_api_mapping = Koha::Acquire::Funds::FundAllocation->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
@@ -191,16 +186,16 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $fund = Koha::Acquire::Funds::Funds->find( $c->param('id') );
-    unless ($fund) {
+    my $fund_allocation = Koha::Acquire::Funds::FundAllocations->find( $c->param('id') );
+    unless ($fund_allocation) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fund not found" }
+            openapi => { error => "Fund allocation not found" }
         );
     }
 
     return try {
-        $fund->delete;
+        $fund_allocation->delete;
         return $c->render(
             status  => 204,
             openapi => q{}
@@ -208,17 +203,6 @@ sub delete {
     } catch {
         $c->unhandled_exception($_);
     };
-}
-
-sub _inherit_currency_and_owner {
-    my ($fund) = @_;
-
-    my $ledger = Koha::Acquire::Funds::Ledgers->find( { ledger_id => $fund->{ledger_id} } );
-
-    $fund->{currency} = $ledger->currency;
-    $fund->{owner}    = $ledger->owner;
-
-    return $fund;
 }
 
 1;
