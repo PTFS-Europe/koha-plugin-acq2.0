@@ -215,6 +215,55 @@ export class AcquisitionAPIClient extends HttpClient {
                 }),
         };
     }
+
+    get fund_allocations() {
+        return {
+            get: (id, embed) =>
+                this.get({
+                    endpoint: "fund_allocations/" + id,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
+                }),
+            getAll: (query, params, embed) =>
+                this.getAll({
+                    endpoint: "fund_allocations",
+                    query,
+                    params,
+                    ...(embed && {
+                        headers: {
+                            "x-koha-embed": embed
+                        }
+                    })
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "fund_allocations/" + id,
+                }),
+            create: fiscal_year =>
+                this.post({
+                    endpoint: "fund_allocations",
+                    body: fiscal_year,
+                }),
+            update: (fiscal_year, id) =>
+                this.put({
+                    endpoint: "fund_allocations/" + id,
+                    body: fiscal_year,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "fund_allocations?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
 }
 
 export default AcquisitionAPIClient;
