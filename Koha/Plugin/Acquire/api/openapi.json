@@ -1682,7 +1682,8 @@
                         "type": "string",
                         "enum": [
                             "fiscal_yr",
-                            "ledger"
+                            "ledger",
+                            "koha_plugin_acquire_fund_allocations"
                         ]
                     },
                     "collectionFormat": "csv"
@@ -1838,7 +1839,8 @@
                         "type": "string",
                         "enum": [
                             "fiscal_yr",
-                            "ledger"
+                            "ledger",
+                            "koha_plugin_acquire_fund_allocations"
                         ]
                     },
                     "collectionFormat": "csv"

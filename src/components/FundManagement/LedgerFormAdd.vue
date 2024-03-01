@@ -225,6 +225,7 @@
                                 type="number"
                                 min="1"
                                 max="100"
+                                step=".01"
                             />
                         </li>
                         <li>
@@ -236,6 +237,7 @@
                                 v-model="ledger.oe_limit_amount"
                                 placeholder="The amount at which a block is triggered"
                                 type="number"
+                                step=".01"
                             />
                         </li>
                         <li>
@@ -247,6 +249,7 @@
                                 v-model="ledger.os_warning_sum"
                                 placeholder="The amount at which a warning is triggered"
                                 type="number"
+                                step=".01"
                             />
                         </li>
                         <li>
@@ -258,6 +261,7 @@
                                 v-model="ledger.os_limit_sum"
                                 placeholder="The amount at which a block is triggered"
                                 type="number"
+                                step=".01"
                             />
                         </li>
                     </ol>

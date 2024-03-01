@@ -23,6 +23,22 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+=head3 fund_total
+
+=cut
+
+sub fund_total {
+    my ( $self, $args ) = @_;
+
+    my $allocations = $self->koha_plugin_acquire_fund_allocations;
+    my $total = 0;
+
+    foreach my $allocation ( @$allocations ) {
+        $total += $allocation->allocation_amount;
+    }
+
+    return $total;
+}
 
 =head3 fiscal_yr
 
@@ -48,6 +64,17 @@ sub ledger {
     return Koha::Acquire::Funds::Ledger->_new_from_dbic($ledger_rs);
 }
 
+=head3 koha_plugin_acquire_fund_allocations
+
+Method to embed fund allocations to the fiscal year
+
+=cut
+
+sub koha_plugin_acquire_fund_allocations {
+    my ($self) = @_;
+    my $fund_allocation_rs = $self->_result->koha_plugin_acquire_fund_allocations;
+    return Koha::Acquire::Funds::FundAllocations->_new_from_dbic($fund_allocation_rs);
+}
 
 =head2 Internal methods
 

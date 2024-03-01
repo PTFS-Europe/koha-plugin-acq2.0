@@ -17,7 +17,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         moduleList: {
             funds: { name: 'Funds and ledgers', code: "funds" }
         },
-        permissions_matrix: permissionsMatrix
+        permissions_matrix: permissionsMatrix,
+        currencies: null
     }),
     actions: {
         determineBranch(code) {
@@ -166,6 +167,9 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return parseInt(group)
             })
             return groupIds
+        },
+        getCurrency(currency) {
+            return this.currencies.find(curr => curr.currency === currency)
         }
     },
     getters: {
