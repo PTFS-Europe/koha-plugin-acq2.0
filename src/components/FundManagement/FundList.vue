@@ -120,7 +120,7 @@ export default {
             return [
                 {
                     title: __("Name"),
-                    data: "name",
+                    data: "name:fund_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {

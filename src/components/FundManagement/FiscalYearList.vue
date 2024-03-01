@@ -116,7 +116,7 @@ export default {
             return [
                 {
                     title: __("Code"),
-                    data: "code",
+                    data: "code:fiscal_yr_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
