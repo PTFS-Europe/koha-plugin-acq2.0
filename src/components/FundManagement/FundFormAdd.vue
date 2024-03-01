@@ -31,7 +31,6 @@
                                 placeholder="Description"
                                 rows="10"
                                 cols="50"
-                                required
                             />
                         </li>
                         <li>
