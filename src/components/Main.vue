@@ -62,7 +62,8 @@ export default {
             permittedUsers,
             modulesEnabled,
             visibleGroups,
-            owners
+            owners,
+            currencies
         } = storeToRefs(acquisitionsStore)
 
         return {
@@ -79,7 +80,8 @@ export default {
             filterUsersByPermissions,
             filterLibGroupsByUsersBranchcode,
             convertSettingsToObject,
-            AVStore
+            AVStore,
+            currencies
         }
     },
     data() {
@@ -137,6 +139,7 @@ export default {
                 this.user.logged_in_user.logged_in_branch = logged_in_branch.branchcode
                 this.user.userflags = userflags
                 this.library_groups = library_groups
+                this.currencies = currencies
                 const { acquisition, superlibrarian } = this.user.userflags
                 if (!acquisition && !superlibrarian) {
                     return this.setError(

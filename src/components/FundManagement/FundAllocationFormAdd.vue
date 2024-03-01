@@ -39,6 +39,7 @@
                                 id="fund_allocation_amount"
                                 v-model="fund_allocation.allocation_amount"
                                 type="number"
+                                step=".01"
                             />
                             <span class="required">Required</span>
                         </li>
