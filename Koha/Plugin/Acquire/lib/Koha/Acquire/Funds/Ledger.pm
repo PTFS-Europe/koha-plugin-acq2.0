@@ -37,6 +37,20 @@ sub fiscal_yr {
 }
 
 
+=head3 koha_plugin_acquire_funds
+
+Method to embed funds to the fiscal year
+
+=cut
+
+sub koha_plugin_acquire_funds {
+    my ($self) = @_;
+    my $fund_rs = $self->_result->koha_plugin_acquire_funds;
+    return Koha::Acquire::Funds::Funds->_new_from_dbic($fund_rs);
+}
+
+
+
 =head2 Internal methods
 
 =head3 _type
