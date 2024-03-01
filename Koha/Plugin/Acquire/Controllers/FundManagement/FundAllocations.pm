@@ -49,7 +49,8 @@ sub list {
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $fund_allocations } );
 
         my @sorted_allocations =
-            sort { $a->{fund_allocation_id} cmp $b->{fund_allocation_id} } @{$filtered_fund_allocations};
+            sort { $a->{fund_allocation_id} <=> $b->{fund_allocation_id} } @{$filtered_fund_allocations};
+
         my $total = 0;
         foreach my $allocation_index ( 1 .. scalar(@sorted_allocations) ) {
             my $allocation = $sorted_allocations[ $allocation_index - 1 ];
@@ -205,7 +206,9 @@ sub delete {
     }
 
     return try {
+        my $fund_id = $fund_allocation->fund_id;
         $fund_allocation->delete;
+
         return $c->render(
             status  => 204,
             openapi => q{}
