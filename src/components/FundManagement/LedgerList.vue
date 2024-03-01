@@ -37,6 +37,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
+            getCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -45,7 +46,8 @@ export default {
             table,
             setConfirmationDialog,
             setMessage,
-            isUserPermitted
+            isUserPermitted,
+            getCurrency
         }
     },
     data() {
@@ -58,6 +60,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 url: "/api/v1/contrib/acquire/ledgers",
+                options: { embed: "koha_plugin_acquire_funds" },
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -113,6 +116,7 @@ export default {
             )
         },
         getTableColumns: function () {
+            const getCurrency = this.getCurrency
             return [
                 {
                     title: __("Name"),
@@ -136,18 +140,31 @@ export default {
                     orderable: true,
                 },
                 {
-                    title: __("Description"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                },
-                {
                     title: __("Status"),
                     data: "status",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return row.status ? "Active" : "Inactive"
+                    },
+                },
+                {
+                    title: __("Fund count"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.koha_plugin_acquire_funds.length
+                    },
+                },
+                {
+                    title: __("Ledger value"),
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        const sum = row.koha_plugin_acquire_funds.reduce((acc, curr) => acc + curr.fund_value, 0)
+                        const { symbol } = getCurrency(row.currency)
+                        return symbol + sum
                     },
                 },
             ]

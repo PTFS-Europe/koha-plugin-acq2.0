@@ -23,6 +23,38 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+use Koha::Acquire::Funds::Fund;
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self, $args) = @_;
+
+    $self->SUPER::store;
+
+    my $fund = $self->fund;
+    $fund->update_fund_total;
+
+    return $self;
+}
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ( $self, $args ) = @_;
+
+    my $deleted = $self->_result()->delete;
+
+    my $fund = $self->fund;
+    $fund->update_fund_total;
+
+    return $self;
+}
+
 =head3 fiscal_yr
 
 Method to embed the fiscal year to a given fund allocation

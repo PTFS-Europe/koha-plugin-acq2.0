@@ -150,12 +150,12 @@ export default {
                 },
                 {
                     title: __("Fund value"),
-                    data: "fund_total",
+                    data: "fund_value",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         const { symbol } = getCurrency(row.currency)
-                        return symbol + row.fund_total
+                        return symbol + row.fund_value
                     },
                 },
             ]

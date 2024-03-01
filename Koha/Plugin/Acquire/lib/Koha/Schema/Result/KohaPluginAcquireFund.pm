@@ -116,6 +116,16 @@ is the fund currently active
 
 owner of the fund
 
+
+=head2 fund_value
+
+  data_type: 'decimal'
+  default_value: 0.000000
+  is_nullable: 1
+  size: [28,6]
+
+value of the fund
+
 =head2 last_updated
 
   data_type: 'timestamp'
@@ -159,6 +169,13 @@ __PACKAGE__->add_columns(
     { data_type => "tinyint", default_value => 1, is_nullable => 1 },
     "owner",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "fund_value",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
     "last_updated",
     {
         data_type                 => "timestamp",

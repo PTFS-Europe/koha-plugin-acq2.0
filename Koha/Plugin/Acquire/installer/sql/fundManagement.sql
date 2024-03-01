@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fund currently active',
     `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fund',
+    `fund_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the fund',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
     PRIMARY KEY (`fund_id`),

@@ -189,7 +189,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         const { symbol } = getCurrency(row.currency)
-                        return symbol + row.fund_total
+                        return symbol + row.fund_value
                     },
                 },
             ]

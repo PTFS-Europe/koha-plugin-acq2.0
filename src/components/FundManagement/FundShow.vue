@@ -23,7 +23,11 @@
             />
         </Toolbar>
         <h2>{{ "Fund " + fund.fund_id }}</h2>
-        <h3>{{ "Current total: " + currency.symbol + fund.fund_total }}</h3>
+        <ValueHeader 
+            :symbol="currency.symbol"
+            :value="fund.fund_value"
+            :key="forceRender"
+        />
         <DisplayDataFields 
             :data="fund"
             homeRoute="FundList"
@@ -52,6 +56,7 @@ import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import KohaTable from "../KohaTable.vue"
+import ValueHeader from './ValueHeader.vue'
 
 export default {
     setup() {
@@ -91,7 +96,8 @@ export default {
                 },
             },
             fundTotal: 0,
-            currency: null
+            currency: null,
+            forceRender: 'no'
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -151,10 +157,12 @@ export default {
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.tasks.delete(fund_allocation.fund_allocation_id).then(
+                    client.fund_allocations.delete(fund_allocation.fund_allocation_id).then(
                         success => {
                             this.setMessage(`Fund allocation deleted`, true)
                             dt.draw()
+                            this.fund.fund_value = this.fund.fund_value - fund_allocation.allocation_amount
+                            this.forceRender = 'yes'
                         },
                         error => {}
                     )
@@ -162,6 +170,7 @@ export default {
             )
         },
         getTableColumns: function () {
+            const getCurrency = this.getCurrency
             return [
                 {
                     title: __("Allocation count"),
@@ -192,6 +201,10 @@ export default {
                     data: "new_fund_value",
                     searchable: true,
                     orderable: true,
+                    render: function (data, type, row, meta) {
+                        const { symbol } = getCurrency(row.currency)
+                        return symbol + row.new_fund_value
+                    },
                 },
                 {
                     title: __("Reference"),
@@ -214,7 +227,8 @@ export default {
         DisplayDataFields,
         Toolbar,
         ToolbarButton,
-        KohaTable
+        KohaTable,
+        ValueHeader
     },
 }
 </script>

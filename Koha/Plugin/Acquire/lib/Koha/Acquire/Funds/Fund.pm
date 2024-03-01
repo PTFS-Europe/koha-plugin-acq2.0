@@ -23,20 +23,20 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
-=head3 fund_total
+=head3 update_fund_total
 
 =cut
 
-sub fund_total {
+sub update_fund_total {
     my ( $self, $args ) = @_;
 
-    my $allocations = $self->koha_plugin_acquire_fund_allocations;
+    my @allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
     my $total = 0;
 
-    foreach my $allocation ( @$allocations ) {
+    foreach my $allocation ( @allocations ) {
         $total += $allocation->allocation_amount;
     }
-
+    $self->fund_value($total)->store;
     return $total;
 }
 
