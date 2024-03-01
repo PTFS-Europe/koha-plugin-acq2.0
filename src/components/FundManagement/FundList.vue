@@ -37,6 +37,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
+            getCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -45,6 +46,7 @@ export default {
             table,
             setConfirmationDialog,
             setMessage,
+            getCurrency,
             isUserPermitted
         }
     },
@@ -58,6 +60,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 url: "/api/v1/contrib/acquire/funds",
+                options: { embed: "koha_plugin_acquire_fund_allocations" },
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -113,6 +116,7 @@ export default {
             )
         },
         getTableColumns: function () {
+            const getCurrency = this.getCurrency
             return [
                 {
                     title: __("Name"),
@@ -130,14 +134,8 @@ export default {
                     },
                 },
                 {
-                    title: __("Description"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                },
-                {
                     title: __("Code"),
-                    data: "description",
+                    data: "code",
                     searchable: true,
                     orderable: true,
                 },
@@ -148,6 +146,16 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return row.status ? "Active" : "Inactive"
+                    },
+                },
+                {
+                    title: __("Fund value"),
+                    data: "fund_total",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        const { symbol } = getCurrency(row.currency)
+                        return symbol + row.fund_total
                     },
                 },
             ]

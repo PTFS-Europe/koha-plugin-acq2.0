@@ -23,6 +23,7 @@
         const logged_in_branch = [% To.json(logged_in_branch) | $raw %];
         const userflags = [% To.json(userflags) | $raw %];
         const library_groups = [% To.json(library_groups) | $raw %];
+        const currencies = [% To.json(currencies.unblessed) | $raw %];
 
     </script>
 

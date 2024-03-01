@@ -45,6 +45,7 @@ my $userflags = haspermission($patron->userid);
 my $acquisitions_library_groups = Koha::Library::Groups->search({ ft_acquisitions => 1 });
 my @user_library_groups;
 
+# If no library groups are defined then we gather all branches into one "group"
 if(scalar(@{$acquisitions_library_groups->as_list} == 0)) {
     my @branches = Koha::Libraries->search()->as_list;
     my $lib_group = {
@@ -59,15 +60,20 @@ if(scalar(@{$acquisitions_library_groups->as_list} == 0)) {
     push( @user_library_groups, $lib_group);
 }
 
+# Get all acquisitions related library groups
 foreach my $alg ( @{$acquisitions_library_groups->as_list } ) {
     my $lib_group = _map_library_group({ group => $alg });
     push @user_library_groups, $lib_group;
 }
 
+# Get currency data
+my $currencies = Koha::Acquisition::Currencies->search();
+
 $template->param(
     userflags => $userflags,
     logged_in_branch => { branchcode => C4::Context::mybranch },
-    library_groups => \@user_library_groups
+    library_groups => \@user_library_groups,
+    currencies => $currencies
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

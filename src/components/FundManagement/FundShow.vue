@@ -23,6 +23,7 @@
             />
         </Toolbar>
         <h2>{{ "Fund " + fund.fund_id }}</h2>
+        <h3>{{ "Current total: " + currency.symbol + fund.fund_total }}</h3>
         <DisplayDataFields 
             :data="fund"
             homeRoute="FundList"
@@ -59,6 +60,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
+            getCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -67,6 +69,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             isUserPermitted,
+            getCurrency,
             table
         }
     },
@@ -87,6 +90,8 @@ export default {
                     "-1": actionButtons,
                 },
             },
+            fundTotal: 0,
+            currency: null
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -97,9 +102,10 @@ export default {
     methods: {
         async getFund(fund_id) {
             const client = APIClient.acquisition
-            await client.funds.get(fund_id, "fiscal_yr,ledger").then(
+            await client.funds.get(fund_id, "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations").then(
                 fund => {
                     this.fund = fund
+                    this.currency = this.getCurrency(fund.currency)
                     this.initialized = true
                 },
                 error => {}
@@ -174,7 +180,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        const symbol = row.allocation_amount >= 0 ? "+" : "-"
+                        const symbol = row.allocation_amount >= 0 ? "+" : ""
                         const colour = row.allocation_amount >= 0 ? "green" : "red"
                         return (
                             '<span style="color:' + colour + ';">' + symbol + row.allocation_amount + '</span>'
@@ -188,8 +194,8 @@ export default {
                     orderable: true,
                 },
                 {
-                    title: __("Note"),
-                    data: "note",
+                    title: __("Reference"),
+                    data: "reference",
                     searchable: true,
                     orderable: true,
                 }

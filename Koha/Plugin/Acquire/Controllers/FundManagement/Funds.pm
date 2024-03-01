@@ -49,6 +49,10 @@ sub list {
         my $filtered_funds =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $funds } );
 
+        foreach my $fund (@$filtered_funds) {
+            $fund = _fund_total($fund);
+        }
+
         return $c->render( status => 200, openapi => $filtered_funds );
     } catch {
         $c->unhandled_exception($_);
@@ -78,6 +82,7 @@ sub get {
             { data => $fund, field => 'owned_by', key => "owner" } );
         $fund =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund } );
+        $fund = _fund_total($fund);
 
         return $c->render(
             status  => 200,
@@ -217,6 +222,21 @@ sub _inherit_currency_and_owner {
 
     $fund->{currency} = $ledger->currency;
     $fund->{owner}    = $ledger->owner;
+
+    return $fund;
+}
+
+sub _fund_total {
+    my ($fund) = @_;
+
+    my $allocations = $fund->{koha_plugin_acquire_fund_allocations} || ();
+    my $total       = 0;
+
+    foreach my $allocation (@$allocations) {
+        $total += $allocation->{allocation_amount};
+    };
+
+    $fund->{fund_total} = $total;
 
     return $fund;
 }
