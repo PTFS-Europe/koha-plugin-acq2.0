@@ -1,26 +1,29 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="tasks_show">
-        <h2>
-            {{ "Task " + task.task_id }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'TaskFormEdit',
-                        params: { task_id: task.task_id },
-                    }"
-                    title="Edit"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a @click="delete_task(task.task_id, task.code)"
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
-        </h2>
+        <Toolbar>
+            <ToolbarLink
+                :to="{ name: 'TaskList' }"
+                icon="xmark"
+                title="Close"
+            />
+            <ToolbarLink
+                :to="{ name: 'TaskFormEdit', params: { task_id: task.task_id } }"
+                icon="pencil"
+                title="Edit"
+            />
+            <ToolbarButton
+                icon="trash"
+                title="Delete"
+                @clicked="delete_task(task.task_id, task.short_name)"
+            />
+        </Toolbar>
+        <h2>{{ "Task " + task.task_id }}</h2>
         <DisplayDataFields 
             :data="task"
             homeRoute="TaskList"
             dataType="task"
+            :showClose="false"
         />
     </div>
 </template>
@@ -29,6 +32,9 @@
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 
 export default {
     setup() {
@@ -61,11 +67,11 @@ export default {
                 error => {}
             )
         },
-        delete_task: function (task_id, task_code) {
+        delete_task: function (task_id, task_name) {
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this task?",
-                    message: task_code,
+                    message: task_name,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
@@ -83,7 +89,10 @@ export default {
         },
     },
     components: {
-        DisplayDataFields
+        DisplayDataFields,
+        Toolbar,
+        ToolbarButton,
+        ToolbarLink,
     },
 }
 </script>

@@ -2,7 +2,7 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="task_list">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
                 :to="{ name: 'TaskFormAdd' }"
                 icon="plus"
                 title="New task"
@@ -40,7 +40,7 @@
 
 <script>
 import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -239,7 +239,7 @@ export default {
             ]
         },
     },
-    components: { Toolbar, ToolbarButton, KohaTable },
+    components: { Toolbar, ToolbarLink, KohaTable },
 }
 </script>
 
