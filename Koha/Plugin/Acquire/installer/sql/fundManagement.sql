@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the ledger',
     `owner` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the ledger is visible to',
+    `ledger_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the ledger',
     `over_spend_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overspend allowed on the ledger',
     `over_encumbrance_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overencumbrance allowed on the ledger',
     `oe_warning_percent` decimal(5,4) DEFAULT 0.0000 COMMENT 'percentage limit for overencumbrance',
