@@ -1,6 +1,6 @@
 <template>
-    <button :to="to" :class="class" @click="handleClick"
-        ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</button
+    <router-link :to="to" :class="class"
+        ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</router-link
     >
 </template>
 
@@ -21,12 +21,6 @@ export default {
         },
         title: {
             type: String,
-        }
-    },
-    emits: ['clicked'],
-    methods: {
-        handleClick() {
-            this.$emit('clicked')
         }
     },
 }

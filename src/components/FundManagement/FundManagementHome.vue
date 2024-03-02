@@ -1,24 +1,24 @@
 <template>
     <Toolbar>
-        <ToolbarButton
+        <ToolbarLink
             :to="{ name: 'FiscalYearList' }"
             icon="pen-to-square"
             title="Manage fiscal years"
             v-if="isUserPermitted('manage_fiscal_years')"
         />
-        <ToolbarButton
+        <ToolbarLink
             :to="{ name: 'LedgerList' }"
             icon="pen-to-square"
             title="Manage ledgers"
             v-if="isUserPermitted('manage_ledgers')"
         />
-        <ToolbarButton
+        <ToolbarLink
             :to="{ name: 'FundList' }"
             icon="pen-to-square"
             title="Manage funds"
             v-if="isUserPermitted('manage_funds')"
         />
-        <ToolbarButton
+        <ToolbarLink
             :to="{ name: 'TaskFormAdd' }"
             icon="plus"
             title="Create task"
@@ -29,7 +29,7 @@
 
 <script>
 import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject } from "vue"
 
 export default {
@@ -45,7 +45,7 @@ export default {
     },
     components: {
         Toolbar,
-        ToolbarButton
+        ToolbarLink
     }
 }
 </script>

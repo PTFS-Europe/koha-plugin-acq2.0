@@ -2,14 +2,18 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="ledgers_show">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
+                :to="{ name: 'LedgerList' }"
+                icon="xmark"
+                title="Close"
+            />
+            <ToolbarLink
                 :to="{ name: 'LedgerFormEdit', params: { ledger_id: ledger.ledger_id } }"
                 icon="pencil"
                 title="Edit"
                 v-if="isUserPermitted('edit_ledger')"
             />
             <ToolbarButton
-                to="#"
                 icon="trash"
                 title="Delete"
                 @clicked="delete_ledger(ledger.ledger_id, ledger.name)"
@@ -46,6 +50,7 @@
 <script>
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
@@ -218,6 +223,7 @@ export default {
         DisplayDataFields,
         Toolbar,
         ToolbarButton,
+        ToolbarLink,
         KohaTable,
         ValueHeader
     },

@@ -2,28 +2,32 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="funds_show">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
+                :to="{ name: 'FundList' }"
+                icon="xmark"
+                title="Close"
+            />
+            <ToolbarLink
                 :to="{ name: 'FundFormEdit', params: { fund_id: fund.fund_id } }"
                 icon="pencil"
                 title="Edit"
                 v-if="isUserPermitted('edit_fund')"
             />
             <ToolbarButton
-                to="#"
                 icon="trash"
                 title="Delete"
                 @clicked="delete_fund(fund.fund_id, fund.name)"
                 v-if="isUserPermitted('delete_fund')"
             />
-            <ToolbarButton
+            <ToolbarLink
                 :to="{ name: 'FundAllocationFormAdd' }"
                 icon="plus"
                 title="New fund allocation"
                 v-if="isUserPermitted('create_fund_allocation')"
             />
-            <ToolbarButton
+            <ToolbarLink
                 :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
-                icon="plus"
+                icon="arrow-right-arrow-left"
                 title="Transfer funds"
                 v-if="isUserPermitted('create_fund_allocation')"
             />
@@ -57,6 +61,7 @@
 <script>
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
@@ -245,6 +250,7 @@ export default {
         DisplayDataFields,
         Toolbar,
         ToolbarButton,
+        ToolbarLink,
         KohaTable,
         ValueHeader
     },
