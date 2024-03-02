@@ -48,7 +48,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fiscal_yr.status"
+                                        :required="!statusOptions.map(opt => opt.value).includes(fiscal_yr.status)"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
