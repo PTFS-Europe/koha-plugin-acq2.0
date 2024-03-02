@@ -2312,6 +2312,53 @@
             }
         }
     },
+    "/fund_allocations/transfer": {
+        "post": {
+            "x-mojo-to": "Acquire::Controllers::FundManagement::FundAllocations#transfer",
+            "operationId": "AcquireSTransferFunds",
+            "tags": [
+                "Acquire"
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "201": {
+                    "description": "Transfer confirmation",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {}
+            }
+        }
+    },
     "/fund_allocations/{id}": {
         "get": {
             "x-mojo-to": "Acquire::Controllers::FundManagement::FundAllocations#get",

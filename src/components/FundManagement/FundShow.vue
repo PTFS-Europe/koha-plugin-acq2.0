@@ -21,6 +21,12 @@
                 title="New fund allocation"
                 v-if="isUserPermitted('create_fund_allocation')"
             />
+            <ToolbarButton
+                :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
+                icon="plus"
+                title="Transfer funds"
+                v-if="isUserPermitted('create_fund_allocation')"
+            />
         </Toolbar>
         <h2>{{ "Fund " + fund.fund_id }}</h2>
         <ValueHeader 
@@ -41,7 +47,6 @@
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @show="doShow"
                 @edit="doEdit"
                 @delete="doDelete"
             ></KohaTable>
@@ -60,7 +65,7 @@ import ValueHeader from './ValueHeader.vue'
 
 export default {
     setup() {
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage, setWarning } = inject("mainStore")
 
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
@@ -73,6 +78,7 @@ export default {
         return {
             setConfirmationDialog,
             setMessage,
+            setWarning,
             isUserPermitted,
             getCurrency,
             table
@@ -136,17 +142,21 @@ export default {
                 }
             )
         },
-        doShow: function ({ fund_allocation_id }, dt, event) {
-            event.preventDefault()
-            this.$router.push({ name: "FundAllocationShow", params: { fund_allocation_id } })
-        },
-        doEdit: function ({ fund_allocation_id }, dt, event) {
+        doEdit: function ({ fund_allocation_id, is_transfer }, dt, event) {
+            if(is_transfer) {
+                this.showTransferWarning()
+                return
+            }
             this.$router.push({
                 name: "FundAllocationFormEdit",
                 params: { fund_allocation_id, fund_id: this.fund.fund_id },
             })
         },
         doDelete: function (fund_allocation, dt, event) {
+            if(fund_allocation.is_transfer) {
+                this.showTransferWarning()
+                return
+            }
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this fund allocation?",
@@ -210,8 +220,17 @@ export default {
                     data: "reference",
                     searchable: true,
                     orderable: true,
+                },
+                {
+                    title: __("Note"),
+                    data: "note",
+                    searchable: true,
+                    orderable: true,
                 }
             ]
+        },
+        showTransferWarning() {
+            this.setWarning("This allocation was a transfer between funds and can't be edited or deleted.")
         },
         tableUrl() {
             const id = this.$route.params.fund_id
