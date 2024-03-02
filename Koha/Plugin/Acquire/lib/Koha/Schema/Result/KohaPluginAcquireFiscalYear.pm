@@ -32,10 +32,9 @@ __PACKAGE__->table("koha_plugin_acquire_fiscal_year");
 
 =head2 description
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   default_value: (empty string)
   is_nullable: 1
-  size: 255
 
 description for the fiscal year
 
@@ -104,7 +103,7 @@ __PACKAGE__->add_columns(
     "fiscal_yr_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
     "description",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    { data_type => "longtext", default_value => "", is_nullable => 1 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "start_date",

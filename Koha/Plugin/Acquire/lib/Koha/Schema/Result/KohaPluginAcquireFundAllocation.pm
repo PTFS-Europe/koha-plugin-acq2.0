@@ -74,10 +74,9 @@ allocation reference
 
 =head2 note
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   default_value: (empty string)
   is_nullable: 1
-  size: 255
 
 any notes associated to the allocation
 
@@ -145,7 +144,7 @@ __PACKAGE__->add_columns(
     "reference",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "note",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    { data_type => "longtext", default_value => "", is_nullable => 1 },
     "currency",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
     "owner",
