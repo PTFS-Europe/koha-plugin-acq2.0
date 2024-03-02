@@ -17,6 +17,11 @@
             />
         </Toolbar>
         <h2>{{ "Ledger " + ledger.ledger_id }}</h2>
+        <ValueHeader 
+            :symbol="currency.symbol"
+            :value="ledger.ledger_value"
+            :key="forceRender"
+        />
         <DisplayDataFields 
             :data="ledger"
             homeRoute="LedgerList"
@@ -45,6 +50,7 @@ import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import KohaTable from "../KohaTable.vue"
+import ValueHeader from './ValueHeader.vue'
 
 export default {
     setup() {
@@ -81,6 +87,8 @@ export default {
                     "-1": actionButtons,
                 },
             },
+            currency: null,
+            forceRender: 'no'
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -94,6 +102,7 @@ export default {
             await client.ledgers.get(ledger_id, "fiscal_yr").then(
                 ledger => {
                     this.ledger = ledger
+                    this.currency = this.getCurrency(ledger.currency)
                     this.initialized = true
                 },
                 error => {}
@@ -139,10 +148,12 @@ export default {
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.tasks.delete(fund.fund_id).then(
+                    client.funds.delete(fund.fund_id).then(
                         success => {
                             this.setMessage(`Fund deleted`, true)
                             dt.draw()
+                            this.ledger.ledger_value = this.ledger.ledger_value - fund.fund_value
+                            this.forceRender = 'yes'
                         },
                         error => {}
                     )
@@ -207,7 +218,8 @@ export default {
         DisplayDataFields,
         Toolbar,
         ToolbarButton,
-        KohaTable
+        KohaTable,
+        ValueHeader
     },
 }
 </script>

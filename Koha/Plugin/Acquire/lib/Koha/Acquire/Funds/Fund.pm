@@ -25,18 +25,25 @@ use JSON       qw ( encode_json );
 
 =head3 update_fund_total
 
+This method is called whenever a fund allocation is made.
+It updates the value of the fund based on the fund allocations and then triggers an update to the ledger value
+
 =cut
 
 sub update_fund_total {
     my ( $self, $args ) = @_;
 
     my @allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
-    my $total = 0;
+    my $total       = 0;
 
-    foreach my $allocation ( @allocations ) {
+    foreach my $allocation (@allocations) {
         $total += $allocation->allocation_amount;
     }
     $self->fund_value($total)->store;
+
+    my $ledger = $self->ledger;
+    $ledger->update_ledger_total;
+
     return $total;
 }
 
