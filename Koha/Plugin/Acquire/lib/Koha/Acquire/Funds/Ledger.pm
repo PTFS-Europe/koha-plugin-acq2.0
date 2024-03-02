@@ -23,6 +23,19 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ( $self, $args ) = @_;
+
+    my $deleted = $self->_result()->delete;
+
+    return $self;
+}
+
 =head3 update_ledger_total
 
 This method is triggered whenever a fund value is updated and updates the value of the relevant ledger

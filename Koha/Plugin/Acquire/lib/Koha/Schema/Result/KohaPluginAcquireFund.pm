@@ -116,7 +116,6 @@ is the fund currently active
 
 owner of the fund
 
-
 =head2 fund_value
 
   data_type: 'decimal'
@@ -216,8 +215,8 @@ __PACKAGE__->belongs_to(
     {
         is_deferrable => 1,
         join_type     => "LEFT",
-        on_delete     => "RESTRICT",
-        on_update     => "RESTRICT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
     },
 );
 
@@ -251,8 +250,8 @@ __PACKAGE__->belongs_to(
     {
         is_deferrable => 1,
         join_type     => "LEFT",
-        on_delete     => "RESTRICT",
-        on_update     => "RESTRICT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
     },
 );
 
@@ -276,8 +275,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 13:56:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7r9EkZcBQqtY9NH8jLoqKw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ogKAsZE9BM55ddpyrJo+Ng
 
 sub koha_object_class {
     'Koha::Acquire::Funds::Fund';
