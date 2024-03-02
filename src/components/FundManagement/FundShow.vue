@@ -95,7 +95,6 @@ export default {
                     "-1": actionButtons,
                 },
             },
-            fundTotal: 0,
             currency: null,
             forceRender: 'no'
         }

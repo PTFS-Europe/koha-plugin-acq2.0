@@ -23,6 +23,25 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+=head3 update_ledger_total
+
+This method is triggered whenever a fund value is updated and updates the value of the relevant ledger
+
+=cut
+
+sub update_ledger_total {
+    my ( $self, $args ) = @_;
+
+    my @funds = $self->koha_plugin_acquire_funds->as_list;
+    my $total = 0;
+
+    foreach my $fund (@funds) {
+        $total += $fund->fund_value;
+    }
+    $self->ledger_value($total)->store;
+    return $total;
+}
+
 
 =head3 fiscal_yr
 

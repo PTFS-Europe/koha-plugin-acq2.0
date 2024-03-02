@@ -117,6 +117,17 @@ owner of the ledger
 
 library groups the ledger is visible to
 
+
+=head2 ledger_value
+
+  data_type: 'decimal'
+  default_value: 0.000000
+  is_nullable: 1
+  size: [28,6]
+
+value of the ledger
+
+
 =head2 over_spend_allowed
 
   data_type: 'tinyint'
@@ -199,6 +210,13 @@ __PACKAGE__->add_columns(
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "visible_to",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "ledger_value",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
     "over_spend_allowed",
     { data_type => "tinyint", default_value => 1, is_nullable => 1 },
     "over_encumbrance_allowed",
