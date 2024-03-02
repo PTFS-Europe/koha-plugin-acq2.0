@@ -21,16 +21,30 @@
             :data="fiscal_yr"
             homeRoute="FiscalYearList"
             dataType="fiscal_year"
+            :showClose="false"
         />
+    </div>
+    <div v-if="initialized" id="ledgers">
+        <div class="page-section">
+            <h3>Ledgers</h3>
+            <KohaTable
+                ref="table"
+                v-bind="tableOptions"
+                @show="doShow"
+                @edit="doEdit"
+                @delete="doDelete"
+            ></KohaTable>
+        </div>
     </div>
 </template>
 
 <script>
-import { inject } from "vue"
+import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -39,18 +53,37 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
+            getCurrency
         } = acquisitionsStore
+
+        const table = ref()
 
         return {
             setConfirmationDialog,
             setMessage,
-            isUserPermitted
+            isUserPermitted,
+            getCurrency,
+            table
         }
     },
     data() {
+        const actionButtons = []
+        if(this.isUserPermitted('edit_ledger')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('delete_ledger')) { actionButtons.push("delete") }
         return {
             fiscal_yr: {},
             initialized: false,
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: this.tableUrl(),
+                options: { embed: "koha_plugin_acquire_funds" },
+                table_settings: null,
+                add_filters: true,
+                actions: {
+                    0: ["show"],
+                    "-1": actionButtons,
+                },
+            },
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -89,11 +122,104 @@ export default {
                 }
             )
         },
+        doShow: function ({ ledger_id }, dt, event) {
+            event.preventDefault()
+            this.$router.push({ name: "LedgerShow", params: { ledger_id } })
+        },
+        doEdit: function ({ ledger_id }, dt, event) {
+            this.$router.push({
+                name: "LedgerFormEdit",
+                params: { ledger_id },
+            })
+        },
+        doDelete: function (ledger, dt, event) {
+            this.setConfirmationDialog(
+                {
+                    title: "Are you sure you want to remove this ledger?",
+                    message: ledger.name,
+                    accept_label: "Yes, delete",
+                    cancel_label: "No, do not delete",
+                },
+                () => {
+                    const client = APIClient.acquisition
+                    client.ledgers.delete(ledger.ledger_id).then(
+                        success => {
+                            this.setMessage(`Ledger deleted`, true)
+                            dt.draw()
+                        },
+                        error => {}
+                    )
+                }
+            )
+        },
+        getTableColumns: function () {
+            const getCurrency = this.getCurrency
+            return [
+                {
+                    title: __("Name"),
+                    data: "name:ledger_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/acquisitions/fund_management/ledger/' +
+                            row.ledger_id +
+                            '" class="show">' +
+                            escape_str(`${row.name}`) +
+                            "</a>"
+                        )
+                    },
+                },
+                {
+                    title: __("Code"),
+                    data: "code",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.status ? "Active" : "Inactive"
+                    },
+                },
+                {
+                    title: __("Fund count"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.koha_plugin_acquire_funds.length
+                    },
+                },
+                {
+                    title: __("Ledger value"),
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        const sum = row.koha_plugin_acquire_funds.reduce((acc, curr) => acc + curr.fund_value, 0)
+                        const { symbol } = getCurrency(row.currency)
+                        return symbol + sum
+                    },
+                },
+            ]
+        },
+        tableUrl() {
+            const id = this.$route.params.fiscal_yr_id
+            let url = "/api/v1/contrib/acquire/ledgers?q="
+            const query = {
+                "me.fiscal_yr_id": id
+            }
+            return url + JSON.stringify(query)
+        }
     },
     components: {
         DisplayDataFields,
         Toolbar,
-        ToolbarButton
+        ToolbarButton,
+        KohaTable
     },
 }
 </script>
