@@ -49,10 +49,9 @@ name for the ledger
 
 =head2 description
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   default_value: (empty string)
   is_nullable: 1
-  size: 255
 
 description for the ledger
 
@@ -188,7 +187,7 @@ __PACKAGE__->add_columns(
     "name",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "description",
-    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    { data_type => "longtext", default_value => "", is_nullable => 1 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "external_id",
