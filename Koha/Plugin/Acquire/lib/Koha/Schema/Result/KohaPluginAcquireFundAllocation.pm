@@ -98,6 +98,14 @@ currency of the fund allocation
 
 owner of the fund allocation
 
+=head2 is_transfer
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+is the fund allocation a transfer to / from another fund
+
 =head2 last_updated
 
   data_type: 'timestamp'
@@ -142,6 +150,8 @@ __PACKAGE__->add_columns(
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
     "owner",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "is_transfer",
+    { data_type => "tinyint", default_value => 0, is_nullable => 1 },
     "last_updated",
     {
         data_type                 => "timestamp",

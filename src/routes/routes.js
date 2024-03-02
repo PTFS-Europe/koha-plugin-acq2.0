@@ -18,6 +18,7 @@ import FundShow from '../components/FundManagement/FundShow.vue'
 import FundFormAdd from '../components/FundManagement/FundFormAdd.vue'
 import FundAllocationShow from '../components/FundManagement/FundAllocationShow.vue'
 import FundAllocationFormAdd from '../components/FundManagement/FundAllocationFormAdd.vue'
+import TransferFunds from '../components/FundManagement/TransferFunds.vue'
 
 export const routes = [
     {
@@ -166,6 +167,13 @@ export const routes = [
                                 component: markRaw(FundAllocationFormAdd),
                                 name: "FundAllocationFormAdd",
                                 title: "Allocate funds",
+                                permission: "create_fund_allocation"
+                            },
+                            {
+                                path: "transfer",
+                                component: markRaw(TransferFunds),
+                                name: "TransferFunds",
+                                title: "Transfer funds",
                                 permission: "create_fund_allocation"
                             },
                         ]

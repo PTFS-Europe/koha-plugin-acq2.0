@@ -146,15 +146,15 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.delete({
                     endpoint: "ledgers/" + id,
                 }),
-            create: fiscal_year =>
+            create: ledger =>
                 this.post({
                     endpoint: "ledgers",
-                    body: fiscal_year,
+                    body: ledger,
                 }),
-            update: (fiscal_year, id) =>
+            update: (ledger, id) =>
                 this.put({
                     endpoint: "ledgers/" + id,
-                    body: fiscal_year,
+                    body: ledger,
                 }),
             count: (query = {}) =>
                 this.count({
@@ -193,15 +193,15 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.delete({
                     endpoint: "funds/" + id,
                 }),
-            create: fiscal_year =>
+            create: fund =>
                 this.post({
                     endpoint: "funds",
-                    body: fiscal_year,
+                    body: fund,
                 }),
-            update: (fiscal_year, id) =>
+            update: (fund, id) =>
                 this.put({
                     endpoint: "funds/" + id,
-                    body: fiscal_year,
+                    body: fund,
                 }),
             count: (query = {}) =>
                 this.count({
@@ -242,15 +242,20 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.delete({
                     endpoint: "fund_allocations/" + id,
                 }),
-            create: fiscal_year =>
+            create: fund_allocation =>
                 this.post({
                     endpoint: "fund_allocations",
-                    body: fiscal_year,
+                    body: fund_allocation,
                 }),
-            update: (fiscal_year, id) =>
+            transfer: fund_allocation =>
+                this.post({
+                    endpoint: "fund_allocations/transfer",
+                    body: fund_allocation,
+                }),
+            update: (fund_allocation, id) =>
                 this.put({
                     endpoint: "fund_allocations/" + id,
-                    body: fiscal_year,
+                    body: fund_allocation,
                 }),
             count: (query = {}) =>
                 this.count({

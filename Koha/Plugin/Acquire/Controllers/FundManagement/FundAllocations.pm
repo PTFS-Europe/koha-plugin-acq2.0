@@ -23,6 +23,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
 use Try::Tiny;
 
+use Koha::Acquire::Funds::Funds;
 use Koha::Acquire::Funds::FundAllocation;
 use Koha::Acquire::Funds::FundAllocations;
 
@@ -216,6 +217,67 @@ sub delete {
     } catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head3 transfer
+
+=cut
+
+sub transfer {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+# Currency needs reviewing - fx calculation may be required
+                my $body = $c->req->json;
+
+                my $fund_transferring_from = Koha::Acquire::Funds::Funds->find( { fund_id => $body->{fund_id_from} } );
+                my $fund_transferring_to   = Koha::Acquire::Funds::Funds->find( { fund_id => $body->{fund_id_to} } );
+                my $note_from              = "Transfer to " . $fund_transferring_to->name;
+                $note_from = $note_from . ": " . $body->{note} if $body->{note};
+                my $note_to = "Transfer from " . $fund_transferring_from->name;
+                $note_to = $note_to . ": " . $body->{note} if $body->{note};
+
+                my $allocation_from = Koha::Acquire::Funds::FundAllocation->new(
+                    {
+                        fund_id           => $body->{fund_id_from},
+                        ledger_id         => $fund_transferring_from->ledger_id,
+                        fiscal_yr_id      => $fund_transferring_from->fiscal_yr_id,
+                        allocation_amount => -$body->{transfer_amount},
+                        reference         => $body->{reference},
+                        note              => $note_from,
+                        currency          => $fund_transferring_from->currency,
+                        owner             => $fund_transferring_from->owner,
+                        visible_to        => $fund_transferring_from->visible_to,
+                        is_transfer       => 1
+                    }
+                )->store();
+                my $allocation_to = Koha::Acquire::Funds::FundAllocation->new(
+                    {
+                        fund_id           => $body->{fund_id_to},
+                        ledger_id         => $fund_transferring_to->ledger_id,
+                        fiscal_yr_id      => $fund_transferring_to->fiscal_yr_id,
+                        allocation_amount => $body->{transfer_amount},
+                        reference         => $body->{reference},
+                        note              => $note_to,
+                        currency          => $fund_transferring_to->currency,
+                        owner             => $fund_transferring_to->owner,
+                        visible_to        => $fund_transferring_to->visible_to,
+                        is_transfer       => 1
+                    }
+                )->store();
+
+                return $c->render(
+                    status  => 201,
+                    openapi => { msg => 'Success'}
+                );
+            }
+        );
+    } catch {
+        return $c->unhandled_exception($_);
+    };
+
 }
 
 1;
