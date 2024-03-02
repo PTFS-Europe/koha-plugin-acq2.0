@@ -23,6 +23,22 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+use Koha::Acquire::Funds::Utils;
+
+=head3 store
+
+=cut
+
+sub store {
+    my ( $self, $args ) = @_;
+
+    $self->SUPER::store;
+
+    $self->cascade_to_ledgers;
+
+    return $self;
+}
+
 
 =head3 delete
 
@@ -35,6 +51,38 @@ sub delete {
 
     return $self;
 }
+
+
+=head3 cascade_to_ledgers
+
+This method cascades changes to the values of the "visible_to" and "status" properties to all ledgers attached to this fiscal year
+
+=cut
+
+sub cascade_to_ledgers {
+    my ( $self, $args ) = @_;
+
+    my @ledgers    = $self->koha_plugin_acquire_ledgers->as_list;
+    my $visible_to = $self->visible_to;
+    my $status     = $self->status;
+
+    foreach my $ledger (@ledgers) {
+        my $status_updated = Koha::Acquire::Funds::Utils->cascade_status(
+            {
+                parent_status => $status,
+                child         => $ledger
+            }
+        );
+        my $visibility_updated = Koha::Acquire::Funds::Utils->cascade_lib_group_visibility(
+            {
+                parent_visibility => $visible_to,
+                child             => $ledger
+            }
+        );
+        $ledger->store() if $status_updated || $visibility_updated;
+    }
+}
+
 
 =head3 koha_plugin_acquire_ledgers
 

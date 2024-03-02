@@ -81,7 +81,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!ledger.status"
+                                        :required="!statusOptions.map(opt => opt.value).includes(ledger.status)"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -223,7 +223,7 @@
                                 v-model="ledger.oe_warning_percent"
                                 placeholder="Percentage that triggers a warning"
                                 type="number"
-                                min="1"
+                                min="0"
                                 max="100"
                                 step=".01"
                             />

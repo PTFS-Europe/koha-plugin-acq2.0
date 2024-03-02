@@ -23,6 +23,20 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+=head3 store
+
+=cut 
+
+sub store {
+    my ( $self, $args ) = @_;
+
+    $self->SUPER::store;
+
+    $self->cascade_to_funds;
+
+    return $self;
+}
+
 
 =head3 delete
 
@@ -34,6 +48,43 @@ sub delete {
     my $deleted = $self->_result()->delete;
 
     return $self;
+}
+
+
+=head3 cascade_to_funds
+
+This method cascades changes to the values of the "visible_to" and "status" properties to all funds attached to this ledger
+
+=cut
+
+sub cascade_to_funds {
+    my ( $self, $args ) = @_;
+
+    my @funds      = $self->koha_plugin_acquire_funds->as_list;
+    my $visible_to = $self->visible_to;
+    my $status     = $self->status;
+
+    foreach my $fund (@funds) {
+        my $status_updated = Koha::Acquire::Funds::Utils->cascade_status(
+            {
+                parent_status => $status,
+                child         => $fund
+            }
+        );
+        my $visibility_updated = Koha::Acquire::Funds::Utils->cascade_lib_group_visibility(
+            {
+                parent_visibility => $visible_to,
+                child             => $fund
+            }
+        );
+        my @data_to_cascade = ( 'fiscal_yr_id', 'currency', 'owner' );
+        my $data_updated = Koha::Acquire::Funds::Utils->cascade_data({
+            parent => $self,
+            child => $fund,
+            properties => \@data_to_cascade
+        });
+        $fund->store() if $status_updated || $visibility_updated || $data_updated;
+    }
 }
 
 =head3 update_ledger_total
