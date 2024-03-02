@@ -24,6 +24,18 @@ use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
 
+=head3 delete
+
+=cut
+
+sub delete {
+    my ( $self, $args ) = @_;
+
+    my $deleted = $self->_result()->delete;
+
+    return $self;
+}
+
 =head3 koha_plugin_acquire_ledgers
 
 Method to embed ledgers to the fiscal year
