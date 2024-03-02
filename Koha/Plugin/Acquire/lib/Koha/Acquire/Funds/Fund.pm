@@ -23,6 +23,23 @@ use base qw(Koha::Object);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ( $self, $args ) = @_;
+
+    my $deleted = $self->_result()->delete;
+
+    my $ledger = $self->ledger;
+    $ledger->update_ledger_total;
+
+    return $self;
+}
+
+
 =head3 update_fund_total
 
 This method is called whenever a fund allocation is made.

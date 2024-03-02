@@ -205,9 +205,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-29 13:56:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pZX22PaZ285E8M2tFpNodg
-
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Q7OXerodgOhzQedaSJIzw
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';
