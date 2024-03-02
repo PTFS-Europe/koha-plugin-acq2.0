@@ -2,7 +2,7 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="fiscal_yr_list">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
                 :to="{ name: 'FiscalYearFormAdd' }"
                 icon="plus"
                 title="New fiscal year"
@@ -26,7 +26,7 @@
 
 <script>
 import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import KohaTable from "../KohaTable.vue"
@@ -165,6 +165,6 @@ export default {
             ]
         },
     },
-    components: { Toolbar, ToolbarButton, KohaTable },
+    components: { Toolbar, ToolbarLink, KohaTable },
 }
 </script>

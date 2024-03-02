@@ -2,7 +2,7 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="ledger_list">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
                 :to="{ name: 'LedgerFormAdd' }"
                 icon="plus"
                 title="New ledger"
@@ -26,7 +26,7 @@
 
 <script>
 import Toolbar from "../Toolbar.vue"
-import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import KohaTable from "../KohaTable.vue"
@@ -170,6 +170,6 @@ export default {
             ]
         },
     },
-    components: { Toolbar, ToolbarButton, KohaTable },
+    components: { Toolbar, ToolbarLink, KohaTable },
 }
 </script>

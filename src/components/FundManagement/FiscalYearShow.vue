@@ -2,14 +2,18 @@
     <div v-if="!initialized">Loading...</div>
     <div v-else id="fiscal_yrs_show">
         <Toolbar>
-            <ToolbarButton
+            <ToolbarLink
+                :to="{ name: 'FiscalYearList' }"
+                icon="xmark"
+                title="Close"
+            />
+            <ToolbarLink
                 :to="{ name: 'FiscalYearFormEdit', params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id } }"
                 icon="pencil"
                 title="Edit"
                 v-if="isUserPermitted('edit_fiscal_year')"
             />
             <ToolbarButton
-                to="#"
                 icon="trash"
                 title="Delete"
                 @clicked="delete_fiscal_yr(fiscal_yr.fiscal_yr_id, fiscal_yr.code)"
@@ -44,6 +48,7 @@ import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import ToolbarLink from "../ToolbarLink.vue"
 import KohaTable from "../KohaTable.vue"
 
 export default {
@@ -219,6 +224,7 @@ export default {
         DisplayDataFields,
         Toolbar,
         ToolbarButton,
+        ToolbarLink,
         KohaTable
     },
 }
