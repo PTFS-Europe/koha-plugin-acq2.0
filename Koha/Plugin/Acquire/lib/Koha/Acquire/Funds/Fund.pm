@@ -24,6 +24,20 @@ use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
 
+=head3 store
+
+=cut 
+
+sub store {
+    my ( $self, $args ) = @_;
+
+    $self->SUPER::store;
+
+    $self->cascade_to_fund_allocations;
+
+    return $self;
+}
+
 =head3 delete
 
 =cut
@@ -39,6 +53,39 @@ sub delete {
     return $self;
 }
 
+
+
+=head3 cascade_to_fund_allocations
+
+This method cascades changes to the values of the "visible_to" and "status" properties to all fund_allocations attached to this ledger
+
+=cut
+
+sub cascade_to_fund_allocations {
+    my ( $self, $args ) = @_;
+
+    my @fund_allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
+    my $visible_to       = $self->visible_to;
+    my $status           = $self->status;
+
+    foreach my $fund_allocation (@fund_allocations) {
+        my $visibility_updated = Koha::Acquire::Funds::Utils->cascade_lib_group_visibility(
+            {
+                parent_visibility => $visible_to,
+                child             => $fund_allocation
+            }
+        );
+        my @data_to_cascade = ( 'fiscal_yr_id', 'currency', 'owner', 'ledger_id' );
+        my $data_updated = Koha::Acquire::Funds::Utils->cascade_data(
+            {
+                parent     => $self,
+                child      => $fund_allocation,
+                properties => \@data_to_cascade
+            }
+        );
+        $fund_allocation->store({ block_fund_value_update => 1 }) if $visibility_updated || $data_updated;
+    }
+}
 
 =head3 update_fund_total
 

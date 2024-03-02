@@ -125,7 +125,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fund.status"
+                                        :required="!statusOptions.map(opt => opt.value).includes(fund.status)"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"

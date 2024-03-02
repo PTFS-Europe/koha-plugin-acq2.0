@@ -32,10 +32,14 @@ use Koha::Acquire::Funds::Fund;
 sub store {
     my ($self, $args) = @_;
 
+    my $block_fund_value_update = $args->{block_fund_value_update};
+
     $self->SUPER::store;
 
-    my $fund = $self->fund;
-    $fund->update_fund_total;
+    if(!$block_fund_value_update) {
+        my $fund = $self->fund;
+        $fund->update_fund_total;
+    }
 
     return $self;
 }
