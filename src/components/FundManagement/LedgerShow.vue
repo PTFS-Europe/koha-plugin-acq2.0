@@ -20,18 +20,19 @@
                 v-if="isUserPermitted('delete_ledger')"
             />
         </Toolbar>
-        <h2>{{ "Ledger " + ledger.ledger_id }}</h2>
-        <ValueHeader 
-            :symbol="currency.symbol"
-            :value="ledger.ledger_value"
-            :key="forceRender"
-        />
-        <DisplayDataFields 
-            :data="ledger"
-            homeRoute="LedgerList"
-            dataType="ledger"
-            :showClose="false"
-        />
+        <h2>{{ ledger.name }}</h2>
+        <div class="ledger_display">
+            <DisplayDataFields 
+                :data="ledger"
+                homeRoute="LedgerList"
+                dataType="ledger"
+                :showClose="false"
+            />
+            <AccountingView 
+                :data="ledger"
+                :currencySymbol="currency.symbol"
+            />
+        </div>
     </div>
     <div v-if="initialized" id="funds">
         <div class="page-section">
@@ -39,9 +40,6 @@
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @show="doShow"
-                @edit="doEdit"
-                @delete="doDelete"
             ></KohaTable>
         </div>
     </div>
@@ -55,7 +53,7 @@ import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import KohaTable from "../KohaTable.vue"
-import ValueHeader from './ValueHeader.vue'
+import AccountingView from './AccountingView.vue'
 
 export default {
     setup() {
@@ -75,9 +73,6 @@ export default {
         }
     },
     data() {
-        const actionButtons = []
-        if(this.isUserPermitted('edit_fund')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_fund')) { actionButtons.push("delete") }
         return {
             ledger: {},
             initialized: false,
@@ -89,11 +84,9 @@ export default {
                 add_filters: true,
                 actions: {
                     0: ["show"],
-                    "-1": actionButtons,
                 },
             },
             currency: null,
-            forceRender: 'no'
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -104,7 +97,7 @@ export default {
     methods: {
         async getLedger(ledger_id) {
             const client = APIClient.acquisition
-            await client.ledgers.get(ledger_id, "fiscal_yr").then(
+            await client.ledgers.get(ledger_id, "fiscal_yr,koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations").then(
                 ledger => {
                     this.ledger = ledger
                     this.currency = this.getCurrency(ledger.currency)
@@ -127,38 +120,6 @@ export default {
                         success => {
                             this.setMessage("Ledger deleted")
                             this.$router.push({ name: "LedgerList" })
-                        },
-                        error => {}
-                    )
-                }
-            )
-        },
-        doShow: function ({ fund_id }, dt, event) {
-            event.preventDefault()
-            this.$router.push({ name: "FundShow", params: { fund_id } })
-        },
-        doEdit: function ({ fund_id }, dt, event) {
-            this.$router.push({
-                name: "FundFormEdit",
-                params: { fund_id },
-            })
-        },
-        doDelete: function (fund, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: "Are you sure you want to remove this fund?",
-                    message: fund.name,
-                    accept_label: "Yes, delete",
-                    cancel_label: "No, do not delete",
-                },
-                () => {
-                    const client = APIClient.acquisition
-                    client.funds.delete(fund.fund_id).then(
-                        success => {
-                            this.setMessage(`Fund deleted`, true)
-                            dt.draw()
-                            this.ledger.ledger_value = this.ledger.ledger_value - fund.fund_value
-                            this.forceRender = 'yes'
                         },
                         error => {}
                     )
@@ -225,10 +186,17 @@ export default {
         ToolbarButton,
         ToolbarLink,
         KohaTable,
-        ValueHeader
+        AccountingView
     },
 }
 </script>
 
 <style scoped>
+#funds {
+    margin-top: 1em;
+}
+.ledger_display {
+    display: flex;
+    gap: 1em;
+}
 </style>

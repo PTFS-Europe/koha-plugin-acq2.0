@@ -101,5 +101,41 @@ sub add_lib_group_data {
     return $data;
 }
 
+sub add_accounting_values_to_ledgers_or_funds {
+    my ( $self, $args ) = @_;
+
+    my $data = $args->{data};
+
+    my @allocations = ();
+
+    if ( defined $data->{koha_plugin_acquire_funds} ) {
+        foreach my $fund ( @{ $data->{koha_plugin_acquire_funds} } ) {
+            my @fund_allocations = @{ $fund->{koha_plugin_acquire_fund_allocations} };
+            push( @allocations, @fund_allocations );
+        }
+    }
+    if ( defined $data->{koha_plugin_acquire_fund_allocations} ) {
+        push( @allocations, @{ $data->{koha_plugin_acquire_fund_allocations} } );
+    }
+
+    if ( scalar(@allocations) > 0 ) {
+        my $allocation_increase = 0;
+        my $allocation_decrease = 0;
+        my $net_transfers       = 0;
+
+        foreach my $allocation (@allocations) {
+            $allocation_increase += $allocation->{allocation_amount} if $allocation->{allocation_amount} > 0;
+            $allocation_decrease += $allocation->{allocation_amount} if $allocation->{allocation_amount} < 0;
+            $net_transfers       += $allocation->{allocation_amount} if $allocation->{is_transfer};
+        }
+
+        my $total_allocation = $allocation_increase + $allocation_decrease;
+        $data->{total_allocation}    = $total_allocation;
+        $data->{allocation_decrease} = $allocation_decrease;
+        $data->{allocation_increase} = $allocation_increase;
+        $data->{net_transfers}       = $net_transfers;
+    }
+    return $data;
+}
 
 1;

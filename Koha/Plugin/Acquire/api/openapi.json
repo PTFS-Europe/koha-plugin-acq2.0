@@ -1343,7 +1343,8 @@
                         "type": "string",
                         "enum": [
                             "fiscal_yr",
-                            "koha_plugin_acquire_funds"
+                            "koha_plugin_acquire_funds",
+                            "koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations"
                         ]
                     },
                     "collectionFormat": "csv"
