@@ -77,6 +77,9 @@ sub get {
             { data => $ledger, field => 'owned_by', key => "owner" } );
         $ledger =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $ledger } );
+        $ledger =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_funds(
+            { data => $ledger } );
 
         return $c->render(
             status  => 200,

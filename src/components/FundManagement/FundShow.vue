@@ -33,17 +33,18 @@
             />
         </Toolbar>
         <h2>{{ "Fund " + fund.fund_id }}</h2>
-        <ValueHeader 
-            :symbol="currency.symbol"
-            :value="fund.fund_value"
-            :key="forceRender"
-        />
-        <DisplayDataFields 
-            :data="fund"
-            homeRoute="FundList"
-            dataType="fund"
-            :showClose="false"
-        />
+        <div class="fund_display">
+            <DisplayDataFields 
+                :data="fund"
+                homeRoute="FundList"
+                dataType="fund"
+                :showClose="false"
+            />
+            <AccountingView 
+                :data="fund"
+                :currencySymbol="currency.symbol"
+            />
+        </div>
     </div>
     <div v-if="initialized" id="fund_allocations">
         <div class="page-section">
@@ -51,8 +52,6 @@
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @edit="doEdit"
-                @delete="doDelete"
             ></KohaTable>
         </div>
     </div>
@@ -66,7 +65,7 @@ import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import DisplayDataFields from "../DisplayDataFields.vue"
 import KohaTable from "../KohaTable.vue"
-import ValueHeader from './ValueHeader.vue'
+import AccountingView from './AccountingView.vue'
 
 export default {
     setup() {
@@ -90,9 +89,6 @@ export default {
         }
     },
     data() {
-        const actionButtons = []
-        if(this.isUserPermitted('edit_fund_allocation')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_fund_allocation')) { actionButtons.push("delete") }
         return {
             fund: {},
             initialized: false,
@@ -102,12 +98,10 @@ export default {
                 table_settings: null,
                 add_filters: true,
                 actions: {
-                    0: ["show"],
-                    "-1": actionButtons,
+                    0: ["show"]
                 },
             },
             currency: null,
-            forceRender: 'no'
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -147,54 +141,16 @@ export default {
                 }
             )
         },
-        doEdit: function ({ fund_allocation_id, is_transfer }, dt, event) {
-            if(is_transfer) {
-                this.showTransferWarning()
-                return
-            }
-            this.$router.push({
-                name: "FundAllocationFormEdit",
-                params: { fund_allocation_id, fund_id: this.fund.fund_id },
-            })
-        },
-        doDelete: function (fund_allocation, dt, event) {
-            if(fund_allocation.is_transfer) {
-                this.showTransferWarning()
-                return
-            }
-            this.setConfirmationDialog(
-                {
-                    title: "Are you sure you want to remove this fund allocation?",
-                    message: fund_allocation.reference,
-                    accept_label: "Yes, delete",
-                    cancel_label: "No, do not delete",
-                },
-                () => {
-                    const client = APIClient.acquisition
-                    client.fund_allocations.delete(fund_allocation.fund_allocation_id).then(
-                        success => {
-                            this.setMessage(`Fund allocation deleted`, true)
-                            dt.draw()
-                            this.fund.fund_value = this.fund.fund_value - fund_allocation.allocation_amount
-                            this.forceRender = 'yes'
-                        },
-                        error => {}
-                    )
-                }
-            )
-        },
         getTableColumns: function () {
             const getCurrency = this.getCurrency
             return [
                 {
-                    title: __("Allocation count"),
-                    data: "fund_allocation_id",
+                    title: __("Date"),
+                    data: "last_updated",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return (
-                            `Allocation ${row.allocation_index}`
-                        )
+                        return row.last_updated.substring(0,10)
                     },
                 },
                 {
@@ -252,7 +208,7 @@ export default {
         ToolbarButton,
         ToolbarLink,
         KohaTable,
-        ValueHeader
+        AccountingView
     },
 }
 </script>
@@ -265,5 +221,9 @@ export default {
 }
 #fund_allocations {
     margin-top: 2em;
+}
+.fund_display {
+    display: flex;
+    gap: 1em;
 }
 </style>
