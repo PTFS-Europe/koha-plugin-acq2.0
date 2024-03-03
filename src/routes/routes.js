@@ -1,11 +1,16 @@
 import { markRaw } from "vue";
 
 import Homepage from '../components/Homepage.vue'
+
 import SettingsHome from '../components/Settings/SettingsHome.vue'
 import ModuleSettings from '../components/Settings/ModuleSettings.vue'
+
+import ManualHome from '../components/Manual/ManualHome.vue'
+
 import TaskList from '../components/TaskManagement/TaskList.vue'
 import TaskShow from '../components/TaskManagement/TaskShow.vue'
 import TaskFormAdd from '../components/TaskManagement/TaskFormAdd.vue'
+
 import FundManagementHome from '../components/FundManagement/FundManagementHome.vue'
 import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
 import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
@@ -19,6 +24,7 @@ import FundFormAdd from '../components/FundManagement/FundFormAdd.vue'
 import FundAllocationShow from '../components/FundManagement/FundAllocationShow.vue'
 import FundAllocationFormAdd from '../components/FundManagement/FundAllocationFormAdd.vue'
 import TransferFunds from '../components/FundManagement/TransferFunds.vue'
+
 
 export const routes = [
     {
@@ -247,8 +253,15 @@ export const routes = [
                         title: "Funds",
                         is_navigation_item: false,
                     },
+                    {
+                        path: "manual",
+                        component: markRaw(ManualHome),
+                        name: "Manual",
+                        title: "Manual",
+                        is_navigation_item: false,
+                    },
                 ]
-            },
+            }
         ]
     }
 ]

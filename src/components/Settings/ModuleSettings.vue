@@ -94,7 +94,7 @@ export default {
                         option: moduleName,
                         description: settingsJSON[moduleName].title
                     }
-                }).filter(moduleName => !['general', 'tasks'].includes(moduleName.option))
+                }).filter(moduleName => !['general', 'tasks', 'manual'].includes(moduleName.option))
                 settingsBaseData.modulesEnabled.options = moduleOptions
             }
             const settingsRenderingData = Object.keys(settingsBaseData).map(key => {
