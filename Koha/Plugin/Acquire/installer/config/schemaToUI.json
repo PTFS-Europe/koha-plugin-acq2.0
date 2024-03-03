@@ -102,16 +102,11 @@
         },
         "fiscal_yr_id": {
             "label": "Fiscal year",
-            "type": "table",
+            "type": "link",
             "dataType": "fiscal_yr",
-            "columns": [
-                "ID",
-                "Code"
-            ],
-            "keys": [
-                "fiscal_yr_id",
-                "code"
-            ]
+            "linkId": "fiscal_yr_id",
+            "linkSlug": "fiscal_year",
+            "linkName": "code"
         },
         "owner": {
             "label": "Owner",
@@ -189,29 +184,19 @@
         },
         "fiscal_yr_id": {
             "label": "Fiscal year",
-            "type": "table",
+            "type": "link",
             "dataType": "fiscal_yr",
-            "columns": [
-                "ID",
-                "Code"
-            ],
-            "keys": [
-                "fiscal_yr_id",
-                "code"
-            ]
+            "linkId": "fiscal_yr_id",
+            "linkSlug": "fiscal_year",
+            "linkName": "code"
         },
         "ledger_id": {
             "label": "Ledger",
-            "type": "table",
+            "type": "link",
             "dataType": "ledger",
-            "columns": [
-                "ID",
-                "Code"
-            ],
-            "keys": [
-                "ledger_id",
-                "code"
-            ]
+            "linkId": "ledger_id",
+            "linkSlug": "ledger",
+            "linkName": "name"
         },
         "owner": {
             "label": "Owner",
