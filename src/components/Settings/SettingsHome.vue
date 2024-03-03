@@ -61,6 +61,7 @@ export default {
                 const selectedModules = value.split("|")
                 modulesEnabled = [...selectedModules]
             }
+            modulesEnabled.push('manual')
             modulesEnabled.push('general')
             modulesEnabled.push('tasks')
 
