@@ -60,6 +60,11 @@ export default {
                 if(fields[key].type === 'owner') {
                     fields[key].value = this.data.owned_by
                 }
+                if(fields[key].type === 'link') {
+                    const value = this.data[fields[key].dataType]
+                    fields[key].href = "/acquisitions/fund_management/" + fields[key].linkSlug + "/" + value[fields[key].linkId]
+                    fields[key].linkText = value[fields[key].linkName]
+                }
                 if(fields[key].type === 'creator') {
                     fields[key].value = this.data.creator
                 }

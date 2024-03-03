@@ -21,7 +21,7 @@
         <ToolbarLink
             :to="{ name: 'TaskFormAdd' }"
             icon="plus"
-            title="Create task"
+            title="New task"
         />
     </Toolbar>
     <h1>Funds and ledgers</h1>

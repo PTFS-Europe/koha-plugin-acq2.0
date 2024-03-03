@@ -51,6 +51,10 @@
             </tr>
         </table>
     </li>
+    <li v-if="item.type === 'link'">
+        <label>{{ item.label }}:</label>
+        <a :href="item.href">{{ item.linkText }}</a>
+    </li>
 </template>
 
 <script>
