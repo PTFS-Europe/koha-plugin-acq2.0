@@ -78,6 +78,10 @@ sub get {
             { data => $fund, field => 'owned_by', key => "owner" } );
         $fund =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund } );
+        $fund =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_funds(
+            { data => $fund } );
+
 
         return $c->render(
             status  => 200,
