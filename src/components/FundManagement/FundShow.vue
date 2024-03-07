@@ -23,7 +23,7 @@
                 :to="{ name: 'FundAllocationFormAdd' }"
                 icon="plus"
                 title="New fund allocation"
-                v-if="isUserPermitted('create_fund_allocation')"
+                v-if="isUserPermitted('create_fund_allocation') && fund.status"
             />
             <ToolbarLink
                 :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
