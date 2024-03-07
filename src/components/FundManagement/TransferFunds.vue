@@ -120,7 +120,7 @@ export default {
             await client.funds.getAll(null, {}).then(
                 funds => {
                     const query_id = parseInt(query.fund_id)
-                    this.funds = funds.filter(fund => fund.fund_id !== query_id)
+                    this.funds = funds.filter(fund => (fund.fund_id !== query_id && fund.status))
                     this.fund_transfer.fund_id_from = query_id
                     this.initialized = true
                 },
