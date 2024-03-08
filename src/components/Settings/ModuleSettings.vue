@@ -55,9 +55,7 @@ export default {
     },
     data() {
         return {
-            config: {
-                modulesEnabled: null
-            },
+            config: {},
             moduleTitle: null,
             settingsRenderingData: [],
             initialized: false
@@ -118,7 +116,7 @@ export default {
                 setting.value = null
                 return setting
             })
-            return settingsToRenderWithValues
+            return settingsToRenderWithValues.filter(setting => setting.variable !== 'selectedWidgets')
         },
         onSubmit(e) {
             e.preventDefault()

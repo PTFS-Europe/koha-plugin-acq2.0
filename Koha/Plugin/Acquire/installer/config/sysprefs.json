@@ -9,6 +9,13 @@
                 "explanation": "Select which modules you wish to use in the acquisitions portal",
                 "type": "multiple",
                 "needsSplit": true
+            },
+            "selectedWidgets": {
+                "value": "",
+                "options": "",
+                "explanation": "Select which widgets you want to display on the dashboard",
+                "type": "multiple",
+                "needsSplit": true
             }
         }
     },

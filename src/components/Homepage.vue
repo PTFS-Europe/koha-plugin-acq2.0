@@ -1,11 +1,15 @@
 <template>
-  <h1>Homepage</h1>
+    <Dashboard 
+        :key="dashboardUpdated"
+        pageTitle="Acquisitions home"
+    />
 </template>
 
 <script>
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
 import { setWarning } from "./../messages"
+import Dashboard from "./Dashboard/Dashboard.vue"
 
 export default {
     setup() {
@@ -14,8 +18,14 @@ export default {
             navigationBlocked
         } = storeToRefs(acquisitionsStore)
 
+        const dashboardStore = inject("dashboardStore")
+        const {
+            dashboardUpdated
+        } = storeToRefs(dashboardStore)
+
         return {
-            navigationBlocked
+            navigationBlocked,
+            dashboardUpdated
         }
     },
 	beforeCreate() {
@@ -23,10 +33,20 @@ export default {
 			setWarning("You did not have the required permissions to access that page. Please contact your system administrator.")
 			this.navigationBlocked = false
 		}
-	}
+	},
+    components: {
+        Dashboard
+    }
 }
 </script>
 
-<style>
-
+<style scoped>
+#acquisitions-dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1em;
+    gap: 3em;
+    width: 100%;
+    height: 100vh;
+}
 </style>

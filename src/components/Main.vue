@@ -9,6 +9,7 @@
                 <div class="col-sm-10 col-sm-push-2">
                     <main>
                         <Dialog />
+                        <DashboardManager />
                         <router-view :key="$route.name" />
                     </main>
                 </div>
@@ -31,6 +32,7 @@ import NavMenu from './NavMenu.vue'
 import Breadcrumbs from "./Breadcrumbs.vue"
 import Help from "./Help.vue"
 import Dialog from "./Dialog.vue"
+import DashboardManager from "./Dashboard/DashboardManager.vue"
 import "vue-select/dist/vue-select.css"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
@@ -41,6 +43,7 @@ export default {
         NavMenu,
         Breadcrumbs,
         Dialog,
+        DashboardManager,
         Help,
     },
     setup() {
