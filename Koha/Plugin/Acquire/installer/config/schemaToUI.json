@@ -84,7 +84,7 @@
         },
         "last_updated": {
             "label": "Last updated",
-            "type": "string"
+            "type": "timestamp"
         }
     },
     "ledger": {
@@ -132,7 +132,7 @@
         },
         "last_updated": {
             "label": "Last updated",
-            "type": "string"
+            "type": "timestamp"
         },
         "currency": {
             "label": "Currency",
@@ -222,7 +222,7 @@
         },
         "last_updated": {
             "label": "Last updated",
-            "type": "string"
+            "type": "timestamp"
         },
         "currency": {
             "label": "Currency",
