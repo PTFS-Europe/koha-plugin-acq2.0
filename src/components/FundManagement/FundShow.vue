@@ -32,7 +32,7 @@
                 v-if="isUserPermitted('create_fund_allocation')"
             />
         </Toolbar>
-        <h2>{{ "Fund " + fund.fund_id }}</h2>
+        <h2>{{ fund.name }}</h2>
         <div class="fund_display">
             <DisplayDataFields 
                 :data="fund"
