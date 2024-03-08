@@ -58,7 +58,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
-            getCurrency
+            formatValueWithCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -67,7 +67,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             isUserPermitted,
-            getCurrency,
+            formatValueWithCurrency,
             table
         }
     },
@@ -158,7 +158,7 @@ export default {
             )
         },
         getTableColumns: function () {
-            const getCurrency = this.getCurrency
+            const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
                     title: __("Name"),
@@ -205,8 +205,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         const sum = row.koha_plugin_acquire_funds.reduce((acc, curr) => acc + curr.fund_value, 0)
-                        const { symbol } = getCurrency(row.currency)
-                        return symbol + sum
+                        return formatValueWithCurrency(row.currency, sum)
                     },
                 },
             ]

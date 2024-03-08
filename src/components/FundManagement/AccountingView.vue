@@ -10,24 +10,24 @@
             </tr>
             <tr>
                 <td>Increase in allocation</td>
-                <td>{{ formatValue(data.allocation_increase) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.allocation_increase) }}</td>
                 <td class="centre_column"></td>
                 <td>Encumbered</td>
-                <td>{{ formatValue() }}</td>
+                <td>{{ formatValueWithCurrency(currency) }}</td>
             </tr>
             <tr>
                 <td>Decrease in allocation</td>
-                <td>{{ formatValue(data.allocation_decrease) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.allocation_decrease) }}</td>
                 <td class="centre_column"></td>
                 <td>Awaiting payment</td>
-                <td>{{ formatValue() }}</td>
+                <td>{{ formatValueWithCurrency(currency) }}</td>
             </tr>
             <tr>
                 <td>Total allocated</td>
-                <td>{{ formatValue(data.total_allocation) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.total_allocation) }}</td>
                 <td class="centre_column"></td>
                 <td>Expended</td>
-                <td>{{ formatValue() }}</td>
+                <td>{{ formatValueWithCurrency(currency) }}</td>
             </tr>
             <tr>
                 <td class="centre_column"></td>
@@ -38,50 +38,46 @@
             </tr>
             <tr>
                 <td>Net transfers</td>
-                <td>{{ formatValue(data.net_transfers) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.net_transfers) }}</td>
                 <td class="centre_column"></td>
                 <td>Over encumbrance</td>
-                <td>{{ formatValue() }}</td>
+                <td>{{ formatValueWithCurrency(currency) }}</td>
             </tr>
             <tr>
                 <td>Total funding</td>
-                <td>{{ formatValue(data.total_allocation) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.total_allocation) }}</td>
                 <td class="centre_column"></td>
                 <td>Over expended</td>
-                <td>{{ formatValue() }}</td>
+                <td>{{ formatValueWithCurrency(currency) }}</td>
             </tr>
             <tr>
                 <td>Cash balance</td>
-                <td>{{ formatValue(data.total_allocation) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.total_allocation) }}</td>
                 <td class="centre_column"></td>
                 <td>Available balance</td>
-                <td>{{ formatValue(data.total_allocation) }}</td>
+                <td>{{ formatValueWithCurrency(currency, data.total_allocation) }}</td>
             </tr>
         </table>
     </div>
 </template>
 
 <script>
+import { inject } from "vue"
+
 export default {
     setup() {
-        
+        const acquisitionsStore = inject("acquisitionsStore")
+        const { 
+            formatValueWithCurrency
+        } = acquisitionsStore
+
+        return {
+            formatValueWithCurrency
+        }
     },
     props: {
         data: Object,
-        currencySymbol: String
-    },
-    methods: {
-        formatValue(value) {
-            if(!value) {
-                return `${this.currencySymbol}0`
-            }
-            if(value >= 0) {
-                return `${this.currencySymbol}${value}`
-            }
-            if(value < 0) {
-                return `-${this.currencySymbol}${-value}`
-            }
-        }
+        currency: String
     }
 }
 
