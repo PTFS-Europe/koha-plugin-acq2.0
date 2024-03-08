@@ -24,13 +24,152 @@
             title="New task"
         />
     </Toolbar>
-    <h1>Funds and ledgers</h1>
+    <div v-if="initialized">
+        <h1>Funds and ledgers</h1>
+        <fieldset class="filters">
+            <h2>Filters</h2>
+            <div class="filters-grid">
+                <div class="filter-grid-cell">
+                    <label for="status" class="filter-label"
+                        >Status:</label
+                    >
+                    <v-select
+                        id="status"
+                        v-model="filters.status"
+                        :reduce="av => av.value"
+                        :options="statusOptions"
+                        label="description"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
+                    <label for="fund_fund_type" class="filter-label"
+                        >Fund type:</label
+                    >
+                    <v-select
+                        id="fund_fund_type"
+                        v-model="filters.fund_type"
+                        :reduce="av => av.value"
+                        :options="acquire_fund_types"
+                        label="description"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
+                    <label for="owner" class="filter-label"
+                        >Owner:</label
+                    >
+                    <v-select
+                        id="owner"
+                        v-model="filters.owner"
+                        :reduce="av => av.borrowernumber"
+                        :options="getOwners"
+                        label="displayName"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
+                    <label for="fiscal_year" class="filter-label"
+                        >Fiscal year:</label
+                    >
+                    <v-select
+                        id="fiscal_year"
+                        v-model="filters.fiscal_yr_id"
+                        :reduce="av => av.fiscal_yr_id"
+                        :options="fiscal_years"
+                        label="code"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
+                    <label for="ledger" class="filter-label"
+                        >Ledger:</label
+                    >
+                    <v-select
+                        id="ledger"
+                        v-model="filters.ledger_id"
+                        :reduce="av => av.ledger_id"
+                        :options="ledgers"
+                        label="name"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+            </div>
+            <input
+                @click="filterTables"
+                id="filter_table"
+                type="button"
+                value="Filter"
+            />
+            <input
+                @click="clearFilters"
+                id="clear_filters"
+                type="button"
+                value="Clear"
+                style="margin-left:0.5em;"
+            />
+        </fieldset>
+        <div class="ledgers-and-funds">
+            <div class="page-section flex-table">
+                <h2>Ledgers</h2>
+                <KohaTable
+                    ref="ledgersTable"
+                    v-bind="tableOptionsLedgers"
+                ></KohaTable>
+            </div>
+            <div class="page-section flex-table" style="margin-top:0px;">
+                <h2>Funds</h2>
+                <KohaTable
+                    ref="fundsTable"
+                    v-bind="tableOptionsFunds"
+                ></KohaTable>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Toolbar from "../Toolbar.vue"
 import ToolbarLink from "../ToolbarLink.vue"
-import { inject } from "vue"
+import KohaTable from "../KohaTable.vue"
+import { inject, ref } from "vue"
+import { storeToRefs } from "pinia"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -38,18 +177,187 @@ export default {
         const { 
             isUserPermitted,
         } = acquisitionsStore
+        const {
+            getOwners,
+        } = storeToRefs(acquisitionsStore)
+
+        const AVStore = inject("AVStore")
+        const {
+            acquire_fund_types,
+        } = storeToRefs(AVStore)
+
+        const ledgersTable = ref()
+        const fundsTable = ref()
 
         return {
             isUserPermitted,
+            ledgersTable,
+            fundsTable,
+            acquire_fund_types,
+            getOwners
+        }
+    },
+    data() {
+        return {
+            tableOptionsLedgers: {
+                columns: this.getTableColumns('ledger'),
+                url: this.tableUrl('ledgers'),
+                options: { 
+                    dom: '<"top pager"<"table_entries"ip>>tr<"bottom pager"ip>',
+                },
+                table_settings: null,
+                add_filters: true,
+            },
+            tableOptionsFunds: {
+                columns: this.getTableColumns('fund'),
+                url: this.tableUrl('funds'),
+                options: { 
+                    dom: '<"top pager"<"table_entries"ip>>tr<"bottom pager"ip>',
+                },
+                table_settings: null,
+                add_filters: true,
+            },
+            filters: {
+                status: null,
+                fund_type: null,
+                owner: null,
+                fiscal_yr_id: null,
+                ledger_id: null
+            },
+            statusOptions: [
+                { description: 'Active', value: 1 },
+                { description: 'Inactive', value: 0 },
+            ],
+            fiscal_years: [],
+            ledgers: [],
+            initialized: false
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getDataRequiredForPageLoad()
+        })
+    },
+    methods: {
+        async getDataRequiredForPageLoad() {
+            this.getFiscalYears().then(() => {
+                this.getLedgers().then(() => {
+                    this.initialized = true
+                })
+            })
+        },
+        async getFiscalYears() {
+            const client = APIClient.acquisition
+            await client.fiscal_years.getAll().then(
+                fiscal_years => {
+                    this.fiscal_years = fiscal_years
+                },
+                error => {}
+            )
+        },
+        async getLedgers() {
+            const client = APIClient.acquisition
+            await client.ledgers.getAll().then(
+                ledgers => {
+                    this.ledgers = ledgers
+                },
+                error => {}
+            )
+        },
+        tableUrl(type, query) {
+            let url = `/api/v1/contrib/acquire/${type}`
+            if(query) {
+                url = url + '?q=' + JSON.stringify(query)
+            }
+            return url
+        },
+        getTableColumns: function (dataType) {
+            return [
+                {
+                    title: __("Name"),
+                    data: `name:${dataType}_id`,
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        const key = `${dataType}_id`
+                        return (
+                            `<a href="/acquisitions/fund_management/${dataType}/` +
+                            row[key]+
+                            '" class="show">' +
+                            escape_str(`${row.name}`) +
+                            "</a>"
+                        )
+                    },
+                },
+                {
+                    title: __("Code"),
+                    data: "code",
+                    searchable: true,
+                    orderable: true,
+                }
+            ]
+        },
+        filterTables() {
+            const filters = JSON.parse(JSON.stringify(this.filters))
+            Object.keys(filters).forEach(key => {
+                if(filters[key] === null) {
+                    delete filters[key]
+                }
+            })
+            this.$refs.fundsTable.redraw(this.tableUrl('funds', filters))
+            if(filters.hasOwnProperty('fund_type')) { delete filters.fund_type }
+            this.$refs.ledgersTable.redraw(this.tableUrl('ledgers', filters))
+        },
+        clearFilters() {
+            this.filters = {
+                status: null,
+                fund_type: null,
+                owner: null,
+                fiscal_yr_id: null,
+                ledger_id: null
+            }
         }
     },
     components: {
         Toolbar,
-        ToolbarLink
+        ToolbarLink,
+        KohaTable
     }
 }
 </script>
 
 <style scoped>
-
+.ledgers-and-funds {
+    display: flex;
+    gap: 2em;
+    width: 100%;
+}
+.flex-table {
+    margin-top: 0px;
+    width: 50%;
+}
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 1em;
+    gap: 1em;
+    width: 90%;
+}
+.filter-grid-cell {
+    display:flex; 
+    gap:1em;
+    justify-content: centre;
+    width:100%;
+}
+.filter-label {
+    min-width: 25%;
+}
+.v-select,
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]),
+textarea {
+    border-color: rgba(60, 60, 60, 0.26);
+    border-width: 1px;
+    border-radius: 4px;
+    min-width: 60%;
+}
 </style>

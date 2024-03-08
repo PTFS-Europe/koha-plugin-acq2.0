@@ -24,7 +24,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         determineBranch(code) {
             if(code) { return code }
             const { logged_in_user: { logged_in_branch, branchcode } } = this.user
-            return logged_in_branch ? logged_in_branch : branchcode 
+            return logged_in_branch ? logged_in_branch : branchcode
         },
         mapSubGroups(group, filteredGroups, branch, groupsToCheck) {
             let matched = false
