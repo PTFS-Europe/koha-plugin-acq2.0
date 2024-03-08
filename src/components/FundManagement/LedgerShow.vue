@@ -30,7 +30,7 @@
             />
             <AccountingView 
                 :data="ledger"
-                :currencySymbol="currency.symbol"
+                :currency="ledger.currency"
             />
         </div>
     </div>
@@ -62,14 +62,14 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
-            getCurrency
+            formatValueWithCurrency
         } = acquisitionsStore
 
         return {
             setConfirmationDialog,
             setMessage,
             isUserPermitted,
-            getCurrency
+            formatValueWithCurrency
         }
     },
     data() {
@@ -100,7 +100,6 @@ export default {
             await client.ledgers.get(ledger_id, "fiscal_yr,koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations").then(
                 ledger => {
                     this.ledger = ledger
-                    this.currency = this.getCurrency(ledger.currency)
                     this.initialized = true
                 },
                 error => {}
@@ -127,7 +126,7 @@ export default {
             )
         },
         getTableColumns: function () {
-            const getCurrency = this.getCurrency
+            const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
                     title: __("Name"),
@@ -165,8 +164,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        const { symbol } = getCurrency(row.currency)
-                        return symbol + row.fund_value
+                        return formatValueWithCurrency(row.currency, row.fund_value)
                     },
                 },
             ]

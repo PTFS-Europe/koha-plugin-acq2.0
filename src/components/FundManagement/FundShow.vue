@@ -42,7 +42,7 @@
             />
             <AccountingView 
                 :data="fund"
-                :currencySymbol="currency.symbol"
+                :currency="fund.currency"
             />
         </div>
     </div>
@@ -74,7 +74,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
-            getCurrency
+            formatValueWithCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -84,7 +84,7 @@ export default {
             setMessage,
             setWarning,
             isUserPermitted,
-            getCurrency,
+            formatValueWithCurrency,
             table
         }
     },
@@ -100,8 +100,7 @@ export default {
                 actions: {
                     0: ["show"]
                 },
-            },
-            currency: null,
+            }
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -115,7 +114,6 @@ export default {
             await client.funds.get(fund_id, "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations").then(
                 fund => {
                     this.fund = fund
-                    this.currency = this.getCurrency(fund.currency)
                     this.initialized = true
                 },
                 error => {}
@@ -142,7 +140,7 @@ export default {
             )
         },
         getTableColumns: function () {
-            const getCurrency = this.getCurrency
+            const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
                     title: __("Date"),
@@ -172,8 +170,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        const { symbol } = getCurrency(row.currency)
-                        return symbol + row.new_fund_value
+                        return formatValueWithCurrency(row.currency, row.new_fund_value)
                     },
                 },
                 {

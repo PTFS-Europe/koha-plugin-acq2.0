@@ -168,8 +168,15 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             })
             return groupIds
         },
-        getCurrency(currency) {
-            return this.currencies.find(curr => curr.currency === currency)
+        formatValueWithCurrency(currency, value) {
+            const { symbol } = this.currencies.find(curr => curr.currency === currency)
+            if(!value) {
+                return `${symbol}0`
+            }
+            if(value < 0) {
+                return `-${symbol}${-value}`
+            }
+            return `${symbol}${value}`
         }
     },
     getters: {

@@ -37,7 +37,7 @@ export default {
         const acquisitionsStore = inject("acquisitionsStore")
         const { 
             isUserPermitted,
-            getCurrency
+            formatValueWithCurrency
         } = acquisitionsStore
 
         const table = ref()
@@ -46,7 +46,7 @@ export default {
             table,
             setConfirmationDialog,
             setMessage,
-            getCurrency,
+            formatValueWithCurrency,
             isUserPermitted
         }
     },
@@ -116,7 +116,7 @@ export default {
             )
         },
         getTableColumns: function () {
-            const getCurrency = this.getCurrency
+            const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
                     title: __("Name"),
@@ -154,8 +154,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        const { symbol } = getCurrency(row.currency)
-                        return symbol + row.fund_value
+                        return formatValueWithCurrency(row.currency, row.fund_value)
                     },
                 },
             ]
