@@ -5,6 +5,12 @@
             {{ item.value }}
         </span>
     </li>
+    <li v-if="item.type === 'timestamp'">
+        <label>{{ item.label }}:</label>
+        <span>
+            {{ item.value.substring(0,10) }}
+        </span>
+    </li>
     <li v-if="item.type === 'enum'">
         <label>{{ item.label }}:</label>
         <span>
