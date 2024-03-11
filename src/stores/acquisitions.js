@@ -96,7 +96,17 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             if(!operation) return true
             if(this.permissions_matrix[operation].length === 0) return true
 
-            const { acquisition, superlibrarian } = userflags
+            const { acquisition, parameters, superlibrarian } = userflags
+            if(operation === 'manage_settings') {
+                let checkResult = false
+                if( superlibrarian || parameters === 1 || parameters.manage_sysprefs) {
+                    checkResult = true
+                } else {
+                    checkResult = false
+                }
+                return checkResult
+            }
+
             if (acquisition === 1 || superlibrarian) {
                 return true
             } else {
