@@ -1,4 +1,5 @@
 export const permissionsMatrix = {
+    manage_settings: ['manage_sysprefs'],
     add_task: [],
     edit_task: [],
     delete_task: [],

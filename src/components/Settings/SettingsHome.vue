@@ -19,7 +19,7 @@ import { storeToRefs } from "pinia"
 export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
-        const { convertSettingsToObject } = acquisitionsStore
+        const { convertSettingsToObject, isUserPermitted } = acquisitionsStore
         const { 
             settings,
         } = storeToRefs(acquisitionsStore)
@@ -27,6 +27,7 @@ export default {
         return {
             settings,
             convertSettingsToObject,
+            isUserPermitted,
             settingsJSON
         }
     },
@@ -66,6 +67,20 @@ export default {
             modulesEnabled.push('tasks')
 
             const modules = Object.keys(settingsJSON)
+            if(!this.isUserPermitted('manage_settings')) {
+                const moduleData = settingsJSON.manual
+                this.navPanes = [
+                    {
+                        path: "/acquisitions/settings/manual",
+                        icon: moduleData.icon,
+                        title: moduleData.title,
+                        module: 'Manual'
+                    }
+                ]
+                this.initialised = true
+                return
+            }
+
             const navPanes = modules.map(moduleName => {
                 const moduleData = settingsJSON[moduleName]
                 return {
@@ -75,6 +90,7 @@ export default {
                     module: moduleName
                 }
             }).filter(m => modulesEnabled.includes(m.module))
+
             this.navPanes = navPanes
             this.initialised = true
             return navPanes

@@ -238,6 +238,7 @@ export const routes = [
                         name: "ModuleSettingsGeneral",
                         title: "General",
                         is_navigation_item: false,
+                        permission: "manage_settings"
                     },
                     {
                         path: "tasks",
@@ -245,6 +246,7 @@ export const routes = [
                         name: "ModuleSettingsTasks",
                         title: "Tasks",
                         is_navigation_item: false,
+                        permission: "manage_settings"
                     },
                     {
                         path: "funds",
@@ -252,6 +254,7 @@ export const routes = [
                         name: "ModuleSettingsFunds",
                         title: "Funds",
                         is_navigation_item: false,
+                        permission: "manage_settings"
                     },
                     {
                         path: "manual",
