@@ -61,28 +61,28 @@ export const routes = [
                                 component: markRaw(FiscalYearList),
                                 name: "FiscalYearList",
                                 title: "List fiscal years",
-                                permission: "manage_fiscal_years"
+                                permission: "manageFiscalYears"
                             },
                             {
                                 path: ":fiscal_yr_id",
                                 component: markRaw(FiscalYearShow),
                                 name: "FiscalYearShow",
                                 title: "Show fiscal year",
-                                permission: "manage_fiscal_years"
+                                permission: "manageFiscalYears"
                             },
                             {
                                 path: "add",
                                 component: markRaw(FiscalYearFormAdd),
                                 name: "FiscalYearFormAdd",
                                 title: "Add fiscal year",
-                                permission: "create_fiscal_year"
+                                permission: "createFiscalYears"
                             },
                             {
                                 path: "edit/:fiscal_yr_id",
                                 component: markRaw(FiscalYearFormAdd),
                                 name: "FiscalYearFormEdit",
                                 title: "Edit fiscal year",
-                                permission: "edit_fiscal_year"
+                                permission: "editFiscalYear"
                             }
                         ]
                     },
@@ -96,28 +96,28 @@ export const routes = [
                                 component: markRaw(LedgerList),
                                 name: "LedgerList",
                                 title: "List ledgers",
-                                permission: "manage_ledgers"
+                                permission: "manageLedgers"
                             },
                             {
                                 path: ":ledger_id",
                                 component: markRaw(LedgerShow),
                                 name: "LedgerShow",
                                 title: "Show ledger",
-                                permission: "manage_ledgers"
+                                permission: "manageLedgers"
                             },
                             {
                                 path: "add",
                                 component: markRaw(LedgerFormAdd),
                                 name: "LedgerFormAdd",
                                 title: "Add ledger",
-                                permission: "create_ledger"
+                                permission: "createLedger"
                             },
                             {
                                 path: "edit/:ledger_id",
                                 component: markRaw(LedgerFormAdd),
                                 name: "LedgerFormEdit",
                                 title: "Edit ledger",
-                                permission: "edit_ledger"
+                                permission: "editLedger"
                             }
                         ]
                     },
@@ -131,56 +131,56 @@ export const routes = [
                                 component: markRaw(FundList),
                                 name: "FundList",
                                 title: "List funds",
-                                permission: "manage_funds"
+                                permission: "mangeFunds"
                             },
                             {
                                 path: ":fund_id",
                                 component: markRaw(FundShow),
                                 name: "FundShow",
                                 title: "Show fund",
-                                permission: "manage_funds"
+                                permission: "mangeFunds"
                             },
                             {
                                 path: "add",
                                 component: markRaw(FundFormAdd),
                                 name: "FundFormAdd",
                                 title: "Add fund",
-                                permission: "create_fund"
+                                permission: "createFund"
                             },
                             {
                                 path: "edit/:fund_id",
                                 component: markRaw(FundFormAdd),
                                 name: "FundFormEdit",
                                 title: "Edit fund",
-                                permission: "edit_fund"
+                                permission: "editFund"
                             },
                             {
                                 path: ":fund_id/allocation",
                                 component: markRaw(FundAllocationShow),
                                 name: "FundAllocationShow",
                                 title: "Show fund allocation",
-                                permission: "manage_fund_allocations"
+                                permission: "manageFundAllocations"
                             },
                             {
                                 path: ":fund_id/allocation/edit/:fund_allocation_id",
                                 component: markRaw(FundAllocationFormAdd),
                                 name: "FundAllocationFormEdit",
                                 title: "Edit fund allocation",
-                                permission: "edit_fund_allocation"
+                                permission: "editFundAllocation"
                             },
                             {
                                 path: ":fund_id/allocate",
                                 component: markRaw(FundAllocationFormAdd),
                                 name: "FundAllocationFormAdd",
                                 title: "Allocate funds",
-                                permission: "create_fund_allocation"
+                                permission: "createFundAllocation"
                             },
                             {
                                 path: "transfer",
                                 component: markRaw(TransferFunds),
                                 name: "TransferFunds",
                                 title: "Transfer funds",
-                                permission: "create_fund_allocation"
+                                permission: "createFundAllocation"
                             },
                         ]
                     }
@@ -238,7 +238,7 @@ export const routes = [
                         name: "ModuleSettingsGeneral",
                         title: "General",
                         is_navigation_item: false,
-                        permission: "manage_settings"
+                        permission: "manageSettings"
                     },
                     {
                         path: "tasks",
@@ -246,7 +246,7 @@ export const routes = [
                         name: "ModuleSettingsTasks",
                         title: "Tasks",
                         is_navigation_item: false,
-                        permission: "manage_settings"
+                        permission: "manageSettings"
                     },
                     {
                         path: "funds",
@@ -254,7 +254,7 @@ export const routes = [
                         name: "ModuleSettingsFunds",
                         title: "Funds",
                         is_navigation_item: false,
-                        permission: "manage_settings"
+                        permission: "manageSettings"
                     },
                     {
                         path: "manual",

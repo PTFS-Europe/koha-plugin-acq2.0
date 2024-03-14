@@ -130,7 +130,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('create_fund_allocation')) {
+            if(!this.isUserPermitted('createFundAllocation')) {
                 setWarning('You do not have the required permissions to transfer funds.')
                 return
             }
@@ -138,7 +138,7 @@ export default {
             const fund_transfer = JSON.parse(JSON.stringify(this.fund_transfer))
 
             const acq_client = APIClient.acquisition
-            acq_client.fund_allocations
+            acq_client.fundAllocations
                 .transfer(fund_transfer).then(
                     success => {
                         setMessage("Funds successfully transferred")

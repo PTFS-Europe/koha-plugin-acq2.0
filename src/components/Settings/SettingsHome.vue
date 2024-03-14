@@ -67,7 +67,7 @@ export default {
             modulesEnabled.push('tasks')
 
             const modules = Object.keys(settingsJSON)
-            if(!this.isUserPermitted('manage_settings')) {
+            if(!this.isUserPermitted('manageSettings')) {
                 const moduleData = settingsJSON.manual
                 this.navPanes = [
                     {

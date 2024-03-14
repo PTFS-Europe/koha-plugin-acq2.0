@@ -136,7 +136,7 @@ export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
         const {
-            library_groups,
+            libraryGroups,
             moduleList,
             getVisibleGroups,
             getOwners
@@ -151,7 +151,7 @@ export default {
 
         return {
             isUserPermitted,
-            library_groups,
+            libraryGroups,
             moduleList,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,

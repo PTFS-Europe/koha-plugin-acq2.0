@@ -151,7 +151,7 @@ export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
         const {
-            library_groups,
+            libraryGroups,
             getVisibleGroups,
             getOwners
         } = storeToRefs(acquisitionsStore)
@@ -166,7 +166,7 @@ export default {
 
         return {
             isUserPermitted,
-            library_groups,
+            libraryGroups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
             formatLibraryGroupIds,
@@ -207,7 +207,7 @@ export default {
     methods: {
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            client.fiscal_years.get(fiscal_yr_id).then(fiscal_yr => {
+            client.fiscalYears.get(fiscal_yr_id).then(fiscal_yr => {
                 this.fiscal_yr = fiscal_yr
                 this.fiscal_yr.visible_to = this.formatLibraryGroupIds(fiscal_yr.visible_to)
                 this.initialized = true
@@ -216,7 +216,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('create_fiscal_year')) {
+            if(!this.isUserPermitted('createFiscalYears')) {
                 setWarning('You do not have the required permissions to create fiscal years.')
                 return
             }
@@ -231,7 +231,7 @@ export default {
 
             if(fiscal_yr_id) {
                 const acq_client = APIClient.acquisition
-                acq_client.fiscal_years
+                acq_client.fiscalYears
                     .update(fiscal_yr, fiscal_yr_id).then(
                         success => {
                             setMessage("Fiscal year updated")
@@ -241,7 +241,7 @@ export default {
                     )
             } else {
                 const acq_client = APIClient.acquisition
-                acq_client.fiscal_years
+                acq_client.fiscalYears
                     .create(fiscal_yr).then(
                         success => {
                             setMessage("Fiscal year created")

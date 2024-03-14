@@ -58,7 +58,7 @@ export default {
         const { 
             user,
             settings,
-            library_groups,
+            libraryGroups,
             permittedUsers,
             modulesEnabled,
             visibleGroups,
@@ -72,7 +72,7 @@ export default {
             loaded,
             settings,
             user,
-            library_groups,
+            libraryGroups,
             permittedUsers,
             modulesEnabled,
             visibleGroups,
@@ -135,10 +135,10 @@ export default {
             .getAll()
             .then(settings => {
                 this.settings = this.convertSettingsToObject(settings)
-                this.user.logged_in_user = logged_in_user
-                this.user.logged_in_user.logged_in_branch = logged_in_branch.branchcode
+                this.user.loggedInUser = logged_in_user
+                this.user.loggedInUser.loggedInBranch = logged_in_branch.branchcode
                 this.user.userflags = userflags
-                this.library_groups = library_groups
+                this.libraryGroups = library_groups
                 this.currencies = currencies
                 const { acquisition, superlibrarian } = this.user.userflags
                 if (!acquisition && !superlibrarian) {

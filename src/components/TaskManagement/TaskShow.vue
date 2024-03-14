@@ -15,7 +15,7 @@
             <ToolbarButton
                 icon="trash"
                 title="Delete"
-                @clicked="delete_task(task.task_id, task.short_name)"
+                @clicked="deleteTask(task.task_id, task.short_name)"
             />
         </Toolbar>
         <h2>{{ "Task " + task.task_id }}</h2>
@@ -67,7 +67,7 @@ export default {
                 error => {}
             )
         },
-        delete_task: function (task_id, task_name) {
+        deleteTask: function (task_id, task_name) {
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this task?",

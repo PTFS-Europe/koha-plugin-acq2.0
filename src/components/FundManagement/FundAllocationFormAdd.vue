@@ -127,7 +127,7 @@ export default {
         },
         async getFundAllocation(fund_allocation_id) {
             const client = APIClient.acquisition
-            await client.fund_allocations.get(fund_allocation_id).then(fund_allocation => {
+            await client.fundAllocations.get(fund_allocation_id).then(fund_allocation => {
                 this.fund_allocation = fund_allocation
             })
         },
@@ -149,7 +149,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('create_fund_allocation')) {
+            if(!this.isUserPermitted('createFundAllocation')) {
                 setWarning('You do not have the required permissions to create fund allocations.')
                 return
             }
@@ -161,7 +161,7 @@ export default {
 
             if(fund_allocation_id) {
                 const acq_client = APIClient.acquisition
-                acq_client.fund_allocations
+                acq_client.fundAllocations
                     .update(fund_allocation, fund_allocation_id).then(
                         success => {
                             setMessage("Fund allocation updated")
@@ -171,7 +171,7 @@ export default {
                     )
             } else {
                 const acq_client = APIClient.acquisition
-                acq_client.fund_allocations
+                acq_client.fundAllocations
                     .create(fund_allocation).then(
                         success => {
                             setMessage("Fund allocation created")
