@@ -71,8 +71,8 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('edit_task')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_task')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editTask')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteTask')) { actionButtons.push("delete") }
         return {
             task_count: 0,
             initialized: false,
@@ -110,7 +110,7 @@ export default {
         },
         tableUrl() {
             let url = "/api/v1/contrib/acquire/tasks?q="
-            const param = this.user.logged_in_user.borrowernumber
+            const param = this.user.loggedInUser.borrowernumber
             const query = {
                 owner: param,
                 status: ['assigned', 'on_hold', 'cancelled']

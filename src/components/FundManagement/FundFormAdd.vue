@@ -191,7 +191,7 @@ export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
         const {
-            library_groups,
+            libraryGroups,
             getVisibleGroups,
             getOwners
         } = storeToRefs(acquisitionsStore)
@@ -211,7 +211,7 @@ export default {
 
         return {
             isUserPermitted,
-            library_groups,
+            libraryGroups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
             formatLibraryGroupIds,
@@ -273,7 +273,7 @@ export default {
         },
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscal_years.get(fiscal_yr_id, { "x-koha-embed": "koha_plugin_acquire_ledgers" }).then(
+            await client.fiscalYears.get(fiscal_yr_id, { "x-koha-embed": "koha_plugin_acquire_ledgers" }).then(
                 fiscalYear => {
                     this.fiscalYear = fiscalYear
                     this.filterGroupsBySelectedLedger(this.fund.ledger_id)
@@ -315,7 +315,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('create_fund')) {
+            if(!this.isUserPermitted('createFund')) {
                 setWarning('You do not have the required permissions to create funds.')
                 return
             }

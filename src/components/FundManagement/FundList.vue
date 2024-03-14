@@ -6,7 +6,7 @@
                 :to="{ name: 'FundFormAdd' }"
                 icon="plus"
                 title="New fund"
-                v-if="isUserPermitted('create_fund')"
+                v-if="isUserPermitted('createFund')"
             />
         </Toolbar>
         <div v-if="fund_count > 0" class="page-section">
@@ -52,8 +52,8 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('edit_fund')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_fund')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editFund')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteFund')) { actionButtons.push("delete") }
         return {
             fund_count: 0,
             initialized: false,

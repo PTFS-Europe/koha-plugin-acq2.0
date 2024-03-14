@@ -11,13 +11,13 @@
                 :to="{ name: 'FiscalYearFormEdit', params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id } }"
                 icon="pencil"
                 title="Edit"
-                v-if="isUserPermitted('edit_fiscal_year')"
+                v-if="isUserPermitted('editFiscalYear')"
             />
             <ToolbarButton
                 icon="trash"
                 title="Delete"
                 @clicked="delete_fiscal_yr(fiscal_yr.fiscal_yr_id, fiscal_yr.code)"
-                v-if="isUserPermitted('delete_fiscal_year')"
+                v-if="isUserPermitted('deleteFiscalYear')"
             />
         </Toolbar>
         <h2>{{ "Fiscal year " + fiscal_yr.fiscal_yr_id }}</h2>
@@ -73,8 +73,8 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('edit_ledger')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_ledger')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editLedger')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteLedger')) { actionButtons.push("delete") }
         return {
             fiscal_yr: {},
             initialized: false,
@@ -99,7 +99,7 @@ export default {
     methods: {
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscal_years.get(fiscal_yr_id).then(
+            await client.fiscalYears.get(fiscal_yr_id).then(
                 fiscal_yr => {
                     this.fiscal_yr = fiscal_yr
                     this.initialized = true
@@ -117,7 +117,7 @@ export default {
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.fiscal_years.delete(fiscal_yr_id).then(
+                    client.fiscalYears.delete(fiscal_yr_id).then(
                         success => {
                             this.setMessage("Fiscal year deleted")
                             this.$router.push({ name: "FiscalYearList" })

@@ -73,7 +73,7 @@ export class AcquisitionAPIClient extends HttpClient {
         };
     }
 
-    get fiscal_years() {
+    get fiscalYears() {
         return {
             get: (id, headers) =>
                 this.get({
@@ -204,7 +204,7 @@ export class AcquisitionAPIClient extends HttpClient {
         };
     }
 
-    get fund_allocations() {
+    get fundAllocations() {
         return {
             get: (id, headers) =>
                 this.get({

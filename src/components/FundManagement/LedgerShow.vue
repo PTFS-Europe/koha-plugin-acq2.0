@@ -11,13 +11,13 @@
                 :to="{ name: 'LedgerFormEdit', params: { ledger_id: ledger.ledger_id } }"
                 icon="pencil"
                 title="Edit"
-                v-if="isUserPermitted('edit_ledger')"
+                v-if="isUserPermitted('editLedger')"
             />
             <ToolbarButton
                 icon="trash"
                 title="Delete"
-                @clicked="delete_ledger(ledger.ledger_id, ledger.name)"
-                v-if="isUserPermitted('delete_ledger')"
+                @clicked="deleteLedger(ledger.ledger_id, ledger.name)"
+                v-if="isUserPermitted('deleteLedger')"
             />
         </Toolbar>
         <h2>{{ ledger.name }}</h2>
@@ -105,7 +105,7 @@ export default {
                 error => {}
             )
         },
-        delete_ledger: function (ledger_id, ledger_code) {
+        deleteLedger: function (ledger_id, ledger_code) {
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this ledger?",

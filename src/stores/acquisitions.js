@@ -4,10 +4,10 @@ import { permissionsMatrix } from "../data/permissionsMatrix";
 export const useAcquisitionsStore = defineStore("acquisitions", {
     state: () => ({
         user: {
-            logged_in_user: null,
+            loggedInUser: null,
             userflags: null,
         },
-        library_groups: null,
+        libraryGroups: null,
         settings: null,
         permittedUsers: null,
         visibleGroups: null,
@@ -17,14 +17,14 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         moduleList: {
             funds: { name: 'Funds and ledgers', code: "funds" }
         },
-        permissions_matrix: permissionsMatrix,
+        permissionsMatrix: permissionsMatrix,
         currencies: null
     }),
     actions: {
         determineBranch(code) {
             if(code) { return code }
-            const { logged_in_user: { logged_in_branch, branchcode } } = this.user
-            return logged_in_branch ? logged_in_branch : branchcode
+            const { loggedInUser: { loggedInBranch, branchcode } } = this.user
+            return loggedInBranch ? loggedInBranch : branchcode
         },
         mapSubGroups(group, filteredGroups, branch, groupsToCheck) {
             let matched = false
@@ -49,7 +49,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         filterLibGroupsByUsersBranchcode(branchcode, groupsToCheck) {
             const branch = this.determineBranch(branchcode)
             const filteredGroups = {}
-            this.library_groups.forEach(group => {
+            this.libraryGroups.forEach(group => {
                 const matched = this.mapSubGroups(group, filteredGroups, branch, groupsToCheck)
                 // If a sub group has been matched but the parent level group did not, then we should add the parent level group as well
                 // This happens when a parent group doesn't have nay branchcodes assigned to it, only sub groups
@@ -94,10 +94,10 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         isUserPermitted(operation, flags) {
             const userflags = flags ? flags : this.user.userflags
             if(!operation) return true
-            if(this.permissions_matrix[operation].length === 0) return true
+            if(this.permissionsMatrix[operation].length === 0) return true
 
             const { acquisition, parameters, superlibrarian } = userflags
-            if(operation === 'manage_settings') {
+            if(operation === 'manageSettings') {
                 let checkResult = false
                 if( superlibrarian || parameters === 1 || parameters.manage_sysprefs) {
                     checkResult = true
@@ -110,7 +110,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             if (acquisition === 1 || superlibrarian) {
                 return true
             } else {
-                const checks = this.permissions_matrix[operation].map(permission => {
+                const checks = this.permissionsMatrix[operation].map(permission => {
                     if (acquisition[permission]) {
                         return true
                     } else {
