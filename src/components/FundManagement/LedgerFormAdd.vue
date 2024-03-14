@@ -49,23 +49,17 @@
                             <label for="ledger_fiscal_yr_id" class="required"
                                 >Fiscal year:</label
                             >
-                            <v-select
+                            <InfiniteScrollSelect
                                 id="ledger_fiscal_yr_id"
                                 v-model="ledger.fiscal_yr_id"
-                                :reduce="av => av.fiscal_yr_id"
-                                :options="fiscal_years"
+                                :selectedData="fiscal_year"
+                                dataType="fiscal_years"
+                                dataIdentifier="fiscal_yr_id"
                                 label="code"
+                                apiClient="acquisition"
+                                :required="true"
                                 @update:modelValue="filterGroupsBySelectedFiscalYear($event)"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!ledger.fiscal_yr_id"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
+                            />
                             <span class="required">Required</span>
                         </li>
                         <li>
@@ -286,6 +280,7 @@ import { inject } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setWarning } from "../../messages"
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 
 export default {
     setup() {
@@ -343,7 +338,7 @@ export default {
                 os_warning_sum: null,
                 os_limit_sum: null,
             },
-            fiscal_years: [],
+            fiscal_year: null,
             currencies: [],
             fiscal_year_groups: [],
         }
@@ -354,14 +349,15 @@ export default {
         })
     },
     methods: {
-        async getDataRequiredForPageLoad(ledger_id) {
-            this.getFiscalYears().then(() => {
-                this.getCurrencies().then(() => {
-                    if(ledger_id) {
-                        this.getLedger(ledger_id)
-                    }
+    async getDataRequiredForPageLoad(ledger_id) {
+            this.getCurrencies().then(() => {
+                if(ledger_id) {
+                    this.getLedger(ledger_id).then(() => {
+                        this.getFiscalYear(this.ledger.fiscal_yr_id)
+                    })
+                } else {
                     this.initialized = true
-                })
+                }
             })
         },
         async getLedger(ledger_id) {
@@ -373,11 +369,12 @@ export default {
                 this.filterGroupsBySelectedFiscalYear(ledger.fiscal_yr_id)
             })
         },
-        async getFiscalYears() {
+        async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscal_years.getAll().then(
-                fiscal_years => {
-                    this.fiscal_years = fiscal_years
+            await client.fiscal_years.get(fiscal_yr_id).then(
+                fiscal_year => {
+                    this.fiscal_year = fiscal_year
+                    this.initialized = true
                 },
                 error => {}
             )
@@ -397,10 +394,11 @@ export default {
                 this.ledger.visible_to = []
                 return
             }
-            const selectedFiscalyear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
-            const applicableGroups = this.formatLibraryGroupIds(selectedFiscalyear.visible_to)
-            this.fiscal_year_groups = applicableGroups
-            this.resetOwnersAndVisibleGroups(applicableGroups)
+            this.getFiscalYear(e).then(() => {
+                const applicableGroups = this.formatLibraryGroupIds(this.fiscal_year.visible_to)
+                this.fiscal_year_groups = applicableGroups
+                this.resetOwnersAndVisibleGroups(applicableGroups)
+            })
             if(e !== this.ledger.fiscal_yr_id) {
                 this.ledger.visible_to = []
             }
@@ -448,6 +446,9 @@ export default {
     },
     unmounted() {
         this.resetOwnersAndVisibleGroups()
+    },
+    components: {
+        InfiniteScrollSelect
     }
 }
 </script>

@@ -93,41 +93,31 @@
                     <label for="fiscal_year" class="filter-label"
                         >Fiscal year:</label
                     >
-                    <v-select
+                    <InfiniteScrollSelect
                         id="fiscal_year"
                         v-model="filters.fiscal_yr_id"
-                        :reduce="av => av.fiscal_yr_id"
-                        :options="fiscal_years"
+                        :selectedData="null"
+                        dataType="fiscal_years"
+                        dataIdentifier="fiscal_yr_id"
                         label="code"
-                    >
-                        <template #search="{ attributes, events }">
-                            <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                            />
-                        </template>
-                    </v-select>
+                        apiClient="acquisition"
+                        :filters="filterLimitations"
+                    />
                 </div>
                 <div class="filter-grid-cell">
                     <label for="ledger" class="filter-label"
                         >Ledger:</label
                     >
-                    <v-select
+                    <InfiniteScrollSelect
                         id="ledger"
                         v-model="filters.ledger_id"
-                        :reduce="av => av.ledger_id"
-                        :options="ledgers"
+                        :selectedData="null"
+                        dataType="ledgers"
+                        dataIdentifier="ledger_id"
                         label="name"
-                    >
-                        <template #search="{ attributes, events }">
-                            <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                            />
-                        </template>
-                    </v-select>
+                        apiClient="acquisition"
+                        :filters="filterLimitations"
+                    />
                 </div>
             </div>
             <input
@@ -167,6 +157,7 @@
 import Toolbar from "../Toolbar.vue"
 import ToolbarLink from "../ToolbarLink.vue"
 import KohaTable from "../KohaTable.vue"
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 import { inject, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -231,6 +222,17 @@ export default {
             fiscal_years: [],
             ledgers: [],
             initialized: false
+        }
+    },
+    computed: {
+        filterLimitations() {
+            const filterLimitations = {}
+            Object.keys(this.filters).forEach(key => {
+                if(this.filters[key]) {
+                    filterLimitations[key] = this.filters[key]
+                }
+            })
+            return filterLimitations
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -309,7 +311,7 @@ export default {
             this.$refs.ledgersTable.redraw(this.tableUrl('ledgers', filters))
         },
         clearFilters() {
-            this.filters = {
+            this.filters =  {
                 status: null,
                 fund_type: null,
                 owner: null,
@@ -321,7 +323,8 @@ export default {
     components: {
         Toolbar,
         ToolbarLink,
-        KohaTable
+        KohaTable,
+        InfiniteScrollSelect
     }
 }
 </script>

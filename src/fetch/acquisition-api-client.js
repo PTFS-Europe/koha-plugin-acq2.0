@@ -75,24 +75,20 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get fiscal_years() {
         return {
-            get: (id, embed) =>
+            get: (id, headers) =>
                 this.get({
                     endpoint: "fiscal_years/" + id,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
-            getAll: (query, params, embed) =>
+            getAll: (query, params, headers) =>
                 this.getAll({
                     endpoint: "fiscal_years",
                     query,
                     params,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
             delete: id =>
@@ -124,22 +120,18 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get ledgers() {
         return {
-            get: (id, embed) =>
+            get: (id, headers) =>
                 this.get({
                     endpoint: "ledgers/" + id,
-                    ...(embed && { headers: {
-                        "x-koha-embed": embed
-                    }})
+                    ...(headers && { headers })
                 }),
-            getAll: (query, params, embed) =>
+            getAll: (query, params, headers) =>
                 this.getAll({
                     endpoint: "ledgers",
                     query,
                     params,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
             delete: id =>
@@ -171,22 +163,18 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get funds() {
         return {
-            get: (id, embed) =>
+            get: (id, headers) =>
                 this.get({
                     endpoint: "funds/" + id,
-                    ...(embed && { headers: {
-                        "x-koha-embed": embed
-                    }})
+                    ...(headers && { headers })
                 }),
-            getAll: (query, params, embed) =>
+            getAll: (query, params, headers) =>
                 this.getAll({
                     endpoint: "funds",
                     query,
                     params,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
             delete: id =>
@@ -218,24 +206,20 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get fund_allocations() {
         return {
-            get: (id, embed) =>
+            get: (id, headers) =>
                 this.get({
                     endpoint: "fund_allocations/" + id,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
-            getAll: (query, params, embed) =>
+            getAll: (query, params, headers) =>
                 this.getAll({
                     endpoint: "fund_allocations",
                     query,
                     params,
-                    ...(embed && {
-                        headers: {
-                            "x-koha-embed": embed
-                        }
+                    ...(headers && {
+                        headers
                     })
                 }),
             delete: id =>

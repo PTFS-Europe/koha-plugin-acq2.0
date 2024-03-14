@@ -111,7 +111,7 @@ export default {
     methods: {
         async getFund(fund_id) {
             const client = APIClient.acquisition
-            await client.funds.get(fund_id, "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations").then(
+            await client.funds.get(fund_id, { "x-koha-embed": "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations" }).then(
                 fund => {
                     this.fund = fund
                     this.initialized = true
