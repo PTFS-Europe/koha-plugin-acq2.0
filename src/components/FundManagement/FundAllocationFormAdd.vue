@@ -13,22 +13,16 @@
                             <label for="fund_allocation_fund_id" class="required"
                                 >Fund:</label
                             >
-                            <v-select
+                            <InfiniteScrollSelect
                                 id="fund_allocation_fund_id"
                                 v-model="fund_allocation.fund_id"
-                                :reduce="av => av.fund_id"
-                                :options="funds"
+                                :selectedData="selectedFund"
+                                dataType="funds"
+                                dataIdentifier="fund_id"
                                 label="name"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!fund_allocation.fund_id"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
+                                apiClient="acquisition"
+                                :required="true"
+                            />
                             <span class="required">Required</span>
                         </li>
                         <li>
@@ -86,6 +80,7 @@
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setWarning } from "../../messages"
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 
 export default {
     setup() {
@@ -123,7 +118,7 @@ export default {
     methods: {
         async getDataRequiredForPageLoad(route) {
             const { params } = route
-            this.getFunds(params).then(() => {
+            this.getFund(params).then(() => {
                 if(params.fund_allocation_id) {
                     this.getFundAllocation(params.fund_allocation_id)
                 }
@@ -136,12 +131,10 @@ export default {
                 this.fund_allocation = fund_allocation
             })
         },
-        async getFunds(params) {
+        async getFund(params) {
             const client = APIClient.acquisition
-            await client.funds.getAll(null, {}).then(
-                funds => {
-                    this.funds = funds
-                    const fund = funds.find(fund => fund.fund_id = params.fund_id)
+            await client.funds.get(params.fund_id).then(
+                fund => {
                     this.selectedFund = fund
                     this.fund_allocation.fund_id = fund.fund_id
                     this.fund_allocation.ledger_id = fund.ledger_id
@@ -188,6 +181,9 @@ export default {
                     )
             }
         }
+    },
+    components: {
+        InfiniteScrollSelect
     }
 }
 </script>
