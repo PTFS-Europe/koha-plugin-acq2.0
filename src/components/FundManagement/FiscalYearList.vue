@@ -6,7 +6,7 @@
                 :to="{ name: 'FiscalYearFormAdd' }"
                 icon="plus"
                 title="New fiscal year"
-                v-if="isUserPermitted('create_fiscal_year')"
+                v-if="isUserPermitted('createFiscalYears')"
             />
         </Toolbar>
         <div v-if="fiscal_yr_count > 0" class="page-section">
@@ -50,8 +50,8 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('edit_fiscal_year')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_fiscal_year')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editFiscalYear')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteFiscalYear')) { actionButtons.push("delete") }
         return {
             fiscal_yr_count: 0,
             initialized: false,
@@ -75,7 +75,7 @@ export default {
     methods: {
         async getFiscalYearCount() {
             const client = APIClient.acquisition
-            await client.fiscal_years.count().then(
+            await client.fiscalYears.count().then(
                 count => {
                     this.fiscal_yr_count = count
                 },
@@ -102,7 +102,7 @@ export default {
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.fiscal_years.delete(fiscal_yr.fiscal_yr_id).then(
+                    client.fiscalYears.delete(fiscal_yr.fiscal_yr_id).then(
                         success => {
                             this.setMessage(`Fiscal year deleted`, true)
                             dt.draw()

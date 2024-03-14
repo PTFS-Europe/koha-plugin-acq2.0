@@ -6,7 +6,7 @@
                 :to="{ name: 'LedgerFormAdd' }"
                 icon="plus"
                 title="New ledger"
-                v-if="isUserPermitted('create_ledger')"
+                v-if="isUserPermitted('createLedger')"
             />
         </Toolbar>
         <div v-if="ledger_count > 0" class="page-section">
@@ -52,8 +52,8 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('edit_ledger')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('delete_ledger')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editLedger')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteLedger')) { actionButtons.push("delete") }
         return {
             ledger_count: 0,
             initialized: false,

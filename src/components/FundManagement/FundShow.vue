@@ -11,25 +11,25 @@
                 :to="{ name: 'FundFormEdit', params: { fund_id: fund.fund_id } }"
                 icon="pencil"
                 title="Edit"
-                v-if="isUserPermitted('edit_fund')"
+                v-if="isUserPermitted('editFund')"
             />
             <ToolbarButton
                 icon="trash"
                 title="Delete"
-                @clicked="delete_fund(fund.fund_id, fund.name)"
-                v-if="isUserPermitted('delete_fund')"
+                @clicked="deleteFund(fund.fund_id, fund.name)"
+                v-if="isUserPermitted('deleteFund')"
             />
             <ToolbarLink
                 :to="{ name: 'FundAllocationFormAdd' }"
                 icon="plus"
                 title="New fund allocation"
-                v-if="isUserPermitted('create_fund_allocation') && fund.status"
+                v-if="isUserPermitted('createFundAllocation') && fund.status"
             />
             <ToolbarLink
                 :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
                 icon="arrow-right-arrow-left"
                 title="Transfer funds"
-                v-if="isUserPermitted('create_fund_allocation')"
+                v-if="isUserPermitted('createFundAllocation')"
             />
         </Toolbar>
         <h2>{{ fund.name }}</h2>
@@ -119,7 +119,7 @@ export default {
                 error => {}
             )
         },
-        delete_fund: function (fund_id, fund_code) {
+        deleteFund: function (fund_id, fund_code) {
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this fund?",

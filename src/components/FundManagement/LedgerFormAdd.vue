@@ -53,7 +53,7 @@
                                 id="ledger_fiscal_yr_id"
                                 v-model="ledger.fiscal_yr_id"
                                 :selectedData="fiscal_year"
-                                dataType="fiscal_years"
+                                dataType="fiscalYears"
                                 dataIdentifier="fiscal_yr_id"
                                 label="code"
                                 apiClient="acquisition"
@@ -286,7 +286,7 @@ export default {
     setup() {
         const acquisitionsStore = inject("acquisitionsStore")
         const {
-            library_groups,
+            libraryGroups,
             getVisibleGroups,
             getOwners
         } = storeToRefs(acquisitionsStore)
@@ -301,7 +301,7 @@ export default {
 
         return {
             isUserPermitted,
-            library_groups,
+            libraryGroups,
             filterGroupsBasedOnOwner,
             filterOwnersBasedOnGroup,
             formatLibraryGroupIds,
@@ -371,7 +371,7 @@ export default {
         },
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscal_years.get(fiscal_yr_id).then(
+            await client.fiscalYears.get(fiscal_yr_id).then(
                 fiscal_year => {
                     this.fiscal_year = fiscal_year
                     this.initialized = true
@@ -406,7 +406,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('create_ledger')) {
+            if(!this.isUserPermitted('createLedger')) {
                 setWarning('You do not have the required permissions to create ledgers.')
                 return
             }

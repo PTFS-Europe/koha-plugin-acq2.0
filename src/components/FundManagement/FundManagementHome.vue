@@ -4,19 +4,19 @@
             :to="{ name: 'FiscalYearList' }"
             icon="pen-to-square"
             title="Manage fiscal years"
-            v-if="isUserPermitted('manage_fiscal_years')"
+            v-if="isUserPermitted('manageFiscalYears')"
         />
         <ToolbarLink
             :to="{ name: 'LedgerList' }"
             icon="pen-to-square"
             title="Manage ledgers"
-            v-if="isUserPermitted('manage_ledgers')"
+            v-if="isUserPermitted('manageLedgers')"
         />
         <ToolbarLink
             :to="{ name: 'FundList' }"
             icon="pen-to-square"
             title="Manage funds"
-            v-if="isUserPermitted('manage_funds')"
+            v-if="isUserPermitted('mangeFunds')"
         />
         <ToolbarLink
             :to="{ name: 'TaskFormAdd' }"
@@ -97,7 +97,7 @@
                         id="fiscal_year"
                         v-model="filters.fiscal_yr_id"
                         :selectedData="null"
-                        dataType="fiscal_years"
+                        dataType="fiscalYears"
                         dataIdentifier="fiscal_yr_id"
                         label="code"
                         apiClient="acquisition"
@@ -250,7 +250,7 @@ export default {
         },
         async getFiscalYears() {
             const client = APIClient.acquisition
-            await client.fiscal_years.getAll().then(
+            await client.fiscalYears.getAll().then(
                 fiscal_years => {
                     this.fiscal_years = fiscal_years
                 },
