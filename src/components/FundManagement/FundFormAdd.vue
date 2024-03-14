@@ -49,23 +49,17 @@
                             <label for="fund_fiscal_yr_id" class="required"
                                 >Fiscal year:</label
                             >
-                            <v-select
+                            <InfiniteScrollSelect
                                 id="fund_fiscal_yr_id"
                                 v-model="fund.fiscal_yr_id"
-                                :reduce="av => av.fiscal_yr_id"
-                                :options="fiscal_years"
+                                :selectedData="fund"
+                                dataType="fiscal_years"
+                                dataIdentifier="fiscal_yr_id"
                                 label="code"
+                                apiClient="acquisition"
+                                :required="true"
                                 @update:modelValue="filterLedgersBySelectedFiscalYear($event)"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!fund.fiscal_yr_id"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
+                            />
                             <span class="required">Required</span>
                         </li>
                         <li>
@@ -191,6 +185,7 @@ import { inject } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setWarning } from "../../messages"
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 
 export default {
     setup() {
@@ -248,7 +243,7 @@ export default {
                 fund_type: '',
                 visible_to: [],
             },
-            fiscal_years: [],
+            fiscalYear: null,
             ledgers: [],
             ledger_groups: [],
         }
@@ -260,13 +255,13 @@ export default {
     },
     methods: {
         async getDataRequiredForPageLoad(fund_id) {
-            this.getFiscalYears().then(() => {
-                if(fund_id) {
-                    this.getFund(fund_id)
-                } else {
-                    this.initialized = true
-                }
-            })
+            if(fund_id) {
+                this.getFund(fund_id).then(() => {
+                    this.getFiscalYear(this.fund.fiscal_yr_id)
+                })
+            } else {
+                this.initialized = true
+            }
         },
         async getFund(fund_id) {
             const client = APIClient.acquisition
@@ -274,15 +269,15 @@ export default {
                 this.fund = fund
                 this.fund.visible_to = this.formatLibraryGroupIds(fund.visible_to)
                 this.filterLedgersBySelectedFiscalYear(fund.fiscal_yr_id)
-                this.filterGroupsBySelectedLedger(fund.ledger_id)
-                this.initialized = true
             })
         },
-        async getFiscalYears() {
+        async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscal_years.getAll(null, {}, "koha_plugin_acquire_ledgers").then(
-                fiscal_years => {
-                    this.fiscal_years = fiscal_years
+            await client.fiscal_years.get(fiscal_yr_id, { "x-koha-embed": "koha_plugin_acquire_ledgers" }).then(
+                fiscalYear => {
+                    this.fiscalYear = fiscalYear
+                    this.filterGroupsBySelectedLedger(this.fund.ledger_id)
+                    this.initialized = true
                 },
                 error => {}
             )
@@ -294,24 +289,28 @@ export default {
                 this.fund.visible_to = []
                 return
             }
-            const fiscalYear = this.fiscal_years.find(fy => fy.fiscal_yr_id === e)
-            const { koha_plugin_acquire_ledgers: ledgers } = fiscalYear
-            if(!ledgers || ledgers.length === 0) {
-                setWarning("There are no ledgers attached to this fiscal year. Please create one or select a different fiscal year.")
-                this.ledger.fiscal_yr_id = null
-                return
-            }
-            this.ledgers = ledgers
+
+            this.getFiscalYear(e).then(() => {
+                const { koha_plugin_acquire_ledgers: ledgers } = this.fiscalYear
+                if(!ledgers || ledgers.length === 0) {
+                    setWarning("There are no ledgers attached to this fiscal year. Please create one or select a different fiscal year.")
+                    this.ledger.fiscal_yr_id = null
+                    return
+                }
+                this.ledgers = ledgers
+            })
             if(e !== this.fund.fiscal_yr_id) {
                 this.fund.ledger_id = null
                 this.fund.visible_to = []
             }
         },
         filterGroupsBySelectedLedger(e) {
-            const selectedLedger = this.ledgers.find(ledger => ledger.ledger_id === e)
-            const applicableGroups = this.formatLibraryGroupIds(selectedLedger.visible_to)
-            this.ledger_groups = applicableGroups
-            this.resetOwnersAndVisibleGroups(applicableGroups)
+            const selectedLedger = this.fiscalYear.koha_plugin_acquire_ledgers.find(ledger => ledger.ledger_id === e)
+            if(selectedLedger) {
+                const applicableGroups = this.formatLibraryGroupIds(selectedLedger.visible_to)
+                this.ledger_groups = applicableGroups
+                this.resetOwnersAndVisibleGroups(applicableGroups)
+            }
         },
         onSubmit(e) {
             e.preventDefault()
@@ -354,6 +353,9 @@ export default {
     },
     unmounted() {
         this.resetOwnersAndVisibleGroups()
+    },
+    components: {
+        InfiniteScrollSelect
     }
 }
 </script>
