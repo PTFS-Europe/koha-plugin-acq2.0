@@ -53,7 +53,7 @@
                                 id="fund_fiscal_yr_id"
                                 v-model="fund.fiscal_yr_id"
                                 :selectedData="fund"
-                                dataType="fiscal_years"
+                                dataType="fiscalYears"
                                 dataIdentifier="fiscal_yr_id"
                                 label="code"
                                 apiClient="acquisition"
@@ -85,6 +85,26 @@
                                 </template>
                             </v-select>
                             <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_fund_group"
+                                >Fund group:</label
+                            >
+                            <v-select
+                                id="fund_fund_group"
+                                v-model="fund.fund_group"
+                                :reduce="av => av.value"
+                                :options="acquire_fund_groups"
+                                label="description"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                         </li>
                         <li>
                             <label for="fund_fund_type"
@@ -206,7 +226,8 @@ export default {
 
         const AVStore = inject("AVStore")
         const {
-            acquire_fund_types
+            acquire_fund_types,
+            acquire_fund_groups
         } = storeToRefs(AVStore)
 
         return {
@@ -218,7 +239,8 @@ export default {
             resetOwnersAndVisibleGroups,
             getVisibleGroups,
             getOwners,
-            acquire_fund_types
+            acquire_fund_types,
+            acquire_fund_groups,
         }
     },
     data() {
@@ -241,6 +263,7 @@ export default {
                 external_id: '',
                 status: null,
                 fund_type: '',
+                fund_group: '',
                 visible_to: [],
             },
             fiscalYear: null,

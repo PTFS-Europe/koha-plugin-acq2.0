@@ -72,6 +72,15 @@ description for the fund
 
 type for the fund
 
+=head2 fund_group
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 1
+  size: 255
+
+group for the fund
+
 =head2 code
 
   data_type: 'varchar'
@@ -156,6 +165,8 @@ __PACKAGE__->add_columns(
     "description",
     { data_type => "longtext", default_value => "", is_nullable => 1 },
     "fund_type",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "fund_group",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },

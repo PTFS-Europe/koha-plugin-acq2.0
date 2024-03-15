@@ -70,6 +70,26 @@
                     </v-select>
                 </div>
                 <div class="filter-grid-cell">
+                    <label for="fund_fund_group" class="filter-label"
+                        >Fund group:</label
+                    >
+                    <v-select
+                        id="fund_fund_group"
+                        v-model="filters.fund_group"
+                        :reduce="av => av.value"
+                        :options="acquire_fund_groups"
+                        label="description"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
                     <label for="owner" class="filter-label"
                         >Owner:</label
                     >
@@ -175,6 +195,7 @@ export default {
         const AVStore = inject("AVStore")
         const {
             acquire_fund_types,
+            acquire_fund_groups,
         } = storeToRefs(AVStore)
 
         const ledgersTable = ref()
@@ -185,6 +206,7 @@ export default {
             ledgersTable,
             fundsTable,
             acquire_fund_types,
+            acquire_fund_groups,
             getOwners
         }
     },
@@ -211,6 +233,7 @@ export default {
             filters: {
                 status: null,
                 fund_type: null,
+                fund_group: null,
                 owner: null,
                 fiscal_yr_id: null,
                 ledger_id: null
@@ -308,6 +331,7 @@ export default {
             })
             this.$refs.fundsTable.redraw(this.tableUrl('funds', filters))
             if(filters.hasOwnProperty('fund_type')) { delete filters.fund_type }
+            if(filters.hasOwnProperty('fund_group')) { delete filters.fund_group }
             this.$refs.ledgersTable.redraw(this.tableUrl('ledgers', filters))
         },
         clearFilters() {

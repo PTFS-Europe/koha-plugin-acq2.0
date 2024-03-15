@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund',
     `description` longtext DEFAULT '' COMMENT 'description for the fund',
     `fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the fund',
+    `fund_group` VARCHAR(255) DEFAULT '' COMMENT 'group for the fund',
     `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the fund',
     `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the fund for use with external accounting systems',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund',

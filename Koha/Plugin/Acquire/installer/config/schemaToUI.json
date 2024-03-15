@@ -232,6 +232,11 @@
             "label": "External ID",
             "type": "string"
         },
+        "fund_group": {
+            "label": "Fund group",
+            "type": "av",
+            "av_type": "acquire_fund_groups"
+        },
         "fund_type": {
             "label": "Fund type",
             "type": "av",

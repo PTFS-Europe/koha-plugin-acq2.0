@@ -137,7 +137,7 @@ sub ledger {
 
 =head3 koha_plugin_acquire_fund_allocations
 
-Method to embed fund allocations to the fiscal year
+Method to embed fund allocations to the fund
 
 =cut
 
