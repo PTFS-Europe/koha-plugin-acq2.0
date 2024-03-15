@@ -1,5 +1,5 @@
 <template>
-        <div>
+        <div class="page-section data-display">
             <fieldset class="rows">
                 <ol>
                     <DataField 
@@ -62,8 +62,14 @@ export default {
                 }
                 if(fields[key].type === 'link') {
                     const value = this.data[fields[key].dataType]
-                    fields[key].href = "/acquisitions/fund_management/" + fields[key].linkSlug + "/" + value[fields[key].linkId]
-                    fields[key].linkText = value[fields[key].linkName]
+                    if(value) {
+                        const linkParam = typeof value === 'string' ? value : value[fields[key].linkId]
+                        fields[key].href = "/acquisitions/fund_management/" + fields[key].linkSlug + "/" + linkParam
+                        fields[key].linkText = fields[key].isAV ? this.get_lib_from_av(fields[key].av_type, value) : value[fields[key].linkName]
+                    } else {
+                        fields[key].type = "string"
+                        fields[key].value = ''
+                    }
                 }
                 if(fields[key].type === 'creator') {
                     fields[key].value = this.data.creator
@@ -92,5 +98,7 @@ export default {
 </script>
 
 <style scoped>
-
+.data-display {
+    min-width: 50%;
+}
 </style>

@@ -43,7 +43,7 @@
             "type": "string"
         }
     },
-    "fiscal_year": {
+    "fiscalYear": {
         "code": {
             "label": "Code",
             "type": "string"
@@ -232,10 +232,41 @@
             "label": "External ID",
             "type": "string"
         },
+        "fund_group": {
+            "label": "Fund group",
+            "type": "link",
+            "dataType": "fund_group",
+            "linkId": "fund_group_id",
+            "linkSlug": "fund_group",
+            "linkName": "name"
+        },
         "fund_type": {
             "label": "Fund type",
             "type": "av",
             "av_type": "acquire_fund_types"
+        }
+    },
+    "fundGroup": {
+        "name": {
+            "label": "Name",
+            "type": "string"
+        },
+        "currency": {
+            "label": "Currency",
+            "type": "string"
+        },
+        "visible_to": {
+            "label": "Library groups covered",
+            "type": "table",
+            "dataType": "lib_groups",
+            "columns": [
+                "ID",
+                "Title"
+            ],
+            "keys": [
+                "id",
+                "title"
+            ]
         }
     }
 }

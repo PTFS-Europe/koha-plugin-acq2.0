@@ -86,7 +86,7 @@ export default {
 <style scoped>
 #account_view {
     width: 50%;
-    margin: 0.9em 0 0;
+    /* margin: 0.9em 0 0; */
 }
 .accounts_table {
     width: 100%;
@@ -103,5 +103,8 @@ export default {
 }
 tbody tr:nth-child(odd):not(.dtrg-group, .active, .ok) td:not(.bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary, .centre_column) {
     background-color: white;
+}
+.page-section + .page-section {
+    margin-top: 0em;
 }
 </style>

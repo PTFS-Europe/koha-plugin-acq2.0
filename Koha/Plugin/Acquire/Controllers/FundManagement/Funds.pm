@@ -79,7 +79,7 @@ sub get {
         $fund =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund } );
         $fund =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_funds(
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_fund_groups_or_funds(
             { data => $fund } );
 
 
@@ -213,6 +213,46 @@ sub delete {
         $c->unhandled_exception($_);
     };
 }
+
+
+=head3 get_fund_group
+
+=cut
+
+sub get_fund_group {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $funds_set = Koha::Acquire::Funds::Funds->new;
+        my $funds     = $c->objects->search($funds_set);
+
+        my $filtered_funds =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $funds } );
+        my @combined_fund_allocations = ();
+
+        my $group_name;
+        foreach my $fund (@$filtered_funds) {
+            push( @combined_fund_allocations, @{ $fund->{koha_plugin_acquire_fund_allocations} } );
+            $group_name = $fund->{fund_group} if !$group_name;
+        }
+
+        my $combined_fund_data = {
+            name => $group_name,
+            koha_plugin_acquire_fund_allocations => \@combined_fund_allocations,
+            currency => 'GBP' # FIXME: How do we handle currencies in groups?
+        };
+
+        my $fund_group =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_fund_groups_or_funds(
+            { data => $combined_fund_data } );
+
+        return $c->render( status => 200, openapi => $fund_group );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+
+}
+
 
 sub _inherit_currency_and_owner {
     my ($fund) = @_;

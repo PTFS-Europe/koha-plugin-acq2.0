@@ -101,7 +101,7 @@ sub add_lib_group_data {
     return $data;
 }
 
-sub add_accounting_values_to_ledgers_or_funds {
+sub add_accounting_values_to_ledgers_or_fund_groups_or_funds {
     my ( $self, $args ) = @_;
 
     my $data = $args->{data};

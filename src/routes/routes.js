@@ -21,9 +21,13 @@ import LedgerFormAdd from '../components/FundManagement/LedgerFormAdd.vue'
 import FundList from '../components/FundManagement/FundList.vue'
 import FundShow from '../components/FundManagement/FundShow.vue'
 import FundFormAdd from '../components/FundManagement/FundFormAdd.vue'
+import FundGroupList from '../components/FundManagement/FundGroupList.vue'
+import FundGroupShow from '../components/FundManagement/FundGroupShow.vue'
+import FundGroupFormAdd from '../components/FundManagement/FundGroupFormAdd.vue'
 import FundAllocationShow from '../components/FundManagement/FundAllocationShow.vue'
 import FundAllocationFormAdd from '../components/FundManagement/FundAllocationFormAdd.vue'
 import TransferFunds from '../components/FundManagement/TransferFunds.vue'
+
 
 
 export const routes = [
@@ -131,14 +135,14 @@ export const routes = [
                                 component: markRaw(FundList),
                                 name: "FundList",
                                 title: "List funds",
-                                permission: "mangeFunds"
+                                permission: "manageFunds"
                             },
                             {
                                 path: ":fund_id",
                                 component: markRaw(FundShow),
                                 name: "FundShow",
                                 title: "Show fund",
-                                permission: "mangeFunds"
+                                permission: "manageFunds"
                             },
                             {
                                 path: "add",
@@ -182,6 +186,41 @@ export const routes = [
                                 title: "Transfer funds",
                                 permission: "createFundAllocation"
                             },
+                        ]
+                    },
+                    {
+                        path: "fund_group",
+                        title: "Fund groups",
+                        is_navigation_item: false,
+                        children: [
+                            {
+                                path: "",
+                                component: markRaw(FundGroupList),
+                                name: "FundGroupList",
+                                title: "List fund groups",
+                                permission: "manageFundGroups"
+                            },
+                            {
+                                path: ":fund_group_id",
+                                component: markRaw(FundGroupShow),
+                                name: "FundGroupShow",
+                                title: "Show fund group",
+                                permission: "manageFundGroups"
+                            },
+                            {
+                                path: "add",
+                                component: markRaw(FundGroupFormAdd),
+                                name: "FundGroupFormAdd",
+                                title: "Add fund group",
+                                permission: "createFundGroup"
+                            },
+                            {
+                                path: "edit/:fund_group_id",
+                                component: markRaw(FundGroupFormAdd),
+                                name: "FundGroupFormEdit",
+                                title: "Edit fund group",
+                                permission: "editFundGroup"
+                            }
                         ]
                     }
                 ]

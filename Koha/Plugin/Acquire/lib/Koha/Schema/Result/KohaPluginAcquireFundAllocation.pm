@@ -36,7 +36,7 @@ __PACKAGE__->table("koha_plugin_acquire_fund_allocation");
   is_foreign_key: 1
   is_nullable: 1
 
-ledger the fund applies to
+fund the fund applies to
 
 =head2 ledger_id
 

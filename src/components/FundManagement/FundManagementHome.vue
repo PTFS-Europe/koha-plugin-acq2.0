@@ -13,10 +13,16 @@
             v-if="isUserPermitted('manageLedgers')"
         />
         <ToolbarLink
+            :to="{ name: 'FundGroupList' }"
+            icon="pen-to-square"
+            title="Manage fund groups"
+            v-if="isUserPermitted('manageFundGroups')"
+        />
+        <ToolbarLink
             :to="{ name: 'FundList' }"
             icon="pen-to-square"
             title="Manage funds"
-            v-if="isUserPermitted('mangeFunds')"
+            v-if="isUserPermitted('manageFunds')"
         />
         <ToolbarLink
             :to="{ name: 'TaskFormAdd' }"
@@ -59,6 +65,26 @@
                         :reduce="av => av.value"
                         :options="acquire_fund_types"
                         label="description"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                </div>
+                <div class="filter-grid-cell">
+                    <label for="fund_fund_group" class="filter-label"
+                        >Fund group:</label
+                    >
+                    <v-select
+                        id="fund_fund_group"
+                        v-model="filters.fund_group"
+                        :reduce="av => av.fund_group_id"
+                        :options="fundGroups"
+                        label="name"
                     >
                         <template #search="{ attributes, events }">
                             <input
@@ -211,6 +237,7 @@ export default {
             filters: {
                 status: null,
                 fund_type: null,
+                fund_group: null,
                 owner: null,
                 fiscal_yr_id: null,
                 ledger_id: null
@@ -219,8 +246,7 @@ export default {
                 { description: 'Active', value: 1 },
                 { description: 'Inactive', value: 0 },
             ],
-            fiscal_years: [],
-            ledgers: [],
+            fundGroups: [],
             initialized: false
         }
     },
@@ -237,31 +263,16 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getDataRequiredForPageLoad()
+            vm.getFundGroups()
         })
     },
     methods: {
-        async getDataRequiredForPageLoad() {
-            this.getFiscalYears().then(() => {
-                this.getLedgers().then(() => {
+        async getFundGroups() {
+            const client = APIClient.acquisition
+            await client.fundGroups.getAll().then(
+                fundGroups => {
+                    this.fundGroups = fundGroups
                     this.initialized = true
-                })
-            })
-        },
-        async getFiscalYears() {
-            const client = APIClient.acquisition
-            await client.fiscalYears.getAll().then(
-                fiscal_years => {
-                    this.fiscal_years = fiscal_years
-                },
-                error => {}
-            )
-        },
-        async getLedgers() {
-            const client = APIClient.acquisition
-            await client.ledgers.getAll().then(
-                ledgers => {
-                    this.ledgers = ledgers
                 },
                 error => {}
             )
@@ -308,6 +319,7 @@ export default {
             })
             this.$refs.fundsTable.redraw(this.tableUrl('funds', filters))
             if(filters.hasOwnProperty('fund_type')) { delete filters.fund_type }
+            if(filters.hasOwnProperty('fund_group')) { delete filters.fund_group }
             this.$refs.ledgersTable.redraw(this.tableUrl('ledgers', filters))
         },
         clearFilters() {
@@ -332,7 +344,7 @@ export default {
 <style scoped>
 .ledgers-and-funds {
     display: flex;
-    gap: 2em;
+    gap: 1em;
     width: 100%;
 }
 .flex-table {

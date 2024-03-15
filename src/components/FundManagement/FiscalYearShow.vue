@@ -21,12 +21,15 @@
             />
         </Toolbar>
         <h2>{{ "Fiscal year " + fiscal_yr.fiscal_yr_id }}</h2>
-        <DisplayDataFields 
-            :data="fiscal_yr"
-            homeRoute="FiscalYearList"
-            dataType="fiscal_year"
-            :showClose="false"
-        />
+        <div style="display:flex;">
+            <DisplayDataFields 
+                :data="fiscal_yr"
+                homeRoute="FiscalYearList"
+                dataType="fiscalYear"
+                :showClose="false"
+            />
+            <div class="page-section filler"></div>
+        </div>
     </div>
     <div v-if="initialized" id="ledgers">
         <div class="page-section">
@@ -234,7 +237,11 @@ export default {
     font-size: 11px;
     cursor: pointer;
 }
-#fiscal_yr_documents ul {
-    padding-left: 0px;
+.filler {
+    width: 50%;
+    margin-left: 0em;
+}
+.page-section + .page-section {
+    margin-top: 0em;
 }
 </style>
