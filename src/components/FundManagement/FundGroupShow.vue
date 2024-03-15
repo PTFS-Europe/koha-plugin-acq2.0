@@ -1,54 +1,42 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="funds_show">
+    <div v-else id="fund_groups_show">
         <Toolbar>
             <ToolbarLink
-                :to="{ name: 'FundList' }"
+                :to="{ name: 'FundGroupList' }"
                 icon="xmark"
                 title="Close"
             />
             <ToolbarLink
-                :to="{ name: 'FundFormEdit', params: { fund_id: fund.fund_id } }"
+                :to="{ name: 'FundGroupFormEdit', params: { fund_group_id: fundGroup.fund_group_id } }"
                 icon="pencil"
                 title="Edit"
-                v-if="isUserPermitted('editFund')"
+                v-if="isUserPermitted('editFundGroup')"
             />
             <ToolbarButton
                 icon="trash"
                 title="Delete"
-                @clicked="deleteFund(fund.fund_id, fund.name)"
-                v-if="isUserPermitted('deleteFund')"
-            />
-            <ToolbarLink
-                :to="{ name: 'FundAllocationFormAdd' }"
-                icon="plus"
-                title="New fund allocation"
-                v-if="isUserPermitted('createFundAllocation') && fund.status"
-            />
-            <ToolbarLink
-                :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
-                icon="arrow-right-arrow-left"
-                title="Transfer funds"
-                v-if="isUserPermitted('createFundAllocation')"
+                @clicked="deleteFund(fundGroup.fund_group_id, fundGroup.name)"
+                v-if="isUserPermitted('deleteFundGroup')"
             />
         </Toolbar>
-        <h2>{{ fund.name }}</h2>
-        <div class="fund_display">
+        <h2>{{ fundGroup.name }}</h2>
+        <div class="fund_group_display">
             <DisplayDataFields 
-                :data="fund"
-                homeRoute="FundList"
-                dataType="fund"
+                :data="fundGroup"
+                homeRoute="FundGroupList"
+                dataType="fundGroup"
                 :showClose="false"
             />
             <AccountingView 
-                :data="fund"
-                :currency="fund.currency"
+                :data="fundGroup"
+                :currency="fundGroup.currency"
             />
         </div>
     </div>
-    <div v-if="initialized" id="fund_allocations">
+    <div v-if="initialized" id="funds">
         <div class="page-section">
-            <h3>Fund allocations</h3>
+            <h3>Funds</h3>
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
@@ -90,7 +78,7 @@ export default {
     },
     data() {
         return {
-            fund: {},
+            fundGroup: {},
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
@@ -105,34 +93,34 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.fund = vm.getFund(to.params.fund_id)
+            vm.fund = vm.getFundGroup(to.params.fund_group_id)
         })
     },
     methods: {
-        async getFund(fund_id) {
+        async getFundGroup(fund_group_id) {
             const client = APIClient.acquisition
-            await client.funds.get(fund_id, { "x-koha-embed": "fiscal_yr,ledger,fund_group,koha_plugin_acquire_fund_allocations" }).then(
-                fund => {
-                    this.fund = fund
+            await client.fundGroups.get(fund_group_id).then(
+                fundGroup => {
+                    this.fundGroup = fundGroup
                     this.initialized = true
                 },
                 error => {}
             )
         },
-        deleteFund: function (fund_id, fund_code) {
+        deleteFund: function (fund_group_id, fund_code) {
             this.setConfirmationDialog(
                 {
-                    title: "Are you sure you want to remove this fund?",
+                    title: "Are you sure you want to remove this fund group?",
                     message: fund_code,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.funds.delete(fund_id).then(
+                    client.funds.delete(fund_group_id).then(
                         success => {
-                            this.setMessage("Fund deleted")
-                            this.$router.push({ name: "FundList" })
+                            this.setMessage("Fund group deleted")
+                            this.$router.push({ name: "FundGroupList" })
                         },
                         error => {}
                     )
@@ -143,58 +131,51 @@ export default {
             const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
-                    title: __("Date"),
-                    data: "last_updated",
+                    title: __("Name"),
+                    data: "name:fund_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.last_updated.substring(0,10)
-                    },
-                },
-                {
-                    title: __("Amount"),
-                    data: "allocation_amount",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const symbol = row.allocation_amount >= 0 ? "+" : ""
-                        const colour = row.allocation_amount >= 0 ? "green" : "red"
                         return (
-                            '<span style="color:' + colour + ';">' + symbol + row.allocation_amount + '</span>'
+                            '<a href="/acquisitions/fund_management/fund/' +
+                            row.fund_id +
+                            '" class="show">' +
+                            escape_str(`${row.name}`) +
+                            "</a>"
                         )
                     },
                 },
                 {
-                    title: __("New fund total"),
-                    data: "new_fund_value",
+                    title: __("Code"),
+                    data: "code",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return formatValueWithCurrency(row.currency, row.new_fund_value)
+                        return row.status ? "Active" : "Inactive"
                     },
                 },
                 {
-                    title: __("Reference"),
-                    data: "reference",
+                    title: __("Fund value"),
+                    data: "fund_value",
                     searchable: true,
                     orderable: true,
+                    render: function (data, type, row, meta) {
+                        return formatValueWithCurrency(row.currency, row.fund_value)
+                    },
                 },
-                {
-                    title: __("Note"),
-                    data: "note",
-                    searchable: true,
-                    orderable: true,
-                }
             ]
         },
-        showTransferWarning() {
-            this.setWarning("This allocation was a transfer between funds and can't be edited or deleted.")
-        },
         tableUrl() {
-            const id = this.$route.params.fund_id
-            let url = "/api/v1/contrib/acquire/fund_allocations?q="
+            const id = this.$route.params.fund_group_id
+            let url = "/api/v1/contrib/acquire/funds?q="
             const query = {
-                fund_id: id
+                fund_group: id
             }
             return url + JSON.stringify(query)
         }
@@ -216,10 +197,10 @@ export default {
     font-size: 11px;
     cursor: pointer;
 }
-#fund_allocations {
+#funds {
     margin-top: 2em;
 }
-.fund_display {
+.fund_group_display {
     display: flex;
     gap: 1em;
 }

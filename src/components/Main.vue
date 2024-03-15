@@ -108,7 +108,6 @@ export default {
 
             const authorised_values = {
                 acquire_fund_types: "ACQUIRE_FUND_TYPE",
-                acquire_fund_groups: "ACQUIRE_FUND_GROUP"
             }
             const av_cat_array = Object.keys(authorised_values).map(function (
                 av_cat

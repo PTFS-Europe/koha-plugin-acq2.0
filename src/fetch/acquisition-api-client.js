@@ -201,6 +201,15 @@ export class AcquisitionAPIClient extends HttpClient {
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
+            getFundGroup: (query, params, headers) =>
+                this.getAll({
+                    endpoint: "fund_groups",
+                    query,
+                    params,
+                    ...(headers && {
+                        headers
+                    })
+                }),
         };
     }
 
@@ -245,6 +254,51 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.count({
                     endpoint:
                         "fund_allocations?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get fundGroups() {
+        return {
+            get: (id, headers) =>
+                this.get({
+                    endpoint: "fund_groups/" + id,
+                    ...(headers && {
+                        headers
+                    })
+                }),
+            getAll: (query, params, headers) =>
+                this.getAll({
+                    endpoint: "fund_groups",
+                    query,
+                    params,
+                    ...(headers && {
+                        headers
+                    })
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "fund_groups/" + id,
+                }),
+            create: fund_allocation =>
+                this.post({
+                    endpoint: "fund_groups",
+                    body: fund_allocation,
+                }),
+            update: (fund_allocation, id) =>
+                this.put({
+                    endpoint: "fund_groups/" + id,
+                    body: fund_allocation,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "fund_groups?" +
                         new URLSearchParams({
                             _page: 1,
                             _per_page: 1,

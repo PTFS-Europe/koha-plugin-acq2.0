@@ -34,6 +34,13 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
+CREATE TABLE IF NOT EXISTS { { fund_group } } (
+    `fund_group_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund group',
+    `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund allocation',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund allocation is visible to',
+    PRIMARY KEY (`fund_group_id`)
+) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { funds } } (
     `fund_id` INT(11) NOT NULL AUTO_INCREMENT,
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
@@ -41,7 +48,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund',
     `description` longtext DEFAULT '' COMMENT 'description for the fund',
     `fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the fund',
-    `fund_group` VARCHAR(255) DEFAULT '' COMMENT 'group for the fund',
+    `fund_group_id` INT(11) DEFAULT NULL COMMENT 'group for the fund',
     `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the fund',
     `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the fund for use with external accounting systems',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund',
@@ -53,11 +60,12 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     PRIMARY KEY (`fund_id`),
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fund_group_id`) REFERENCES { { fund_group } } (`fund_group_id`) ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `fund_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
+    `fund_id` INT(11) DEFAULT NULL COMMENT 'fund the fund allocation applies to',
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund allocation applies to',
     `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund allocation applies to',
     `allocation_amount` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',

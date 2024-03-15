@@ -43,6 +43,10 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireFundAllocation;
     Koha::Schema->register_class( KohaPluginAcquireFundAllocation => 'Koha::Schema::Result::KohaPluginAcquireFundAllocation' );
 
+    require Koha::Acquire::Funds::FundGroups;
+    require Koha::Schema::Result::KohaPluginAcquireFundGroup;
+    Koha::Schema->register_class( KohaPluginAcquireFundGroup => 'Koha::Schema::Result::KohaPluginAcquireFundGroup' );
+
     Koha::Database->schema( { new => 1 } );
 }
 our $VERSION = "0.0";
@@ -95,6 +99,7 @@ sub install {
                     ledgers         => $self->get_qualified_table_name('ledgers'),
                     funds           => $self->get_qualified_table_name('funds'),
                     fund_allocation => $self->get_qualified_table_name('fund_allocation'),
+                    fund_group      => $self->get_qualified_table_name('fund_group'),
                 },
                 bundle_path => $bundle_path,
             }
@@ -102,7 +107,7 @@ sub install {
 
         my $is_success = $installer->install();
         if ( !$is_success ) {
-            warn 'Migration failed';
+            warn 'Installation failed';
         }
 
         return 1;
