@@ -58,7 +58,7 @@ name for the fund
 =head2 description
 
   data_type: 'longtext'
-  default_value: (empty string)
+  default_value: ''''
   is_nullable: 1
 
 description for the fund
@@ -71,6 +71,14 @@ description for the fund
   size: 255
 
 type for the fund
+
+=head2 fund_group_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+group for the fund
 
 =head2 code
 
@@ -154,9 +162,11 @@ __PACKAGE__->add_columns(
     "name",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "description",
-    { data_type => "longtext", default_value => "", is_nullable => 1 },
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "fund_type",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "fund_group_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "external_id",
@@ -219,6 +229,41 @@ __PACKAGE__->belongs_to(
     },
 );
 
+=head2 fund_group
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFundGroup>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "fund_group",
+    "Koha::Schema::Result::KohaPluginAcquireFundGroup",
+    { fund_group_id => "fund_group_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "SET NULL",
+        on_update     => "CASCADE",
+    },
+);
+
+=head2 koha_plugin_acquire_sub_funds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_sub_funds",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { "foreign.fund_id" => "self.fund_id" },
+    { cascade_copy      => 0, cascade_delete => 0 },
+);
+
 =head2 koha_plugin_acquire_fund_allocations
 
 Type: has_many
@@ -274,8 +319,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ogKAsZE9BM55ddpyrJo+Ng
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-15 15:11:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nIUIVCHMPdfDhi7DZ9VDVg
+
 
 sub koha_object_class {
     'Koha::Acquire::Funds::Fund';

@@ -135,9 +135,22 @@ sub ledger {
     return Koha::Acquire::Funds::Ledger->_new_from_dbic($ledger_rs);
 }
 
+=head3 fund_group
+
+Method to embed the fund group to a given fund
+
+=cut
+
+sub fund_group {
+    my ($self) = @_;
+    my $fund_group_rs = $self->_result->fund_group;
+    return unless $fund_group_rs;
+    return Koha::Acquire::Funds::FundGroup->_new_from_dbic($fund_group_rs);
+}
+
 =head3 koha_plugin_acquire_fund_allocations
 
-Method to embed fund allocations to the fiscal year
+Method to embed fund allocations to the fund
 
 =cut
 

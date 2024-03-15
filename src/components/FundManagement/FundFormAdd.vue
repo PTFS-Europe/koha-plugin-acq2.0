@@ -53,7 +53,7 @@
                                 id="fund_fiscal_yr_id"
                                 v-model="fund.fiscal_yr_id"
                                 :selectedData="fund"
-                                dataType="fiscal_years"
+                                dataType="fiscalYears"
                                 dataIdentifier="fiscal_yr_id"
                                 label="code"
                                 apiClient="acquisition"
@@ -72,7 +72,7 @@
                                 :reduce="av => av.ledger_id"
                                 :options="ledgers"
                                 label="name"
-                                @update:modelValue="filterGroupsBySelectedLedger($event)"
+                                @update:modelValue="filterLibGroupsAndFundGroupsBySelectedLedger($event)"
                                 :disabled="ledgers.length === 0"
                             >
                                 <template #search="{ attributes, events }">
@@ -85,6 +85,27 @@
                                 </template>
                             </v-select>
                             <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_fund_group_id"
+                                >Fund group:</label
+                            >
+                            <v-select
+                                id="fund_fund_group"
+                                v-model="fund.fund_group"
+                                :reduce="av => av.value"
+                                :options="fundGroupOptions"
+                                label="name"
+                                :disabled="fundGroupOptions.length === 0"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                         </li>
                         <li>
                             <label for="fund_fund_type"
@@ -148,9 +169,9 @@
                                 :reduce="av => av.id"
                                 :options="getVisibleGroups"
                                 label="title"
-                                @update:modelValue="filterOwnersBasedOnGroup($event, fund, ledger_groups)"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, fund, ledgerGroups)"
                                 multiple
-                                :disabled="ledger_groups.length === 0"
+                                :disabled="ledgerGroups.length === 0"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -206,7 +227,7 @@ export default {
 
         const AVStore = inject("AVStore")
         const {
-            acquire_fund_types
+            acquire_fund_types,
         } = storeToRefs(AVStore)
 
         return {
@@ -218,7 +239,7 @@ export default {
             resetOwnersAndVisibleGroups,
             getVisibleGroups,
             getOwners,
-            acquire_fund_types
+            acquire_fund_types,
         }
     },
     data() {
@@ -241,11 +262,13 @@ export default {
                 external_id: '',
                 status: null,
                 fund_type: '',
+                fund_group_id: null,
                 visible_to: [],
             },
             fiscalYear: null,
             ledgers: [],
-            ledger_groups: [],
+            ledgerGroups: [],
+            fundGroupOptions: []
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -255,13 +278,15 @@ export default {
     },
     methods: {
         async getDataRequiredForPageLoad(fund_id) {
-            if(fund_id) {
-                this.getFund(fund_id).then(() => {
-                    this.getFiscalYear(this.fund.fiscal_yr_id)
-                })
-            } else {
-                this.initialized = true
-            }
+            this.getFundGroups().then(() => {
+                if(fund_id) {
+                    this.getFund(fund_id).then(() => {
+                        this.getFiscalYear(this.fund.fiscal_yr_id)
+                    })
+                } else {
+                    this.initialized = true
+                }
+            })
         },
         async getFund(fund_id) {
             const client = APIClient.acquisition
@@ -271,12 +296,18 @@ export default {
                 this.filterLedgersBySelectedFiscalYear(fund.fiscal_yr_id)
             })
         },
+        async getFundGroups() {
+            const client = APIClient.acquisition
+            await client.fundGroups.getAll().then(fundGroups => {
+                this.fundGroups = fundGroups
+            })
+        },
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
             await client.fiscalYears.get(fiscal_yr_id, { "x-koha-embed": "koha_plugin_acquire_ledgers" }).then(
                 fiscalYear => {
                     this.fiscalYear = fiscalYear
-                    this.filterGroupsBySelectedLedger(this.fund.ledger_id)
+                    this.filterLibGroupsAndFundGroupsBySelectedLedger(this.fund.ledger_id)
                     this.initialized = true
                 },
                 error => {}
@@ -304,12 +335,25 @@ export default {
                 this.fund.visible_to = []
             }
         },
-        filterGroupsBySelectedLedger(e) {
+        filterLibGroupsAndFundGroupsBySelectedLedger(e) {
             const selectedLedger = this.fiscalYear.koha_plugin_acquire_ledgers.find(ledger => ledger.ledger_id === e)
             if(selectedLedger) {
                 const applicableGroups = this.formatLibraryGroupIds(selectedLedger.visible_to)
-                this.ledger_groups = applicableGroups
+                this.ledgerGroups = applicableGroups
                 this.resetOwnersAndVisibleGroups(applicableGroups)
+
+                const fundGroupsWithMatchingCurrencyAndVisibility = this.fundGroups
+                    .filter(group => group.currency === selectedLedger.currency)
+                    .map(group => {
+                        const groupVisibility = this.formatLibraryGroupIds(group.visible_to)
+                        const matchFound = groupVisibility.some(item => applicableGroups.includes(item))
+                        if(matchFound) {
+                            return group
+                        } else {
+                            return null
+                        }
+                    }).filter(group => group !== null)
+                this.fundGroupOptions = fundGroupsWithMatchingCurrencyAndVisibility
             }
         },
         onSubmit(e) {

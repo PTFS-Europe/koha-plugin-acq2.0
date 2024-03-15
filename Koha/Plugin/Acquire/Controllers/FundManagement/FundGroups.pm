@@ -1,4 +1,4 @@
-package Koha::Plugin::Acquire::Controllers::FundManagement::Ledgers;
+package Koha::Plugin::Acquire::Controllers::FundManagement::FundGroups;
 
 # Copyright 2024 PTFS Europe
 
@@ -23,8 +23,9 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
 use Try::Tiny;
 
-use Koha::Acquire::Funds::Ledger;
-use Koha::Acquire::Funds::Ledgers;
+use Koha::Acquire::Funds::Funds;
+use Koha::Acquire::Funds::FundGroup;
+use Koha::Acquire::Funds::FundGroups;
 
 use Koha::Plugin::Acquire::Controllers::ControllerUtils;
 
@@ -42,13 +43,14 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ledgers_set = Koha::Acquire::Funds::Ledgers->new;
-        my $ledgers     = $c->objects->search($ledgers_set);
+        my $fund_groups_set = Koha::Acquire::Funds::FundGroups->new;
+        my $fund_groups     = $c->objects->search($fund_groups_set);
 
-        my $filtered_ledgers =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $ledgers } );
+        my $filtered_fund_groups =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group(
+            { dataset => $fund_groups } );
 
-        return $c->render( status => 200, openapi => $filtered_ledgers );
+        return $c->render( status => 200, openapi => $filtered_fund_groups );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -63,27 +65,24 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ledgers_set = Koha::Acquire::Funds::Ledgers->new;
-        my $ledger      = $c->objects->find( $ledgers_set, $c->param('id') );
+        my $fund_groups_set = Koha::Acquire::Funds::FundGroups->new;
+        my $fund_group      = $c->objects->find( $fund_groups_set, $c->param('id') );
 
-        unless ($ledger) {
+        unless ($fund_group) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "Ledger not found" }
+                openapi => { error => "Fund allocation not found" }
             );
         }
 
-        $ledger = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $ledger, field => 'owned_by', key => "owner" } );
-        $ledger =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $ledger } );
-        $ledger =
+        $fund_group = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund_group } );
+        $fund_group =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_accounting_values_to_ledgers_or_fund_groups_or_funds(
-            { data => $ledger } );
+            { data => $fund_group } );
 
         return $c->render(
             status  => 200,
-            openapi => $ledger
+            openapi => $fund_group
         );
     } catch {
         $c->unhandled_exception($_);
@@ -102,15 +101,14 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
-                my $ledger = Koha::Acquire::Funds::Ledger->new_from_api($body)->store;
+                my $fund_group = Koha::Acquire::Funds::FundGroup->new_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $ledger->ledger_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_group->fund_group_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $ledger->to_api
+                    openapi => $fund_group->to_api
                 );
             }
         );
@@ -121,19 +119,19 @@ sub add {
 
 =head3 update
 
-Controller function that handles updating a Koha::Acquire::Funds::Ledger object
+Controller function that handles updating a Koha::Acquire::Funds::FundGroup object
 
 =cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $ledger = Koha::Acquire::Funds::Ledgers->find( $c->param('id') );
+    my $fund_group = Koha::Acquire::Funds::FundGroups->find( $c->param('id') );
 
-    unless ($ledger) {
+    unless ($fund_group) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Ledger not found" }
+            openapi => { error => "Fund allocation not found" }
         );
     }
 
@@ -142,23 +140,19 @@ sub update {
             sub {
 
                 my $body = $c->req->json;
+                delete $body->{lib_groups} if $body->{lib_groups};
 
-                delete $body->{owned_by}     if $body->{owned_by};
-                delete $body->{lib_groups}   if $body->{lib_groups};
-                delete $body->{fiscal_year}  if $body->{fiscal_year};
-                delete $body->{last_updated} if $body->{last_updated};
+                $fund_group->set_from_api($body)->store;
 
-                $ledger->set_from_api($body)->store;
-
-                $c->res->headers->location( $c->req->url->to_string . '/' . $ledger->ledger_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fund_group->fund_group_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $ledger->to_api
+                    openapi => $fund_group->to_api
                 );
             }
         );
     } catch {
-        my $to_api_mapping = Koha::Acquire::Funds::Ledger->new->to_api_mapping;
+        my $to_api_mapping = Koha::Acquire::Funds::FundGroup->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
@@ -190,16 +184,17 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $ledger = Koha::Acquire::Funds::Ledgers->find( $c->param('id') );
-    unless ($ledger) {
+    my $fund_group = Koha::Acquire::Funds::FundGroups->find( $c->param('id') );
+    unless ($fund_group) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Ledger not found" }
+            openapi => { error => "Fund allocation not found" }
         );
     }
 
     return try {
-        $ledger->delete;
+        $fund_group->delete;
+
         return $c->render(
             status  => 204,
             openapi => q{}
