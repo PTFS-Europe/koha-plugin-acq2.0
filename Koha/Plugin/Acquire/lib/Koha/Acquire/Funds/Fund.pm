@@ -53,7 +53,20 @@ sub delete {
     return $self;
 }
 
+=head3 has_sub_funds
 
+Checks if a fund has sub funds
+
+=cut
+
+sub has_sub_funds {
+    my ( $self, $args ) = @_;
+
+    my $sub_fund_count = $self->koha_plugin_acquire_sub_funds->count;
+
+    return 1 if scalar($sub_fund_count > 0);
+    return 0;
+}
 
 =head3 cascade_to_fund_allocations
 
@@ -146,6 +159,18 @@ sub fund_group {
     my $fund_group_rs = $self->_result->fund_group;
     return unless $fund_group_rs;
     return Koha::Acquire::Funds::FundGroup->_new_from_dbic($fund_group_rs);
+}
+
+=head3 koha_plugin_acquire_sub_funds
+
+Method to embed sub funds to the fund
+
+=cut
+
+sub koha_plugin_acquire_sub_funds {
+    my ($self) = @_;
+    my $sub_fund_rs = $self->_result->koha_plugin_acquire_sub_funds;
+    return Koha::Acquire::Funds::SubFunds->_new_from_dbic($sub_fund_rs);
 }
 
 =head3 koha_plugin_acquire_fund_allocations
