@@ -38,6 +38,14 @@ __PACKAGE__->table("koha_plugin_acquire_fund_allocation");
 
 fund the fund applies to
 
+=head2 sub_fund_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+sub fund the fund applies to
+
 =head2 ledger_id
 
   data_type: 'integer'
@@ -130,6 +138,8 @@ __PACKAGE__->add_columns(
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
     "fund_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "sub_fund_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "ledger_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "fiscal_yr_id",
@@ -208,6 +218,26 @@ __PACKAGE__->belongs_to(
     "fund",
     "Koha::Schema::Result::KohaPluginAcquireFund",
     { fund_id => "fund_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
+
+=head2 sub_fund
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "sub_fund",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { sub_fund_id => "sub_fund_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",

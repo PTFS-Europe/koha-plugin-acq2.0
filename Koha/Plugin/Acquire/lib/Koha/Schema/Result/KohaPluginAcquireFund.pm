@@ -260,7 +260,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_sub_funds",
     "Koha::Schema::Result::KohaPluginAcquireSubFund",
-    { "foreign.fund_id" => "self.fund_id" },
+    { "foreign.sfund_id" => "self.sfund_id" },
     { cascade_copy      => 0, cascade_delete => 0 },
 );
 

@@ -63,9 +63,32 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     FOREIGN KEY (`fund_group_id`) REFERENCES { { fund_group } } (`fund_group_id`) ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
+CREATE TABLE IF NOT EXISTS { { sub_funds } } (
+    `sub_fund_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `fund_id` INT(11) DEFAULT NULL COMMENT 'parent fund for the sub fund',
+    `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the sub_fund applies to',
+    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the sub_fund applies to',
+    `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the sub_fund',
+    `description` longtext DEFAULT '' COMMENT 'description for the sub_fund',
+    `sub_fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the sub_fund',
+    `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the sub_fund',
+    `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the sub_fund for use with external accounting systems',
+    `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the sub_fund',
+    `status` TINYINT(1) DEFAULT '1' COMMENT 'is the sub_fund currently active',
+    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the sub_fund',
+    `sub_fund_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the sub_fund',
+    `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the sub_fund',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the sub_fund is visible to',
+    PRIMARY KEY (`sub_fund_id`),
+    FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
     `fund_id` INT(11) DEFAULT NULL COMMENT 'fund the fund allocation applies to',
+    `sub_fund_id` INT(11) DEFAULT NULL COMMENT 'sub fund the fund allocation applies to',
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund allocation applies to',
     `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund allocation applies to',
     `allocation_amount` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',
@@ -77,6 +100,7 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund allocation',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund allocation is visible to',
     PRIMARY KEY (`fund_allocation_id`),
+    FOREIGN KEY (`sub_fund_id`) REFERENCES { { sub_funds } } (`sub_fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,

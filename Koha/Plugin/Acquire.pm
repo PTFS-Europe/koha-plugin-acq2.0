@@ -39,6 +39,10 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireFund;
     Koha::Schema->register_class( KohaPluginAcquireFund => 'Koha::Schema::Result::KohaPluginAcquireFund' );
 
+    require Koha::Acquire::Funds::SubFunds;
+    require Koha::Schema::Result::KohaPluginAcquireSubFund;
+    Koha::Schema->register_class( KohaPluginAcquireSubFund => 'Koha::Schema::Result::KohaPluginAcquireSubFund' );
+
     require Koha::Acquire::Funds::FundAllocations;
     require Koha::Schema::Result::KohaPluginAcquireFundAllocation;
     Koha::Schema->register_class( KohaPluginAcquireFundAllocation => 'Koha::Schema::Result::KohaPluginAcquireFundAllocation' );
@@ -98,6 +102,7 @@ sub install {
                     fiscal_year     => $self->get_qualified_table_name('fiscal_year'),
                     ledgers         => $self->get_qualified_table_name('ledgers'),
                     funds           => $self->get_qualified_table_name('funds'),
+                    sub_funds       => $self->get_qualified_table_name('sub_funds'),
                     fund_allocation => $self->get_qualified_table_name('fund_allocation'),
                     fund_group      => $self->get_qualified_table_name('fund_group'),
                 },
