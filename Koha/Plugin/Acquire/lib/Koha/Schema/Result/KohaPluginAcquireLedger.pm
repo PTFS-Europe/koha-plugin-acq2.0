@@ -50,7 +50,7 @@ name for the ledger
 =head2 description
 
   data_type: 'longtext'
-  default_value: (empty string)
+  default_value: ''''
   is_nullable: 1
 
 description for the ledger
@@ -187,7 +187,7 @@ __PACKAGE__->add_columns(
     "name",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "description",
-    { data_type => "longtext", default_value => "", is_nullable => 1 },
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "external_id",
@@ -312,6 +312,21 @@ __PACKAGE__->has_many(
     { cascade_copy        => 0, cascade_delete => 0 },
 );
 
+=head2 koha_plugin_acquire_sub_funds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_sub_funds",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { "foreign.ledger_id" => "self.ledger_id" },
+    { cascade_copy        => 0, cascade_delete => 0 },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -332,8 +347,9 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DT8sx2tdZRPW4QUWJrD54A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:shq4M2IHcd931nl0PrekQw
+
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

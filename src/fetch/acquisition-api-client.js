@@ -213,6 +213,49 @@ export class AcquisitionAPIClient extends HttpClient {
         };
     }
 
+    get subFunds() {
+        return {
+            get: (id, headers) =>
+                this.get({
+                    endpoint: "sub_funds/" + id,
+                    ...(headers && { headers })
+                }),
+            getAll: (query, params, headers) =>
+                this.getAll({
+                    endpoint: "sub_funds",
+                    query,
+                    params,
+                    ...(headers && {
+                        headers
+                    })
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "sub_funds/" + id,
+                }),
+            create: fund =>
+                this.post({
+                    endpoint: "sub_funds",
+                    body: fund,
+                }),
+            update: (fund, id) =>
+                this.put({
+                    endpoint: "sub_funds/" + id,
+                    body: fund,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "sub_funds?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
     get fundAllocations() {
         return {
             get: (id, headers) =>

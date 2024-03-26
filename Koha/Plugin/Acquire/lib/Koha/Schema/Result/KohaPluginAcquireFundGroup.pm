@@ -1,4 +1,5 @@
 use utf8;
+
 package Koha::Schema::Result::KohaPluginAcquireFundGroup;
 
 # Created by DBIx::Class::Schema::Loader
@@ -59,14 +60,14 @@ library groups the fund allocation is visible to
 =cut
 
 __PACKAGE__->add_columns(
-  "fund_group_id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "name",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "currency",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
-  "visible_to",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "fund_group_id",
+    { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+    "name",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "currency",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
+    "visible_to",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -92,15 +93,15 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
 =cut
 
 __PACKAGE__->has_many(
-  "koha_plugin_acquire_funds",
-  "Koha::Schema::Result::KohaPluginAcquireFund",
-  { "foreign.fund_group_id" => "self.fund_group_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "koha_plugin_acquire_funds",
+    "Koha::Schema::Result::KohaPluginAcquireFund",
+    { "foreign.fund_group_id" => "self.fund_group_id" },
+    { cascade_copy            => 0, cascade_delete => 0 },
 );
 
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Nbu5q8xIh5d8wrFiT8GyXg
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-15 15:11:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:72UFs0QvOX6bl3oCM4hsJQ
 
 sub koha_object_class {
     'Koha::Acquire::Funds::FundGroup';
