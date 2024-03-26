@@ -1,4 +1,5 @@
 use utf8;
+
 package Koha::Schema::Result::KohaPluginAcquireSubFund;
 
 # Created by DBIx::Class::Schema::Loader
@@ -152,46 +153,46 @@ library groups the sub_fund is visible to
 =cut
 
 __PACKAGE__->add_columns(
-  "sub_fund_id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "fund_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "ledger_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "fiscal_yr_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "name",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "description",
-  { data_type => "longtext", default_value => "''", is_nullable => 1 },
-  "sub_fund_type",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "code",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "external_id",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
-  "currency",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
-  "status",
-  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-  "owner",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "sub_fund_value",
-  {
-    data_type => "decimal",
-    default_value => "0.000000",
-    is_nullable => 1,
-    size => [28, 6],
-  },
-  "last_updated",
-  {
-    data_type => "timestamp",
-    datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
-    is_nullable => 1,
-  },
-  "visible_to",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "sub_fund_id",
+    { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+    "fund_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "ledger_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "fiscal_yr_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "name",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "description",
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
+    "sub_fund_type",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "code",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "external_id",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
+    "currency",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
+    "status",
+    { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+    "owner",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "sub_fund_value",
+    {
+        data_type     => "decimal",
+        default_value => "0.000000",
+        is_nullable   => 1,
+        size          => [ 28, 6 ],
+    },
+    "last_updated",
+    {
+        data_type                 => "timestamp",
+        datetime_undef_if_invalid => 1,
+        default_value             => \"current_timestamp",
+        is_nullable               => 1,
+    },
+    "visible_to",
+    { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -208,6 +209,81 @@ __PACKAGE__->set_primary_key("sub_fund_id");
 
 =head1 RELATIONS
 
+=head2 fiscal_yr
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "fiscal_yr",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
+    { fiscal_yr_id => "fiscal_yr_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
+
+=head2 fund
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "fund",
+    "Koha::Schema::Result::KohaPluginAcquireFund",
+    { fund_id => "fund_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
+
+=head2 koha_plugin_acquire_fund_allocations
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_fund_allocations",
+    "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
+    { "foreign.sub_fund_id" => "self.sub_fund_id" },
+    { cascade_copy          => 0, cascade_delete => 0 },
+);
+
+=head2 ledger
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireLedger>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "ledger",
+    "Koha::Schema::Result::KohaPluginAcquireLedger",
+    { ledger_id => "ledger_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -217,20 +293,20 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "owner",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "owner" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
-  },
+    "owner",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "owner" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "RESTRICT",
+        on_update     => "RESTRICT",
+    },
 );
 
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R8dTYY45LSzzzo8zGAuUAw
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-22 15:57:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pG/L0lxSj8hj7G6ECPqA3w
 
 sub koha_object_class {
     'Koha::Acquire::Funds::SubFund';

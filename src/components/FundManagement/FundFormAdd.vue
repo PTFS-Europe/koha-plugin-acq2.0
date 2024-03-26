@@ -92,8 +92,8 @@
                             >
                             <v-select
                                 id="fund_fund_group"
-                                v-model="fund.fund_group"
-                                :reduce="av => av.value"
+                                v-model="fund.fund_group_id"
+                                :reduce="av => av.fund_group_id"
                                 :options="fundGroupOptions"
                                 label="name"
                                 :disabled="fundGroupOptions.length === 0"

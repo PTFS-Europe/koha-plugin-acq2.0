@@ -36,7 +36,7 @@ __PACKAGE__->table("koha_plugin_acquire_fund_allocation");
   is_foreign_key: 1
   is_nullable: 1
 
-fund the fund applies to
+fund the fund allocation applies to
 
 =head2 sub_fund_id
 
@@ -44,7 +44,7 @@ fund the fund applies to
   is_foreign_key: 1
   is_nullable: 1
 
-sub fund the fund applies to
+sub fund the fund allocation applies to
 
 =head2 ledger_id
 
@@ -83,7 +83,7 @@ allocation reference
 =head2 note
 
   data_type: 'longtext'
-  default_value: (empty string)
+  default_value: ''''
   is_nullable: 1
 
 any notes associated to the allocation
@@ -111,7 +111,7 @@ owner of the fund allocation
   default_value: 0
   is_nullable: 1
 
-is the fund allocation a transfer to / from another fund
+is the fund allocation a transfer to/from another fund
 
 =head2 last_updated
 
@@ -154,7 +154,7 @@ __PACKAGE__->add_columns(
     "reference",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "note",
-    { data_type => "longtext", default_value => "", is_nullable => 1 },
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "currency",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
     "owner",
@@ -226,26 +226,6 @@ __PACKAGE__->belongs_to(
     },
 );
 
-=head2 sub_fund
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
-
-=cut
-
-__PACKAGE__->belongs_to(
-    "sub_fund",
-    "Koha::Schema::Result::KohaPluginAcquireSubFund",
-    { sub_fund_id => "sub_fund_id" },
-    {
-        is_deferrable => 1,
-        join_type     => "LEFT",
-        on_delete     => "CASCADE",
-        on_update     => "CASCADE",
-    },
-);
-
 =head2 ledger
 
 Type: belongs_to
@@ -286,8 +266,29 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:J3BiypKt9VdEQZJ1Ir4PNA
+=head2 sub_fund
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "sub_fund",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { sub_fund_id => "sub_fund_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ulTbB2mRrJzN+xftOHSPVA
+
 
 
 

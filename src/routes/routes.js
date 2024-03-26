@@ -21,6 +21,7 @@ import LedgerFormAdd from '../components/FundManagement/LedgerFormAdd.vue'
 import FundList from '../components/FundManagement/FundList.vue'
 import FundShow from '../components/FundManagement/FundShow.vue'
 import FundFormAdd from '../components/FundManagement/FundFormAdd.vue'
+import SubFundFormAdd from '../components/FundManagement/SubFundFormAdd.vue'
 import FundGroupList from '../components/FundManagement/FundGroupList.vue'
 import FundGroupShow from '../components/FundManagement/FundGroupShow.vue'
 import FundGroupFormAdd from '../components/FundManagement/FundGroupFormAdd.vue'
@@ -173,7 +174,7 @@ export const routes = [
                                 permission: "editFundAllocation"
                             },
                             {
-                                path: ":fund_id/allocate",
+                                path: ":fund_id/:sub_fund_id?/allocate",
                                 component: markRaw(FundAllocationFormAdd),
                                 name: "FundAllocationFormAdd",
                                 title: "Allocate funds",
@@ -185,6 +186,27 @@ export const routes = [
                                 name: "TransferFunds",
                                 title: "Transfer funds",
                                 permission: "createFundAllocation"
+                            },
+                            {
+                                path: ":fund_id/sub_fund/add",
+                                component: markRaw(SubFundFormAdd),
+                                name: "SubFundFormAdd",
+                                title: "Add sub fund",
+                                permission: "createFund"
+                            },
+                            {
+                                path: ":fund_id/sub_fund/edit/:sub_fund_id",
+                                component: markRaw(SubFundFormAdd),
+                                name: "SubFundFormAddEdit",
+                                title: "Edit sub fund",
+                                permission: "editFund"
+                            },
+                            {
+                                path: "sub_fund/:sub_fund_id",
+                                component: markRaw(FundShow),
+                                name: "SubFundShow",
+                                title: "Show sub fund",
+                                permission: "manageFunds"
                             },
                         ]
                     },

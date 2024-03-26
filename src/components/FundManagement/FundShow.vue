@@ -20,6 +20,12 @@
                 v-if="isUserPermitted('deleteFund')"
             />
             <ToolbarLink
+                :to="{ name: 'SubFundFormAdd', params: { fund_id: fund.fund_id } }"
+                icon="plus"
+                title="New sub fund"
+                v-if="isUserPermitted('createFund') && !hasExistingAllocations"
+            />
+            <ToolbarLink
                 :to="{ name: 'FundAllocationFormAdd' }"
                 icon="plus"
                 title="New fund allocation"
@@ -100,7 +106,8 @@ export default {
                 actions: {
                     0: ["show"]
                 },
-            }
+            },
+            hasExistingAllocations: false
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -114,6 +121,9 @@ export default {
             await client.funds.get(fund_id, { "x-koha-embed": "fiscal_yr,ledger,fund_group,koha_plugin_acquire_fund_allocations" }).then(
                 fund => {
                     this.fund = fund
+                    if(fund.koha_plugin_acquire_fund_allocations.length > 0) {
+                        this.hasExistingAllocations = true
+                    }
                     this.initialized = true
                 },
                 error => {}

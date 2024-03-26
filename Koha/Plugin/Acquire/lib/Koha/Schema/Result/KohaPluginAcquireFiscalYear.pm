@@ -33,7 +33,7 @@ __PACKAGE__->table("koha_plugin_acquire_fiscal_year");
 =head2 description
 
   data_type: 'longtext'
-  default_value: (empty string)
+  default_value: ''''
   is_nullable: 1
 
 description for the fiscal year
@@ -103,7 +103,7 @@ __PACKAGE__->add_columns(
     "fiscal_yr_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
     "description",
-    { data_type => "longtext", default_value => "", is_nullable => 1 },
+    { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "code",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
     "start_date",
@@ -184,6 +184,21 @@ __PACKAGE__->has_many(
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
+=head2 koha_plugin_acquire_sub_funds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_sub_funds",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -204,8 +219,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-02 10:02:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Q7OXerodgOhzQedaSJIzw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DwwXDrs3okPHmPALZRxCng
 
 sub koha_object_class {
     'Koha::Acquire::Fund::FiscalYear';

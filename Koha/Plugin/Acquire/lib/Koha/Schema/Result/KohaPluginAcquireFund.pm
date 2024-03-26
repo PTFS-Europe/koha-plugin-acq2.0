@@ -279,6 +279,21 @@ __PACKAGE__->has_many(
     { cascade_copy      => 0, cascade_delete => 0 },
 );
 
+=head2 koha_plugin_acquire_sub_funds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
+
+=cut
+
+__PACKAGE__->has_many(
+    "koha_plugin_acquire_sub_funds",
+    "Koha::Schema::Result::KohaPluginAcquireSubFund",
+    { "foreign.fund_id" => "self.fund_id" },
+    { cascade_copy      => 0, cascade_delete => 0 },
+);
+
 =head2 ledger
 
 Type: belongs_to
@@ -319,9 +334,8 @@ __PACKAGE__->belongs_to(
     },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-15 15:11:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nIUIVCHMPdfDhi7DZ9VDVg
-
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-27 11:18:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O9O6VZqrB0FyulgvuUpJcg
 
 sub koha_object_class {
     'Koha::Acquire::Funds::Fund';
