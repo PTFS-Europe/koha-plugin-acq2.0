@@ -34,6 +34,7 @@ sub store {
     $self->SUPER::store;
 
     $self->cascade_to_fund_allocations;
+    $self->cascade_to_sub_funds;
 
     return $self;
 }
@@ -70,7 +71,7 @@ sub has_sub_funds {
 
 =head3 cascade_to_fund_allocations
 
-This method cascades changes to the values of the "visible_to" and "status" properties to all fund_allocations attached to this ledger
+This method cascades changes to the values of the "visible_to" and "status" properties to all fund_allocations attached to this fund
 
 =cut
 
@@ -97,6 +98,45 @@ sub cascade_to_fund_allocations {
             }
         );
         $fund_allocation->store({ block_fund_value_update => 1 }) if $visibility_updated || $data_updated;
+    }
+}
+
+
+=head3 cascade_to_sub_funds
+
+This method cascades changes to the values of the "visible_to" and "status" properties to all sub_funds attached to this fund
+
+=cut
+
+sub cascade_to_sub_funds {
+    my ( $self, $args ) = @_;
+
+    my @sub_funds  = $self->koha_plugin_acquire_sub_funds->as_list;
+    my $visible_to = $self->visible_to;
+    my $status     = $self->status;
+
+    foreach my $sub_fund (@sub_funds) {
+        my $visibility_updated = Koha::Acquire::Funds::Utils->cascade_lib_group_visibility(
+            {
+                parent_visibility => $visible_to,
+                child             => $sub_fund
+            }
+        );
+        my $status_updated = Koha::Acquire::Funds::Utils->cascade_status(
+            {
+                parent_status => $status,
+                child         => $sub_fund
+            }
+        );
+        my @data_to_cascade = ( 'fiscal_yr_id', 'currency', 'owner', 'ledger_id' );
+        my $data_updated    = Koha::Acquire::Funds::Utils->cascade_data(
+            {
+                parent     => $self,
+                child      => $sub_fund,
+                properties => \@data_to_cascade
+            }
+        );
+        $sub_fund->store( { block_fund_value_update => 1 } ) if $status_updated || $visibility_updated || $data_updated;
     }
 }
 

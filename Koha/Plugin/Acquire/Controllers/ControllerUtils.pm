@@ -114,6 +114,14 @@ sub add_accounting_values_to_ledgers_or_fund_groups_or_funds {
             push( @allocations, @fund_allocations );
         }
     }
+    if ( defined $data->{koha_plugin_acquire_sub_funds} ) {
+        foreach my $sub_fund ( @{ $data->{koha_plugin_acquire_sub_funds} } ) {
+            if( defined $sub_fund->{koha_plugin_acquire_fund_allocations} ) {
+                my @fund_allocations = @{ $sub_fund->{koha_plugin_acquire_fund_allocations} };
+                push( @allocations, @fund_allocations );
+            }
+        }
+    }
     if ( defined $data->{koha_plugin_acquire_fund_allocations} ) {
         push( @allocations, @{ $data->{koha_plugin_acquire_fund_allocations} } );
     }
