@@ -8,7 +8,7 @@
                 title="Close"
             />
             <ToolbarLink
-                :to="{ name: 'FundFormEdit', params: { fund_id: fund.fund_id } }"
+                :to="{ name: isSubFund ? 'SubFundFormAddEdit' : 'FundFormEdit', params: { fund_id: fund.fund_id, ...(isSubFund && { sub_fund_id: fund.sub_fund_id }) } }"
                 icon="pencil"
                 title="Edit"
                 v-if="isUserPermitted('editFund')"
@@ -16,14 +16,14 @@
             <ToolbarButton
                 icon="trash"
                 title="Delete"
-                @clicked="deleteFund(fund.fund_id, fund.name)"
+                @clicked="deleteFund(isSubFund ? fund.sub_fund_id : fund.fund_id, fund.name)"
                 v-if="isUserPermitted('deleteFund')"
             />
             <ToolbarLink
-                :to="{ name: 'SubFundFormAdd', params: { fund_id: fund.fund_id } }"
+                :to="{ name: 'SubFundFormAdd', params: { [navParam]: fund[navParam] } }"
                 icon="plus"
                 title="New sub fund"
-                v-if="isUserPermitted('createFund') && !hasExistingAllocations"
+                v-if="isUserPermitted('createFund') && !hasExistingAllocations && !isSubFund"
             />
             <ToolbarLink
                 :to="{ name: 'FundAllocationFormAdd', params: { fund_id: fund.fund_id, ...(isSubFund && { sub_fund_id: fund.sub_fund_id }) } }"
@@ -32,7 +32,7 @@
                 v-if="isUserPermitted('createFundAllocation') && !hasSubFunds && fund.status"
             />
             <ToolbarLink
-                :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
+                :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id, ...(isSubFund && { sub_fund_id: fund.sub_fund_id }) } }"
                 icon="arrow-right-arrow-left"
                 title="Transfer funds"
                 v-if="isUserPermitted('createFundAllocation')"
@@ -43,7 +43,7 @@
             <DisplayDataFields 
                 :data="fund"
                 homeRoute="FundList"
-                dataType="fund"
+                :dataType="isSubFund ? 'subFund': 'fund'"
                 :showClose="false"
             />
             <AccountingView 
@@ -52,12 +52,21 @@
             />
         </div>
     </div>
-    <div v-if="initialized" id="fund_allocations">
+    <div v-if="initialized && hasExistingAllocations" id="fund_allocations">
         <div class="page-section">
             <h3>Fund allocations</h3>
             <KohaTable
-                ref="table"
-                v-bind="tableOptions"
+                ref="allocationTable"
+                v-bind="allocationTableOptions"
+            ></KohaTable>
+        </div>
+    </div>
+    <div v-if="initialized && hasSubFunds" id="fund_allocations">
+        <div class="page-section">
+            <h3>Sub funds</h3>
+            <KohaTable
+                ref="subFundTable"
+                v-bind="subFundTableOptions"
             ></KohaTable>
         </div>
     </div>
@@ -83,7 +92,8 @@ export default {
             formatValueWithCurrency
         } = acquisitionsStore
 
-        const table = ref()
+        const allocationTable = ref()
+        const subFundTable = ref()
 
         return {
             setConfirmationDialog,
@@ -181,7 +191,7 @@ export default {
                 }
             )
         },
-        getTableColumns: function () {
+        getAllocationTableColumns: function () {
             const formatValueWithCurrency = this.formatValueWithCurrency
             return [
                 {
@@ -229,14 +239,58 @@ export default {
                 }
             ]
         },
+        getSubFundTableColumns: function () {
+            const formatValueWithCurrency = this.formatValueWithCurrency
+            return [
+                {
+                    title: __("Name"),
+                    data: "name:sub_fund_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/acquisitions/fund_management/fund/sub_fund/' +
+                            row.sub_fund_id +
+                            '" class="show">' +
+                            escape_str(`${row.name}`) +
+                            "</a>"
+                        )
+                    },
+                },
+                {
+                    title: __("Code"),
+                    data: "code",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.status ? "Active" : "Inactive"
+                    },
+                },
+                {
+                    title: __("Fund value"),
+                    data: "sub_fund_value",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return formatValueWithCurrency(row.currency, row.sub_fund_value)
+                    },
+                },
+            ]
+        },
         showTransferWarning() {
             this.setWarning("This allocation was a transfer between funds and can't be edited or deleted.")
         },
-        tableUrl() {
-            const id = this.$route.params.fund_id
-            let url = "/api/v1/contrib/acquire/fund_allocations?q="
+        tableUrl(dataType) {
+            const id = this.$route.params.sub_fund_id ? this.$route.params.sub_fund_id : this.$route.params.fund_id
+            let url = dataType === 'allocations' ? "/api/v1/contrib/acquire/fund_allocations?q=" : "/api/v1/contrib/acquire/sub_funds?q="
             const query = {
-                fund_id: id
+                [this.$route.params.sub_fund_id ? 'sub_fund_id' : 'fund_id']: id
             }
             return url + JSON.stringify(query)
         }

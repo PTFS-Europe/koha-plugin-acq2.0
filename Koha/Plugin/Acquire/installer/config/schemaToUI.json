@@ -246,6 +246,78 @@
             "av_type": "acquire_fund_types"
         }
     },
+    "subFund": {
+        "name": {
+            "label": "Name",
+            "type": "string"
+        },
+        "description": {
+            "label": "Description",
+            "type": "string"
+        },
+        "code": {
+            "label": "Code",
+            "type": "string"
+        },
+        "fiscal_yr_id": {
+            "label": "Fiscal year",
+            "type": "link",
+            "dataType": "fiscal_yr",
+            "linkId": "fiscal_yr_id",
+            "linkSlug": "fiscal_year",
+            "linkName": "code"
+        },
+        "ledger_id": {
+            "label": "Ledger",
+            "type": "link",
+            "dataType": "ledger",
+            "linkId": "ledger_id",
+            "linkSlug": "ledger",
+            "linkName": "name"
+        },
+        "fund_id": {
+            "label": "Parent fund",
+            "type": "link",
+            "dataType": "fund",
+            "linkId": "fund_id",
+            "linkSlug": "fund",
+            "linkName": "name"
+        },
+        "owner": {
+            "label": "Owner",
+            "type": "patron"
+        },
+        "visible_to": {
+            "label": "Library groups covered",
+            "type": "table",
+            "dataType": "lib_groups",
+            "columns": [
+                "ID",
+                "Title"
+            ],
+            "keys": [
+                "id",
+                "title"
+            ]
+        },
+        "status": {
+            "label": "Status",
+            "type": "enum",
+            "options": { "1": "Active", "0": "Inactive" }
+        },
+        "last_updated": {
+            "label": "Last updated",
+            "type": "timestamp"
+        },
+        "currency": {
+            "label": "Currency",
+            "type": "string"
+        },
+        "external_id": {
+            "label": "External ID",
+            "type": "string"
+        }
+    },
     "fundGroup": {
         "name": {
             "label": "Name",
