@@ -105,8 +105,6 @@ sub add {
                 delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
-                $body = _inherit_currency_and_owner($body);
-
                 my $sub_fund = Koha::Acquire::Funds::SubFund->new_from_api($body)->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $sub_fund->fund_id );
@@ -148,8 +146,6 @@ sub update {
                 delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
-
-                $body = _inherit_currency_and_owner($body);
 
                 $sub_fund->set_from_api($body)->store;
 
