@@ -18,7 +18,8 @@ package Koha::Acquire::Funds::SubFund;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use base qw(Koha::Acquire::Funds::Fund);
+use base qw(Koha::Object);
+
 
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
@@ -46,10 +47,8 @@ sub delete {
 
     my $deleted = $self->_result()->delete;
 
-    # TODO: Needs a call to update the parent fund
-
-    my $ledger = $self->ledger;
-    $ledger->update_ledger_total;
+    my $fund = $self->fund;
+    $fund->update_fund_total;
 
     return $self;
 }
@@ -87,15 +86,14 @@ sub cascade_to_fund_allocations {
     }
 }
 
-=head3 update_fund_total
+=head3 update_sub_fund_total
 
 This method is called whenever a fund allocation is made.
 It updates the value of the fund based on the fund allocations and then triggers an update to the ledger value
 
 =cut
 
-sub update_fund_total {
-    # TODO: Needs to work with fund and sub fund level 
+sub update_sub_fund_total {
     my ( $self, $args ) = @_;
 
     my @allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
@@ -104,10 +102,10 @@ sub update_fund_total {
     foreach my $allocation (@allocations) {
         $total += $allocation->allocation_amount;
     }
-    $self->fund_value($total)->store;
+    $self->sub_fund_value($total)->store;
 
-    my $ledger = $self->ledger;
-    $ledger->update_ledger_total;
+    my $fund = $self->fund;
+    $fund->update_fund_total;
 
     return $total;
 }
@@ -145,7 +143,7 @@ Method to embed the fund to a given sub fund
 sub fund {
     my ($self) = @_;
     my $fund_rs = $self->_result->fund;
-    return Koha::Acquire::Funds::Ledger->_new_from_dbic($fund_rs);
+    return Koha::Acquire::Funds::Fund->_new_from_dbic($fund_rs);
 }
 
 =head3 koha_plugin_acquire_fund_allocations

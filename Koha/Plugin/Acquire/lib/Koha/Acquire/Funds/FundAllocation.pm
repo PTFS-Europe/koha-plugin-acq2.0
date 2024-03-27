@@ -38,7 +38,9 @@ sub store {
 
     if(!$block_fund_value_update) {
         my $fund = $self->fund;
-        $fund->update_fund_total;
+        $fund->update_fund_total if $fund && !$self->sub_fund_id;
+        my $sub_fund = $self->sub_fund;
+        $sub_fund->update_sub_fund_total if $sub_fund;
     }
 
     return $self;
@@ -93,7 +95,21 @@ Method to embed the fund to a given fund allocation
 sub fund {
     my ($self) = @_;
     my $fund_rs = $self->_result->fund;
+    return unless $fund_rs;
     return Koha::Acquire::Funds::Fund->_new_from_dbic($fund_rs);
+}
+
+=head3 sub_fund
+
+Method to embed the sub_fund to a given fund allocation
+
+=cut
+
+sub sub_fund {
+    my ($self) = @_;
+    my $sub_fund_rs = $self->_result->sub_fund;
+    return unless $sub_fund_rs;
+    return Koha::Acquire::Funds::SubFund->_new_from_dbic($sub_fund_rs);
 }
 
 =head2 Internal methods
