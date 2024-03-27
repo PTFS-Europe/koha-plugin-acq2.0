@@ -1,39 +1,57 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="fund_allocation_add">
+    <div v-else id="fund_transfer_add">
         <h2>Transfer between funds</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label for="fund_allocation_fund_id" class="required"
+                            <label for="fund_transfer_fund_id" class="required"
                                 >Fund to transfer to:</label
                             >
-                            <v-select
-                                id="fund_allocation_fund_id"
+                            <InfiniteScrollSelect
+                                id="fund_transfer_fund_id"
                                 v-model="fund_transfer.fund_id_to"
-                                :reduce="av => av.fund_id"
-                                :options="funds"
+                                dataType="funds"
+                                dataIdentifier="fund_id"
                                 label="name"
+                                apiClient="acquisition"
+                                :required="!fund_transfer.fund_id_to"
+                                :filters="{ fund_id: { 'not_in': [ $route.query.fund_id ] }, status: '1'}"
+                                @update:modelValue="handleSubFunds"
+                            />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="fund_transfer_sub_fund" :class="noSubFunds ?  '' :'required'"
+                                >Sub fund:</label
+                            >
+                            <v-select
+                                id="fund_transfer_sub_fund"
+                                v-model="fund_transfer.sub_fund_id_to"
+                                :reduce="av => av.sub_fund_id"
+                                :options="subFunds"
+                                label="name"
+                                :disabled="noSubFunds"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fund_transfer.fund_id_to"
+                                        :required="!noSubFunds ? false : !fund_transfer.sub_fund_it_to"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
                                     />
                                 </template>
                             </v-select>
-                            <span class="required">Required</span>
+                            <span v-if="!noSubFunds" class="required">Required</span>
                         </li>
                         <li>
-                            <label for="fund_allocation_amount" class="required"
+                            <label for="fund_transfer_amount" class="required"
                                 >Allocation amount:</label
                             >
                             <input
-                                id="fund_allocation_amount"
+                                id="fund_transfer_amount"
                                 v-model="fund_transfer.transfer_amount"
                                 type="number"
                                 step=".01"
@@ -41,21 +59,21 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="fund_allocation_reference"
+                            <label for="fund_transfer_reference"
                                 >Reference:</label
                             >
                             <input
-                                id="fund_allocation_reference"
+                                id="fund_transfer_reference"
                                 v-model="fund_transfer.reference"
                                 placeholder="Fund transfer reference"
                             />
                         </li>
                         <li>
-                            <label for="fund_allocation_note"
+                            <label for="fund_transfer_note"
                                 >Note:
                             </label>
                             <textarea
-                                id="fund_allocation_note"
+                                id="fund_transfer_note"
                                 v-model="fund_transfer.note"
                                 placeholder="Notes"
                                 rows="10"
@@ -65,9 +83,9 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" :disabled="stopSubmit" />
                     <router-link
-                        :to="{ name: 'FundShow', params: { fund_id: fund_transfer.fund_id_from } }"
+                        :to="{ name: 'FundShow', params: { fund_id: $route.query.fund_id } }"
                         role="button"
                         class="cancel"
                         >Cancel</router-link
@@ -83,6 +101,7 @@
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setWarning } from "../../messages"
+import InfiniteScrollSelect from '../InfiniteScrollSelect.vue'
 
 export default {
     setup() {
@@ -96,36 +115,49 @@ export default {
         }
     },
     data() {
+        const { sub_fund_id, fund_id } = this.$route.query
+        const fund_transfer = {
+            fund_id_from: null,
+            sub_fund_id_from: null,
+            fund_id_to: null,
+            sub_fund_id_to: null,
+            reference: '',
+            note: '',
+            transfer_amount: null,
+        }
+        if(sub_fund_id) fund_transfer.sub_fund_id_from = parseInt(sub_fund_id)
+        if(fund_id && !sub_fund_id) fund_transfer.fund_id_from = parseInt(fund_id)
+
         return {
-            initialized: false,
-            fund_transfer: {
-                fund_id_from: null,
-                fund_id_to: null,
-                reference: '',
-                note: '',
-                transfer_amount: null,
-            },
-            funds: [],
+            initialized: true,
+            fund_transfer,
+            subFunds: [],
+            noSubFunds: true,
+            stopSubmit: false
         }
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getFunds(to)
-        })
-    },
     methods: {
-        async getFunds(route) {
-            const { query } = route
+        async getFund(fund_id) {
             const client = APIClient.acquisition
-            await client.funds.getAll(null, {}).then(
-                funds => {
-                    const query_id = parseInt(query.fund_id)
-                    this.funds = funds.filter(fund => (fund.fund_id !== query_id && fund.status))
-                    this.fund_transfer.fund_id_from = query_id
-                    this.initialized = true
+            await client.funds.get(fund_id, { "x-koha-embed": "koha_plugin_acquire_sub_funds" }).then(
+                fund => {
+                    this.selectedFund = fund
+                    if(fund.koha_plugin_acquire_sub_funds && fund.koha_plugin_acquire_sub_funds.length > 0) {
+                        this.noSubFunds = false
+                        this.subFunds = fund.koha_plugin_acquire_sub_funds
+                    }
                 },
                 error => {}
             )
+        },
+        async handleSubFunds() {
+            this.stopSubmit = true
+            await this.getFund(this.fund_transfer.fund_id_to)
+
+            if(this.selectedFund.koha_plugin_acquire_sub_funds && this.selectedFund.koha_plugin_acquire_sub_funds.length > 0) {
+                this.noSubFunds = false
+            }
+            this.stopSubmit = false
         },
         onSubmit(e) {
             e.preventDefault()
@@ -147,6 +179,9 @@ export default {
                     error => {}
                 )
         }
+    },
+    components: {
+        InfiniteScrollSelect
     }
 }
 </script>

@@ -7,24 +7,25 @@
         <h2 v-else>New fund allocation</h2>
         <div>
             <form @submit="onSubmit($event)">
+                <h3>Allocate to fund: {{ selectedFund.name }}</h3>
                 <fieldset class="rows">
                     <ol>
-                        <li>
+                        <!-- <li>
                             <label for="fund_allocation_fund_id" class="required"
                                 >Fund:</label
                             >
                             <InfiniteScrollSelect
                                 id="fund_allocation_fund_id"
-                                v-model="fund_allocation.fund_id"
+                                v-model="fund_allocation[isSubFund ? 'sub_fund_id' : 'fund_id']"
                                 :selectedData="selectedFund"
-                                dataType="funds"
-                                dataIdentifier="fund_id"
+                                :dataType="isSubFund ? 'sub_funds' : 'funds'"
+                                :dataIdentifier="isSubFund ? 'sub_fund_id' : 'fund_id'"
                                 label="name"
                                 apiClient="acquisition"
                                 :required="true"
                             />
                             <span class="required">Required</span>
-                        </li>
+                        </li> -->
                         <li>
                             <label for="fund_allocation_amount" class="required"
                                 >Allocation amount:</label
@@ -98,6 +99,7 @@ export default {
             initialized: false,
             fund_allocation: {
                 fund_id: null,
+                sub_fund_id: null,
                 fiscal_yr_id: null,
                 ledger_id: null,
                 reference: '',
@@ -107,7 +109,8 @@ export default {
                 visible_to: '',
             },
             funds: [],
-            selectedFund: null
+            selectedFund: null,
+            isSubFund: false
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -132,16 +135,21 @@ export default {
             })
         },
         async getFund(params) {
+            const { fund_id, sub_fund_id } = params
+            const whichClient = sub_fund_id ? 'subFunds' : 'funds'
+            const whichParam = sub_fund_id ? 'sub_fund_id' : 'fund_id'
+            if(sub_fund_id) this.isSubFund = true
+
             const client = APIClient.acquisition
-            await client.funds.get(params.fund_id).then(
-                fund => {
-                    this.selectedFund = fund
-                    this.fund_allocation.fund_id = fund.fund_id
-                    this.fund_allocation.ledger_id = fund.ledger_id
-                    this.fund_allocation.fiscal_yr_id = fund.fiscal_yr_id
-                    this.fund_allocation.currency = fund.currency
-                    this.fund_allocation.owner = fund.owner
-                    this.fund_allocation.visible_to = fund.visible_to
+            await client[whichClient].get(params[whichParam]).then(
+                result => {
+                    this.selectedFund = result
+                    this.fund_allocation[whichParam] = result[whichParam]
+                    this.fund_allocation.ledger_id = result.ledger_id
+                    this.fund_allocation.fiscal_yr_id = result.fiscal_yr_id
+                    this.fund_allocation.currency = result.currency
+                    this.fund_allocation.owner = result.owner
+                    this.fund_allocation.visible_to = result.visible_to
                 },
                 error => {}
             )

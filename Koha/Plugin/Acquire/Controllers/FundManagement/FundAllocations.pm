@@ -234,14 +234,27 @@ sub transfer {
 
                 my $fund_transferring_from = Koha::Acquire::Funds::Funds->find( { fund_id => $body->{fund_id_from} } );
                 my $fund_transferring_to   = Koha::Acquire::Funds::Funds->find( { fund_id => $body->{fund_id_to} } );
-                my $note_from              = "Transfer to " . $fund_transferring_to->name;
+                my $sub_fund_transferring_from =
+                    Koha::Acquire::Funds::SubFunds->find( { sub_fund_id => $body->{sub_fund_id_from} } );
+                my $sub_fund_transferring_to =
+                    Koha::Acquire::Funds::SubFunds->find( { sub_fund_id => $body->{sub_fund_id_to} } );
+
+                my $note_from = "Transfer to "
+                    . ( $sub_fund_transferring_to ? $sub_fund_transferring_to->name : $fund_transferring_to->name );
                 $note_from = $note_from . ": " . $body->{note} if $body->{note};
-                my $note_to = "Transfer from " . $fund_transferring_from->name;
+                my $note_to =
+                    "Transfer from "
+                    . (
+                    $sub_fund_transferring_from ? $sub_fund_transferring_from->name : $fund_transferring_from->name );
                 $note_to = $note_to . ": " . $body->{note} if $body->{note};
+
+                my $fund_id_from = $body->{sub_fund_id_from} ? undef : $body->{fund_id_from};
+                my $fund_id_to = $body->{sub_fund_id_to} ? undef : $body->{fund_id_to};
 
                 my $allocation_from = Koha::Acquire::Funds::FundAllocation->new(
                     {
-                        fund_id           => $body->{fund_id_from},
+                        fund_id           => $fund_id_from,
+                        sub_fund_id       => $body->{sub_fund_id_from},
                         ledger_id         => $fund_transferring_from->ledger_id,
                         fiscal_yr_id      => $fund_transferring_from->fiscal_yr_id,
                         allocation_amount => -$body->{transfer_amount},
@@ -255,7 +268,8 @@ sub transfer {
                 )->store();
                 my $allocation_to = Koha::Acquire::Funds::FundAllocation->new(
                     {
-                        fund_id           => $body->{fund_id_to},
+                        fund_id           => $fund_id_to,
+                        sub_fund_id       => $body->{sub_fund_id_to},
                         ledger_id         => $fund_transferring_to->ledger_id,
                         fiscal_yr_id      => $fund_transferring_to->fiscal_yr_id,
                         allocation_amount => $body->{transfer_amount},
