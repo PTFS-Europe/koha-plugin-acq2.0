@@ -150,8 +150,16 @@ It updates the value of the fund based on the fund allocations and then triggers
 sub update_fund_total {
     my ( $self, $args ) = @_;
 
-    my @allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
-    my $total       = 0;
+    my @allocations;
+    if ( $self->has_sub_funds ) {
+        my @sub_funds = $self->koha_plugin_acquire_sub_funds->as_list;
+        foreach my $sub_fund (@sub_funds) {
+            push( @allocations, $sub_fund->koha_plugin_acquire_fund_allocations->as_list );
+        }
+    } else {
+        push( @allocations, $self->koha_plugin_acquire_fund_allocations->as_list );
+    }
+    my $total = 0;
 
     foreach my $allocation (@allocations) {
         $total += $allocation->allocation_amount;
