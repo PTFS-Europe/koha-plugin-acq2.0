@@ -26,10 +26,10 @@
                 v-if="isUserPermitted('createFund') && !hasExistingAllocations"
             />
             <ToolbarLink
-                :to="{ name: 'FundAllocationFormAdd' }"
+                :to="{ name: 'FundAllocationFormAdd', params: { fund_id: fund.fund_id, ...(isSubFund && { sub_fund_id: fund.sub_fund_id }) } }"
                 icon="plus"
                 title="New fund allocation"
-                v-if="isUserPermitted('createFundAllocation') && fund.status"
+                v-if="isUserPermitted('createFundAllocation') && !hasSubFunds && fund.status"
             />
             <ToolbarLink
                 :to="{ name: 'TransferFunds', query: { fund_id: fund.fund_id } }"
@@ -91,38 +91,70 @@ export default {
             setWarning,
             isUserPermitted,
             formatValueWithCurrency,
-            table
+            allocationTable,
+            subFundTable
         }
     },
     data() {
         return {
             fund: {},
             initialized: false,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                url: this.tableUrl(),
+            hasSubFunds: false,
+            allocationTableOptions: {
+                columns: this.getAllocationTableColumns(),
+                url: this.tableUrl('allocations'),
                 table_settings: null,
                 add_filters: true,
                 actions: {
                     0: ["show"]
                 },
             },
-            hasExistingAllocations: false
+            subFundTableOptions: {
+                columns: this.getSubFundTableColumns(),
+                url: this.tableUrl('subFunds'),
+                table_settings: null,
+                add_filters: true,
+                actions: {
+                    0: ["show"]
+                },
+            },
+            hasExistingAllocations: false,
+            isSubFund: false,
+            navParam: 'fund_id'
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.fund = vm.getFund(to.params.fund_id)
+            vm.fund = vm.getFund(to.params)
         })
     },
     methods: {
-        async getFund(fund_id) {
+        async getFund(params) {
             const client = APIClient.acquisition
-            await client.funds.get(fund_id, { "x-koha-embed": "fiscal_yr,ledger,fund_group,koha_plugin_acquire_fund_allocations" }).then(
+            const { fund_id, sub_fund_id } = params
+
+            const whichParam = sub_fund_id ? 'sub_fund_id' : 'fund_id'
+            const whichClient = sub_fund_id ? 'subFunds' : 'funds'
+
+            let embed = "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations"
+            if(sub_fund_id) {
+                embed += ",fund"
+            }
+            if(fund_id) {
+                embed += ",fund_group,koha_plugin_acquire_sub_funds.koha_plugin_acquire_fund_allocations"
+            }
+            await client[whichClient].get(params[whichParam], { "x-koha-embed": embed }).then(
                 fund => {
                     this.fund = fund
+                    if(fund.sub_fund_id) {
+                        this.isSubFund = true
+                        this.navParam = 'sub_fund_id'
+                    }
                     if(fund.koha_plugin_acquire_fund_allocations.length > 0) {
                         this.hasExistingAllocations = true
+                    }
+                    if(fund.koha_plugin_acquire_sub_funds && fund.koha_plugin_acquire_sub_funds.length > 0) {
+                        this.hasSubFunds = true
                     }
                     this.initialized = true
                 },
