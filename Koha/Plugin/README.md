@@ -31,3 +31,19 @@ RewriteRule ^/cgi-bin/koha/acqui/.*$ /acquisitions [PT]
 ```
 
 If needed then chmod +x acquisitions.pl
+
+# Production apache config
+etc/apache2/sites-available/kohadev.conf
+```
+   ScriptAlias /acquisitions "/var/lib/koha/INSTANCE/plugins/Koha/Plugin/Acquire/views/acquisitions.pl"
+   Alias /plugin “/var/lib/koha/INSTANCE/plugins"
+```
+
+/etc/apache2/apache2.conf
+```
+<Directory /var/lib/koha/INSTANCE/plugins>
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>
+```

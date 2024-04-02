@@ -94,7 +94,21 @@ sub add_lib_group_data {
 
     foreach my $id (@ids) {
         my $lib_group = Koha::Library::Groups->find( { id => $id } );
-        push( @lib_groups, $lib_group->unblessed );
+        push( @lib_groups, $lib_group->unblessed ) if $lib_group;
+    }
+
+    if(scalar(@lib_groups) == 0) {
+        my @branches  = Koha::Libraries->search()->as_list;
+        my $lib_group = {
+            title => 'All branches',
+            id    => 1,
+        };
+        my @libraries;
+        foreach my $branch (@branches) {
+            push( @libraries, $branch->unblessed );
+        }
+        $lib_group->{libraries} = \@libraries;
+        push( @lib_groups, $lib_group );
     }
 
     $data->{lib_groups} = \@lib_groups;
