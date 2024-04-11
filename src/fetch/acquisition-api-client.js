@@ -36,9 +36,12 @@ export class AcquisitionAPIClient extends HttpClient {
 
     get tasks() {
         return {
-            get: id =>
+            get: (id, headers) =>
                 this.get({
                     endpoint: "tasks/" + id,
+                    ...(headers && {
+                        headers
+                    })
                 }),
             getAll: (query, params) =>
                 this.getAll({

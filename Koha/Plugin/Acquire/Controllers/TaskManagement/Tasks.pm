@@ -62,7 +62,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $task = Koha::Acquire::TaskManagement::Tasks->find( $c->param('id') );
+        my $tasks_set = Koha::Acquire::TaskManagement::Tasks->new;
+        my $task      = $c->objects->find( $tasks_set, $c->param('id') );
 
         unless ($task) {
             return $c->render(
@@ -71,13 +72,8 @@ sub get {
             );
         }
 
-        $task = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $task, field => 'owned_by', key => 'owner' } );
-        $task = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $task, field => 'creator', key => 'created_by' } );
         $task =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $task } );
-
         return $c->render(
             status  => 200,
             openapi => $task

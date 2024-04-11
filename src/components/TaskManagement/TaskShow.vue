@@ -59,7 +59,7 @@ export default {
     methods: {
         async getTask(task_id) {
             const client = APIClient.acquisition
-            await client.tasks.get(task_id).then(
+            await client.tasks.get(task_id, { "x-koha-embed": "owner,created_by" }).then(
                 task => {
                     this.task = task
                     this.initialized = true
