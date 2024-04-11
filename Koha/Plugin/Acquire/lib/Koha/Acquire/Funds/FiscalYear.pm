@@ -97,6 +97,19 @@ sub koha_plugin_acquire_ledgers {
 }
 
 
+=head3 owner
+
+Method to embed the owner to a given fiscal year
+
+=cut
+
+sub owner {
+    my ($self) = @_;
+    my $owner_rs = $self->_result->owner;
+    return Koha::Patron->_new_from_dbic($owner_rs);
+}
+
+
 =head2 Internal methods
 
 =head3 _type

@@ -58,7 +58,7 @@ export default {
                 const value = this.data[key]
                 fields[key].value = value
                 if(fields[key].type === 'owner') {
-                    fields[key].value = this.data.owned_by
+                    fields[key].value = this.data.owner
                 }
                 if(fields[key].type === 'link') {
                     const value = this.data[fields[key].dataType]

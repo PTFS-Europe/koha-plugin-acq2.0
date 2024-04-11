@@ -133,6 +133,18 @@ sub koha_plugin_acquire_funds {
 }
 
 
+=head3 owner
+
+Method to embed the owner to a given ledger
+
+=cut
+
+sub owner {
+    my ($self) = @_;
+    my $owner_rs = $self->_result->owner;
+    return Koha::Patron->_new_from_dbic($owner_rs);
+}
+
 
 =head2 Internal methods
 

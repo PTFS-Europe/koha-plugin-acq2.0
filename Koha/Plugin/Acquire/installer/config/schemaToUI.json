@@ -62,7 +62,7 @@
         },
         "owner": {
             "label": "Owner",
-            "type": "patron"
+            "type": "owner"
         },
         "visible_to": {
             "label": "Library groups covered",
@@ -110,7 +110,7 @@
         },
         "owner": {
             "label": "Owner",
-            "type": "patron"
+            "type": "owner"
         },
         "visible_to": {
             "label": "Library groups covered",
@@ -200,7 +200,7 @@
         },
         "owner": {
             "label": "Owner",
-            "type": "patron"
+            "type": "owner"
         },
         "visible_to": {
             "label": "Library groups covered",
@@ -285,7 +285,7 @@
         },
         "owner": {
             "label": "Owner",
-            "type": "patron"
+            "type": "owner"
         },
         "visible_to": {
             "label": "Library groups covered",

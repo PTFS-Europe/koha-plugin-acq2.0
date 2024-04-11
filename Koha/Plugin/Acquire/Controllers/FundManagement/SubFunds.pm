@@ -74,8 +74,6 @@ sub get {
             );
         }
 
-        $sub_fund = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $sub_fund, field => 'owned_by', key => "owner" } );
         $sub_fund = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $sub_fund } );
         $sub_fund =
             Koha::Plugin::Acquire::Controllers::ControllerUtils
@@ -102,7 +100,6 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
                 my $sub_fund = Koha::Acquire::Funds::SubFund->new_from_api($body)->store;
@@ -143,7 +140,6 @@ sub update {
 
                 my $body = $c->req->json;
 
-                delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
 

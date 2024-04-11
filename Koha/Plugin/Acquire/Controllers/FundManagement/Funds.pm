@@ -74,8 +74,6 @@ sub get {
             );
         }
 
-        $fund = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $fund, field => 'owned_by', key => "owner" } );
         $fund =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fund } );
         $fund =
@@ -104,7 +102,6 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
                 $body = _inherit_currency_and_owner($body);
@@ -147,7 +144,6 @@ sub update {
 
                 my $body = $c->req->json;
 
-                delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
 

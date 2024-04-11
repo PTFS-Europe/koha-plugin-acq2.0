@@ -102,7 +102,7 @@ export default {
     methods: {
         async getFiscalYear(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscalYears.get(fiscal_yr_id).then(
+            await client.fiscalYears.get(fiscal_yr_id, { "x-koha-embed": "owner" }).then(
                 fiscal_yr => {
                     this.fiscal_yr = fiscal_yr
                     this.initialized = true
