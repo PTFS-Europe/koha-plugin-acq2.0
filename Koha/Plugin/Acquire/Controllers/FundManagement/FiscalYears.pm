@@ -74,8 +74,6 @@ sub get {
             );
         }
 
-        $fiscal_year = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $fiscal_year, field => 'owned_by', key => "owner" } );
         $fiscal_year =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fiscal_year } );
 
@@ -100,7 +98,6 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                delete $body->{owned_by} if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
                 my $fiscal_year = Koha::Acquire::Funds::FiscalYear->new_from_api($body)->store;
@@ -141,7 +138,6 @@ sub update {
 
                 my $body = $c->req->json;
 
-                delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
 

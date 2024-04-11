@@ -73,8 +73,6 @@ sub get {
             );
         }
 
-        $ledger = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_patron_data(
-            { data => $ledger, field => 'owned_by', key => "owner" } );
         $ledger =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $ledger } );
         $ledger =
@@ -102,7 +100,6 @@ sub add {
             sub {
 
                 my $body = $c->req->json;
-                delete $body->{owned_by}   if $body->{owned_by};
                 delete $body->{lib_groups} if $body->{lib_groups};
 
                 my $ledger = Koha::Acquire::Funds::Ledger->new_from_api($body)->store;
@@ -143,7 +140,6 @@ sub update {
 
                 my $body = $c->req->json;
 
-                delete $body->{owned_by}     if $body->{owned_by};
                 delete $body->{lib_groups}   if $body->{lib_groups};
                 delete $body->{fiscal_year}  if $body->{fiscal_year};
                 delete $body->{last_updated} if $body->{last_updated};

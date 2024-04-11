@@ -233,6 +233,19 @@ sub koha_plugin_acquire_fund_allocations {
     return Koha::Acquire::Funds::FundAllocations->_new_from_dbic($fund_allocation_rs);
 }
 
+
+=head3 owner
+
+Method to embed the owner to a given fund
+
+=cut
+
+sub owner {
+    my ($self) = @_;
+    my $owner_rs = $self->_result->owner;
+    return Koha::Patron->_new_from_dbic($owner_rs);
+}
+
 =head2 Internal methods
 
 =head3 _type

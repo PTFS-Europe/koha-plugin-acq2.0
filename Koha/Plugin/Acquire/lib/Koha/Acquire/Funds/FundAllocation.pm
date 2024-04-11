@@ -112,6 +112,20 @@ sub sub_fund {
     return Koha::Acquire::Funds::SubFund->_new_from_dbic($sub_fund_rs);
 }
 
+
+=head3 owner
+
+Method to embed the owner to a given fund allocation
+
+=cut
+
+sub owner {
+    my ($self) = @_;
+    my $owner_rs = $self->_result->owner;
+    return Koha::Patron->_new_from_dbic($owner_rs);
+}
+
+
 =head2 Internal methods
 
 =head3 _type
