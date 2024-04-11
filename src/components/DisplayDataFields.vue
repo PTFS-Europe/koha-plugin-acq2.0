@@ -72,7 +72,7 @@ export default {
                     }
                 }
                 if(fields[key].type === 'creator') {
-                    fields[key].value = this.data.creator
+                    fields[key].value = this.data.created_by
                 }
                 if(fields[key].type === 'av') {
                     fields[key].value = this.get_lib_from_av(fields[key].av_type, value)

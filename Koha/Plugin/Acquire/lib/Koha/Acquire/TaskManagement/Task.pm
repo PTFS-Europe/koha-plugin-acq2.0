@@ -29,6 +29,34 @@ use JSON       qw ( encode_json );
 
 =cut
 
+
+=head3 owner
+
+Method to embed the owner to a given task
+
+=cut
+
+sub owner {
+    my ($self) = @_;
+    my $owner_rs = $self->_result->owner;
+    return Koha::Patron->_new_from_dbic($owner_rs);
+}
+
+
+=head3 created_by
+
+Method to embed the patron who created the task
+
+=cut
+
+sub created_by {
+    my ($self) = @_;
+    my $created_by_rs = $self->_result->created_by;
+    return Koha::Patron->_new_from_dbic($created_by_rs);
+}
+
+
+
 sub _type {
     return 'KohaPluginAcquireWorkflowTask';
 }

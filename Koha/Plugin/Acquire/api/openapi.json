@@ -354,6 +354,21 @@
                     "description": "ID of task to fetch",
                     "required": true,
                     "type": "integer"
+                },
+                {
+                    "name": "x-koha-embed",
+                    "in": "header",
+                    "description": "Embed",
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "owner",
+                            "created_by"
+                        ]
+                    },
+                    "collectionFormat": "csv"
                 }
             ],
             "produces": [
