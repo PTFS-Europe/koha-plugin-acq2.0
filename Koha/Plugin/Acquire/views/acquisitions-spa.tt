@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE To %]
 [% INCLUDE 'doc-head-open.inc' %]
-   <title>Acquistions</title>
+   <title>Acquisitions</title>
    <script type="text/javascript">window.plugin_path="[% PLUGIN_PATH %]"</script>
    <meta data-n-head="1" charset="utf-8">
    <meta data-n-head="1" name="viewport" content="width=device-width,initial-scale=1">
