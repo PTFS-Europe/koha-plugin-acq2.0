@@ -11,13 +11,13 @@ perl /kohadevbox/koha/misc/devel/install_plugins.pl
 
 etc/apache2/sites-available/kohadev.conf
 ```
-   ScriptAlias /acquisitions "/kohadevbox/koha_plugin/Koha/Plugin/Acquire/views/acquisitions.pl"
+   ScriptAlias /acquisitions "/kohadevbox/plugins/koha-plugin-acq2/Koha/Plugin/Acquire/views/acquisitions.pl"
    Alias /plugin “/var/lib/koha/kohadev/plugins"
 ```
 
 /etc/apache2/apache2.conf
 ```
-<Directory /kohadevbox/koha_plugin>
+<Directory /kohadevbox/plugins>
     Options Indexes FollowSymLinks
     AllowOverride None
     Require all granted
