@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      -'v*'
+      - 'v*'
 
 jobs:
   release:
@@ -23,6 +23,6 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
       - name: 'Create Release'
-        run: hub release create ${{ env.VERSION }} -m ${{ env.VERSION }} -a ${{ env.FILENAME }}
+        run: gh release create ${{ env.VERSION }} ${{ env.FILENAME }} -t ${{ env.VERSION }} -n ""
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
