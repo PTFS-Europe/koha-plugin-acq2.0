@@ -3,6 +3,7 @@
 RED="\033[0;31m"
 NC="\033[0m" # No colour
 GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
 
 echo "Creating and releasing .kpz file"
 
@@ -30,10 +31,21 @@ else
     NEW_VERSION_NUMBER=${NEW_VERSION:1}
 fi
 
-PREVIOUS_VERSION=$(git log --pretty=oneline | grep -P -m 1 -o "v[\d|.]{1,6}")
-PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
+PREVIOUS_VERSION=$(git log --pretty=oneline | grep -m 1 -o "v[0-9.]\{1,6\}")
+if [ -z "$PREVIOUS_VERSION" ]; then
+    echo -e "${YELLOW}No previous version found. Assuming this is the first release.${NC}"
+    PREVIOUS_VERSION_NUMBER="v0.0.0" # Assuming 0 as the initial version for comparison
+else
+    PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
+fi
+echo -e "Previous version: $PREVIOUS_VERSION"
+echo -e "New version: $NEW_VERSION"
 
-if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
+# Comparing versions
+VERSION_COMPARISON=$(echo -e "$PREVIOUS_VERSION_NUMBER\n$NEW_VERSION_NUMBER" | sort -V | head -n 1)
+echo -e "Version comparison: $VERSION_COMPARISON"
+
+if [ "$VERSION_COMPARISON" != "$PREVIOUS_VERSION_NUMBER" ]; then
     echo -e "${GREEN}Version has been updated from $PREVIOUS_VERSION_NUMBER to $NEW_VERSION_NUMBER - checking remotes and starting upload${NC}"
 
     REMOTES=$(git remote -v)
