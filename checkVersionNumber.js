@@ -62,9 +62,9 @@ if(cliInput === 'version') {
     
     if(!versionNumberIdentified) return console.log('No version found') 
     if(versionNumberIdentified) {
-        const regex = /"(.*?)"/
+        const regex = /our \$VERSION\s*=\s*(["'`]?)([\d.]+)\1;/
         const findVersionNumber = regex.exec(fileByLine[versionNumberIdentified])
-        const pluginVersion = findVersionNumber[1]
+        const pluginVersion = findVersionNumber[2]
         console.log(`v${pluginVersion}`)
     }
 }
