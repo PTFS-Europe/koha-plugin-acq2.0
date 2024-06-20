@@ -30,13 +30,13 @@ __PACKAGE__->table("koha_plugin_acquire_ledgers");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 fiscal_yr_id
+=head2 fiscal_period_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-fiscal year the ledger applies to
+fiscal period the ledger applies to
 
 =head2 name
 
@@ -182,7 +182,7 @@ amount to trigger a block on the ledger for overspend
 __PACKAGE__->add_columns(
     "ledger_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-    "fiscal_yr_id",
+    "fiscal_period_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "name",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
@@ -262,18 +262,18 @@ __PACKAGE__->set_primary_key("ledger_id");
 
 =head1 RELATIONS
 
-=head2 fiscal_yr
+=head2 fiscal_period
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalPeriod>
 
 =cut
 
 __PACKAGE__->belongs_to(
-    "fiscal_yr",
-    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
-    { fiscal_yr_id => "fiscal_yr_id" },
+    "fiscal_period",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalPeriod",
+    { fiscal_period_id => "fiscal_period_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",
@@ -352,11 +352,11 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::Acquire::Fund::FiscalYear';
+    'Koha::Acquire::Fund::FiscalPeriod';
 }
 
 sub koha_objects_class {
-    'Koha::Acquire::Fund::FiscalYears';
+    'Koha::Acquire::Fund::FiscalPeriods';
 }
 
 

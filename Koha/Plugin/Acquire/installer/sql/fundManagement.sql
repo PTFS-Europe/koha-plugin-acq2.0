@@ -1,19 +1,19 @@
-CREATE TABLE IF NOT EXISTS { { fiscal_year } } (
-    `fiscal_yr_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `description` longtext DEFAULT '' COMMENT 'description for the fiscal year',
-    `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the fiscal year',
+CREATE TABLE IF NOT EXISTS { { fiscal_period } } (
+    `fiscal_period_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` longtext DEFAULT '' COMMENT 'description for the fiscal period',
+    `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the fiscal period',
     `start_date` date DEFAULT NULL COMMENT 'start date of the event',
     `end_date` date DEFAULT NULL COMMENT 'end date of the event',
-    `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fiscal year currently active',
-    `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fiscal year',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal year',
-    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fiscal year is visible to',
-    PRIMARY KEY (`fiscal_yr_id`),
+    `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fiscal period currently active',
+    `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fiscal period',
+    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal period',
+    `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fiscal period is visible to',
+    PRIMARY KEY (`fiscal_period_id`),
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `ledger_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the ledger applies to',
+    `fiscal_period_id` INT(11) DEFAULT NULL COMMENT 'fiscal period the ledger applies to',
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the ledger',
     `description` longtext DEFAULT '' COMMENT 'description for the ledger',
     `code` VARCHAR(255) DEFAULT '' COMMENT 'code for the ledger',
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `os_warning_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a warning for overspend',
     `os_limit_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a block on the ledger for overspend',
     PRIMARY KEY (`ledger_id`),
-    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_group } } (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS { { fund_group } } (
 CREATE TABLE IF NOT EXISTS { { funds } } (
     `fund_id` INT(11) NOT NULL AUTO_INCREMENT,
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund applies to',
-    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund applies to',
+    `fiscal_period_id` INT(11) DEFAULT NULL COMMENT 'fiscal period the fund applies to',
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the fund',
     `description` longtext DEFAULT '' COMMENT 'description for the fund',
     `fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the fund',
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
     PRIMARY KEY (`fund_id`),
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fund_group_id`) REFERENCES { { fund_group } } (`fund_group_id`) ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS { { sub_funds } } (
     `sub_fund_id` INT(11) NOT NULL AUTO_INCREMENT,
     `fund_id` INT(11) DEFAULT NULL COMMENT 'parent fund for the sub fund',
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the sub_fund applies to',
-    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the sub_fund applies to',
+    `fiscal_period_id` INT(11) DEFAULT NULL COMMENT 'fiscal period the sub_fund applies to',
     `name` VARCHAR(255) DEFAULT '' COMMENT 'name for the sub_fund',
     `description` longtext DEFAULT '' COMMENT 'description for the sub_fund',
     `sub_fund_type` VARCHAR(255) DEFAULT '' COMMENT 'type for the sub_fund',
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS { { sub_funds } } (
     PRIMARY KEY (`sub_fund_id`),
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_id` INT(11) DEFAULT NULL COMMENT 'fund the fund allocation applies to',
     `sub_fund_id` INT(11) DEFAULT NULL COMMENT 'sub fund the fund allocation applies to',
     `ledger_id` INT(11) DEFAULT NULL COMMENT 'ledger the fund allocation applies to',
-    `fiscal_yr_id` INT(11) DEFAULT NULL COMMENT 'fiscal year the fund allocation applies to',
+    `fiscal_period_id` INT(11) DEFAULT NULL COMMENT 'fiscal period the fund allocation applies to',
     `allocation_amount` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount for the allocation',
     `reference` VARCHAR(255) DEFAULT '' COMMENT 'allocation reference',
     `note` longtext DEFAULT '' COMMENT 'any notes associated to the allocation',
@@ -103,6 +103,6 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     FOREIGN KEY (`sub_fund_id`) REFERENCES { { sub_funds } } (`sub_fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`fiscal_yr_id`) REFERENCES { { fiscal_year } } (`fiscal_yr_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;

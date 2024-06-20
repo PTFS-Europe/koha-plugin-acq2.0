@@ -1,15 +1,15 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="fiscal_yr_list">
+    <div v-else id="fiscal_period_list">
         <Toolbar>
             <ToolbarLink
-                :to="{ name: 'FiscalYearFormAdd' }"
+                :to="{ name: 'FiscalPeriodFormAdd' }"
                 icon="plus"
-                title="New fiscal year"
-                v-if="isUserPermitted('createFiscalYears')"
+                title="New fiscal period"
+                v-if="isUserPermitted('createFiscalPeriods')"
             />
         </Toolbar>
-        <div v-if="fiscal_yr_count > 0" class="page-section">
+        <div v-if="fiscal_period_count > 0" class="page-section">
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
@@ -19,7 +19,7 @@
             ></KohaTable>
         </div>
         <div v-else class="dialog message">
-            There are no fiscal years defined
+            There are no fiscal periods defined
         </div>
     </div>
 </template>
@@ -50,14 +50,14 @@ export default {
     },
     data() {
         const actionButtons = []
-        if(this.isUserPermitted('editFiscalYear')) { actionButtons.push("edit") }
-        if(this.isUserPermitted('deleteFiscalYear')) { actionButtons.push("delete") }
+        if(this.isUserPermitted('editFiscalPeriod')) { actionButtons.push("edit") }
+        if(this.isUserPermitted('deleteFiscalPeriod')) { actionButtons.push("delete") }
         return {
-            fiscal_yr_count: 0,
+            fiscal_period_count: 0,
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: "/api/v1/contrib/acquire/fiscal_years",
+                url: "/api/v1/contrib/acquire/fiscal_periods",
                 table_settings: null,
                 add_filters: true,
                 actions: {
@@ -69,42 +69,42 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getFiscalYearCount().then(() => (vm.initialized = true))
+            vm.getFiscalPeriodCount().then(() => (vm.initialized = true))
         })
     },
     methods: {
-        async getFiscalYearCount() {
+        async getFiscalPeriodCount() {
             const client = APIClient.acquisition
-            await client.fiscalYears.count().then(
+            await client.fiscalPeriods.count().then(
                 count => {
-                    this.fiscal_yr_count = count
+                    this.fiscal_period_count = count
                 },
                 error => {}
             )
         },
-        doShow: function ({ fiscal_yr_id }, dt, event) {
+        doShow: function ({ fiscal_period_id }, dt, event) {
             event.preventDefault()
-            this.$router.push({ name: "FiscalYearShow", params: { fiscal_yr_id } })
+            this.$router.push({ name: "FiscalPeriodShow", params: { fiscal_period_id } })
         },
-        doEdit: function ({ fiscal_yr_id }, dt, event) {
+        doEdit: function ({ fiscal_period_id }, dt, event) {
             this.$router.push({
-                name: "FiscalYearFormEdit",
-                params: { fiscal_yr_id },
+                name: "FiscalPeriodFormEdit",
+                params: { fiscal_period_id },
             })
         },
-        doDelete: function (fiscal_yr, dt, event) {
+        doDelete: function (fiscal_period, dt, event) {
             this.setConfirmationDialog(
                 {
-                    title: "Are you sure you want to remove this fiscal year?",
-                    message: fiscal_yr.name,
+                    title: "Are you sure you want to remove this fiscal period?",
+                    message: fiscal_period.name,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.fiscalYears.delete(fiscal_yr.fiscal_yr_id).then(
+                    client.fiscalPeriods.delete(fiscal_period.fiscal_period_id).then(
                         success => {
-                            this.setMessage(`Fiscal year deleted`, true)
+                            this.setMessage(`Fiscal period deleted`, true)
                             dt.draw()
                         },
                         error => {}
@@ -116,13 +116,13 @@ export default {
             return [
                 {
                     title: __("Code"),
-                    data: "code:fiscal_yr_id",
+                    data: "code:fiscal_period_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return (
-                            '<a href="/acquisitions/fund_management/fiscal_yr/' +
-                            row.fiscal_yr_id +
+                            '<a href="/acquisitions/fund_management/fiscal_period/' +
+                            row.fiscal_period_id +
                             '" class="show">' +
                             escape_str(`${row.code}`) +
                             "</a>"

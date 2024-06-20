@@ -46,19 +46,19 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="ledger_fiscal_yr_id" class="required"
-                                >Fiscal year:</label
+                            <label for="ledger_fiscal_period_id" class="required"
+                                >Fiscal period:</label
                             >
                             <InfiniteScrollSelect
-                                id="ledger_fiscal_yr_id"
-                                v-model="ledger.fiscal_yr_id"
-                                :selectedData="fiscal_year"
-                                dataType="fiscalYears"
-                                dataIdentifier="fiscal_yr_id"
+                                id="ledger_fiscal_period_id"
+                                v-model="ledger.fiscal_period_id"
+                                :selectedData="fiscal_period"
+                                dataType="fiscalPeriods"
+                                dataIdentifier="fiscal_period_id"
                                 label="code"
                                 apiClient="acquisition"
                                 :required="true"
-                                @update:modelValue="filterGroupsBySelectedFiscalYear($event)"
+                                @update:modelValue="filterGroupsBySelectedFiscalPeriod($event)"
                             />
                             <span class="required">Required</span>
                         </li>
@@ -125,7 +125,7 @@
                                 v-model="ledger.owner"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
-                                @update:modelValue="filterGroupsBasedOnOwner($event, ledger, fiscal_year_groups)"
+                                @update:modelValue="filterGroupsBasedOnOwner($event, ledger, fiscal_period_groups)"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
@@ -149,9 +149,9 @@
                                 :reduce="av => av.id"
                                 :options="getVisibleGroups"
                                 label="title"
-                                @update:modelValue="filterOwnersBasedOnGroup($event, ledger, fiscal_year_groups)"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, ledger, fiscal_period_groups)"
                                 multiple
-                                :disabled="fiscal_year_groups.length === 0"
+                                :disabled="fiscal_period_groups.length === 0"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -322,7 +322,7 @@ export default {
                 { description: 'Not allowed', value: 0 },
             ],
             ledger: {
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 name: '',
                 description: '',
                 code: '',
@@ -338,9 +338,9 @@ export default {
                 os_warning_sum: null,
                 os_limit_sum: null,
             },
-            fiscal_year: null,
+            fiscal_period: null,
             currencies: [],
-            fiscal_year_groups: [],
+            fiscal_period_groups: [],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -353,7 +353,7 @@ export default {
             this.getCurrencies().then(() => {
                 if(ledger_id) {
                     this.getLedger(ledger_id).then(() => {
-                        this.getFiscalYear(this.ledger.fiscal_yr_id)
+                        this.getFiscalPeriod(this.ledger.fiscal_period_id)
                     })
                 } else {
                     this.initialized = true
@@ -366,14 +366,14 @@ export default {
                 this.ledger = ledger
                 this.ledger.oe_warning_percent = ledger.oe_warning_percent * 100
                 this.ledger.visible_to = this.formatLibraryGroupIds(ledger.visible_to)
-                this.filterGroupsBySelectedFiscalYear(ledger.fiscal_yr_id)
+                this.filterGroupsBySelectedFiscalPeriod(ledger.fiscal_period_id)
             })
         },
-        async getFiscalYear(fiscal_yr_id) {
+        async getFiscalPeriod(fiscal_period_id) {
             const client = APIClient.acquisition
-            await client.fiscalYears.get(fiscal_yr_id).then(
-                fiscal_year => {
-                    this.fiscal_year = fiscal_year
+            await client.fiscalPeriods.get(fiscal_period_id).then(
+                fiscal_period => {
+                    this.fiscal_period = fiscal_period
                     this.initialized = true
                 },
                 error => {}
@@ -388,18 +388,18 @@ export default {
                 error => {}
             )
         },
-        filterGroupsBySelectedFiscalYear(e) {
+        filterGroupsBySelectedFiscalPeriod(e) {
             if(!e) {
-                this.fiscal_year_groups = []
+                this.fiscal_period_groups = []
                 this.ledger.visible_to = []
                 return
             }
-            this.getFiscalYear(e).then(() => {
-                const applicableGroups = this.formatLibraryGroupIds(this.fiscal_year.visible_to)
-                this.fiscal_year_groups = applicableGroups
+            this.getFiscalPeriod(e).then(() => {
+                const applicableGroups = this.formatLibraryGroupIds(this.fiscal_period.visible_to)
+                this.fiscal_period_groups = applicableGroups
                 this.resetOwnersAndVisibleGroups(applicableGroups)
             })
-            if(e !== this.ledger.fiscal_yr_id) {
+            if(e !== this.ledger.fiscal_period_id) {
                 this.ledger.visible_to = []
             }
         },

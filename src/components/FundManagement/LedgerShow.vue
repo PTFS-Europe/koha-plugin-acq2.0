@@ -97,7 +97,7 @@ export default {
     methods: {
         async getLedger(ledger_id) {
             const client = APIClient.acquisition
-            await client.ledgers.get(ledger_id, { "x-koha-embed": "fiscal_yr,koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations" }).then(
+            await client.ledgers.get(ledger_id, { "x-koha-embed": "fiscal_period,koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations" }).then(
                 ledger => {
                     this.ledger = ledger
                     this.initialized = true

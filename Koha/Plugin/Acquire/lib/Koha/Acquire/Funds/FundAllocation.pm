@@ -61,16 +61,16 @@ sub delete {
     return $self;
 }
 
-=head3 fiscal_yr
+=head3 fiscal_period
 
-Method to embed the fiscal year to a given fund allocation
+Method to embed the fiscal period to a given fund allocation
 
 =cut
 
-sub fiscal_yr {
+sub fiscal_period {
     my ($self) = @_;
-    my $fiscal_year_rs = $self->_result->fiscal_yr;
-    return Koha::Acquire::Funds::FiscalYear->_new_from_dbic($fiscal_year_rs);
+    my $fiscal_period_rs = $self->_result->fiscal_period;
+    return Koha::Acquire::Funds::FiscalPeriod->_new_from_dbic($fiscal_period_rs);
 }
 
 

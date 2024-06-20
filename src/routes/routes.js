@@ -12,9 +12,9 @@ import TaskShow from '../components/TaskManagement/TaskShow.vue'
 import TaskFormAdd from '../components/TaskManagement/TaskFormAdd.vue'
 
 import FundManagementHome from '../components/FundManagement/FundManagementHome.vue'
-import FiscalYearList from '../components/FundManagement/FiscalYearList.vue'
-import FiscalYearShow from '../components/FundManagement/FiscalYearShow.vue'
-import FiscalYearFormAdd from '../components/FundManagement/FiscalYearFormAdd.vue'
+import FiscalPeriodList from '../components/FundManagement/FiscalPeriodList.vue'
+import FiscalPeriodShow from '../components/FundManagement/FiscalPeriodShow.vue'
+import FiscalPeriodFormAdd from '../components/FundManagement/FiscalPeriodFormAdd.vue'
 import LedgerList from '../components/FundManagement/LedgerList.vue'
 import LedgerShow from '../components/FundManagement/LedgerShow.vue'
 import LedgerFormAdd from '../components/FundManagement/LedgerFormAdd.vue'
@@ -57,37 +57,37 @@ export const routes = [
                         is_navigation_item: false,
                     },
                     {
-                        path: "fiscal_year",
-                        title: "Fiscal years",
+                        path: "fiscal_period",
+                        title: "Fiscal periods",
                         is_navigation_item: false,
                         children: [
                             {
                                 path: "",
-                                component: markRaw(FiscalYearList),
-                                name: "FiscalYearList",
-                                title: "List fiscal years",
-                                permission: "manageFiscalYears"
+                                component: markRaw(FiscalPeriodList),
+                                name: "FiscalPeriodList",
+                                title: "List fiscal periods",
+                                permission: "manageFiscalPeriods"
                             },
                             {
-                                path: ":fiscal_yr_id",
-                                component: markRaw(FiscalYearShow),
-                                name: "FiscalYearShow",
-                                title: "Show fiscal year",
-                                permission: "manageFiscalYears"
+                                path: ":fiscal_period_id",
+                                component: markRaw(FiscalPeriodShow),
+                                name: "FiscalPeriodShow",
+                                title: "Show fiscal period",
+                                permission: "manageFiscalPeriods"
                             },
                             {
                                 path: "add",
-                                component: markRaw(FiscalYearFormAdd),
-                                name: "FiscalYearFormAdd",
-                                title: "Add fiscal year",
-                                permission: "createFiscalYears"
+                                component: markRaw(FiscalPeriodFormAdd),
+                                name: "FiscalPeriodFormAdd",
+                                title: "Add fiscal period",
+                                permission: "createFiscalPeriods"
                             },
                             {
-                                path: "edit/:fiscal_yr_id",
-                                component: markRaw(FiscalYearFormAdd),
-                                name: "FiscalYearFormEdit",
-                                title: "Edit fiscal year",
-                                permission: "editFiscalYear"
+                                path: "edit/:fiscal_period_id",
+                                component: markRaw(FiscalPeriodFormAdd),
+                                name: "FiscalPeriodFormEdit",
+                                title: "Edit fiscal period",
+                                permission: "editFiscalPeriod"
                             }
                         ]
                     },

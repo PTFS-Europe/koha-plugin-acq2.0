@@ -143,7 +143,7 @@ export default {
                 { description: 'Inactive', value: 0 },
             ],
             sub_fund: {
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null,
                 fund_id: null,
                 name: '',
@@ -179,7 +179,7 @@ export default {
                 this.fund = fund
                 this.sub_fund.fund_id = fund.fund_id
                 this.sub_fund.ledger_id = fund.ledger_id
-                this.sub_fund.fiscal_yr_id = fund.fiscal_yr_id
+                this.sub_fund.fiscal_period_id = fund.fiscal_period_id
                 this.sub_fund.sub_fund_type = fund.fund_type
                 this.sub_fund.currency = fund.currency
                 this.sub_fund.owner = fund.owner
