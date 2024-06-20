@@ -1,13 +1,13 @@
 use utf8;
 
-package Koha::Schema::Result::KohaPluginAcquireFiscalYear;
+package Koha::Schema::Result::KohaPluginAcquireFiscalPeriod;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::KohaPluginAcquireFiscalYear
+Koha::Schema::Result::KohaPluginAcquireFiscalPeriod
 
 =cut
 
@@ -16,15 +16,15 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<koha_plugin_acquire_fiscal_year>
+=head1 TABLE: C<koha_plugin_acquire_fiscal_period>
 
 =cut
 
-__PACKAGE__->table("koha_plugin_acquire_fiscal_year");
+__PACKAGE__->table("koha_plugin_acquire_fiscal_period");
 
 =head1 ACCESSORS
 
-=head2 fiscal_yr_id
+=head2 fiscal_period_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -36,7 +36,7 @@ __PACKAGE__->table("koha_plugin_acquire_fiscal_year");
   default_value: ''''
   is_nullable: 1
 
-description for the fiscal year
+description for the fiscal period
 
 =head2 code
 
@@ -45,7 +45,7 @@ description for the fiscal year
   is_nullable: 1
   size: 255
 
-code for the fiscal year
+code for the fiscal period
 
 =head2 start_date
 
@@ -69,7 +69,7 @@ end date of the event
   default_value: 1
   is_nullable: 1
 
-is the fiscal year currently active
+is the fiscal period currently active
 
 =head2 last_updated
 
@@ -78,7 +78,7 @@ is the fiscal year currently active
   default_value: current_timestamp
   is_nullable: 1
 
-time of the last update to the fiscal year
+time of the last update to the fiscal period
 
 =head2 owner
 
@@ -86,7 +86,7 @@ time of the last update to the fiscal year
   is_foreign_key: 1
   is_nullable: 1
 
-owner of the fiscal year
+owner of the fiscal period
 
 =head2 visible_to
 
@@ -95,12 +95,12 @@ owner of the fiscal year
   is_nullable: 1
   size: 255
 
-library groups the fiscal year is visible to
+library groups the fiscal period is visible to
 
 =cut
 
 __PACKAGE__->add_columns(
-    "fiscal_yr_id",
+    "fiscal_period_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
     "description",
     { data_type => "longtext", default_value => "''", is_nullable => 1 },
@@ -129,13 +129,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</fiscal_yr_id>
+=item * L</fiscal_period_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("fiscal_yr_id");
+__PACKAGE__->set_primary_key("fiscal_period_id");
 
 =head1 RELATIONS
 
@@ -150,7 +150,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_fund_allocations",
     "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -165,7 +165,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_funds",
     "Koha::Schema::Result::KohaPluginAcquireFund",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -180,7 +180,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireLedger>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_ledgers",
     "Koha::Schema::Result::KohaPluginAcquireLedger",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -195,7 +195,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_sub_funds",
     "Koha::Schema::Result::KohaPluginAcquireSubFund",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -223,11 +223,11 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DwwXDrs3okPHmPALZRxCng
 
 sub koha_object_class {
-    'Koha::Acquire::Fund::FiscalYear';
+    'Koha::Acquire::Fund::FiscalPeriod';
 }
 
 sub koha_objects_class {
-    'Koha::Acquire::Fund::FiscalYears';
+    'Koha::Acquire::Fund::FiscalPeriods';
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

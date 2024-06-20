@@ -1,4 +1,4 @@
-package Koha::Plugin::Acquire::Controllers::FundManagement::FiscalYears;
+package Koha::Plugin::Acquire::Controllers::FundManagement::FiscalPeriods;
 
 # Copyright 2024 PTFS Europe
 
@@ -23,8 +23,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
 use Try::Tiny;
 
-use Koha::Acquire::Funds::FiscalYear;
-use Koha::Acquire::Funds::FiscalYears;
+use Koha::Acquire::Funds::FiscalPeriod;
+use Koha::Acquire::Funds::FiscalPeriods;
 
 use Koha::Plugin::Acquire::Controllers::ControllerUtils;
 
@@ -42,14 +42,14 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $fiscal_years_set = Koha::Acquire::Funds::FiscalYears->new;
-        my $fiscal_years     = $c->objects->search($fiscal_years_set);
+        my $fiscal_periods_set = Koha::Acquire::Funds::FiscalPeriods->new;
+        my $fiscal_periods     = $c->objects->search($fiscal_periods_set);
 
-        my $filtered_fiscal_years = Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group({
-            dataset => $fiscal_years
+        my $filtered_fiscal_periods = Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group({
+            dataset => $fiscal_periods
         });
 
-        return $c->render( status => 200, openapi => $filtered_fiscal_years );
+        return $c->render( status => 200, openapi => $filtered_fiscal_periods );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -64,22 +64,22 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $fiscal_years_set = Koha::Acquire::Funds::FiscalYears->new;
-        my $fiscal_year      = $c->objects->find( $fiscal_years_set, $c->param('id') );
+        my $fiscal_periods_set = Koha::Acquire::Funds::FiscalPeriods->new;
+        my $fiscal_period      = $c->objects->find( $fiscal_periods_set, $c->param('id') );
 
-        unless ($fiscal_year) {
+        unless ($fiscal_period) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "Fiscal year not found" }
+                openapi => { error => "Fiscal period not found" }
             );
         }
 
-        $fiscal_year =
-            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fiscal_year } );
+        $fiscal_period =
+            Koha::Plugin::Acquire::Controllers::ControllerUtils->add_lib_group_data( { data => $fiscal_period } );
 
         return $c->render(
             status  => 200,
-            openapi => $fiscal_year
+            openapi => $fiscal_period
         );
     } catch {
         $c->unhandled_exception($_);
@@ -100,12 +100,12 @@ sub add {
                 my $body = $c->req->json;
                 delete $body->{lib_groups} if $body->{lib_groups};
 
-                my $fiscal_year = Koha::Acquire::Funds::FiscalYear->new_from_api($body)->store;
+                my $fiscal_period = Koha::Acquire::Funds::FiscalPeriod->new_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_period_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $fiscal_year->to_api
+                    openapi => $fiscal_period->to_api
                 );
             }
         );
@@ -116,19 +116,19 @@ sub add {
 
 =head3 update
 
-Controller function that handles updating a Koha::Acquire::Funds::FiscalYear object
+Controller function that handles updating a Koha::Acquire::Funds::FiscalPeriod object
 
 =cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( $c->param('id') );
+    my $fiscal_period = Koha::Acquire::Funds::FiscalPeriods->find( $c->param('id') );
 
-    unless ($fiscal_year) {
+    unless ($fiscal_period) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fiscal year not found" }
+            openapi => { error => "Fiscal period not found" }
         );
     }
 
@@ -141,17 +141,17 @@ sub update {
                 delete $body->{lib_groups} if $body->{lib_groups};
                 delete $body->{last_updated} if $body->{last_updated};
 
-                $fiscal_year->set_from_api($body)->store;
+                $fiscal_period->set_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_year->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_period_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $fiscal_year->to_api
+                    openapi => $fiscal_period->to_api
                 );
             }
         );
     } catch {
-        my $to_api_mapping = Koha::Acquire::Funds::FiscalYear->new->to_api_mapping;
+        my $to_api_mapping = Koha::Acquire::Funds::FiscalPeriod->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
@@ -183,16 +183,16 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $fiscal_year = Koha::Acquire::Funds::FiscalYears->find( $c->param('id') );
-    unless ($fiscal_year) {
+    my $fiscal_period = Koha::Acquire::Funds::FiscalPeriods->find( $c->param('id') );
+    unless ($fiscal_period) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fiscal year not found" }
+            openapi => { error => "Fiscal period not found" }
         );
     }
 
     return try {
-        $fiscal_year->delete;
+        $fiscal_period->delete;
         return $c->render(
             status  => 204,
             openapi => q{}

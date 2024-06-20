@@ -146,7 +146,7 @@ export default {
             const whichParam = sub_fund_id ? 'sub_fund_id' : 'fund_id'
             const whichClient = sub_fund_id ? 'subFunds' : 'funds'
 
-            let embed = "fiscal_yr,ledger,koha_plugin_acquire_fund_allocations"
+            let embed = "fiscal_period,ledger,koha_plugin_acquire_fund_allocations"
             if(sub_fund_id) {
                 embed += ",fund"
             }

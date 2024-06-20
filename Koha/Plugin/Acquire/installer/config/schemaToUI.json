@@ -43,7 +43,7 @@
             "type": "string"
         }
     },
-    "fiscalYear": {
+    "fiscalPeriod": {
         "code": {
             "label": "Code",
             "type": "string"
@@ -100,12 +100,12 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
-            "label": "Fiscal year",
+        "fiscal_period_id": {
+            "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
-            "linkSlug": "fiscal_year",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
+            "linkSlug": "fiscal_period",
             "linkName": "code"
         },
         "owner": {
@@ -182,12 +182,12 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
-            "label": "Fiscal year",
+        "fiscal_period_id": {
+            "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
-            "linkSlug": "fiscal_year",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
+            "linkSlug": "fiscal_period",
             "linkName": "code"
         },
         "ledger_id": {
@@ -259,12 +259,12 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
-            "label": "Fiscal year",
+        "fiscal_period_id": {
+            "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
-            "linkSlug": "fiscal_year",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
+            "linkSlug": "fiscal_period",
             "linkName": "code"
         },
         "ledger_id": {

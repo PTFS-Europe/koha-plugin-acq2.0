@@ -149,7 +149,7 @@ sub update {
                 my $body = $c->req->json;
 
                 delete $body->{lib_groups}   if $body->{lib_groups};
-                delete $body->{fiscal_year}  if $body->{fiscal_year};
+                delete $body->{fiscal_period}  if $body->{fiscal_period};
                 delete $body->{last_updated} if $body->{last_updated};
 
                 $fund_allocation->set_from_api($body)->store;
@@ -252,7 +252,7 @@ sub transfer {
                         fund_id           => $fund_id_from,
                         sub_fund_id       => $body->{sub_fund_id_from},
                         ledger_id         => $fund_transferring_from->ledger_id,
-                        fiscal_yr_id      => $fund_transferring_from->fiscal_yr_id,
+                        fiscal_period_id      => $fund_transferring_from->fiscal_period_id,
                         allocation_amount => -$body->{transfer_amount},
                         reference         => $body->{reference},
                         note              => $note_from,
@@ -267,7 +267,7 @@ sub transfer {
                         fund_id           => $fund_id_to,
                         sub_fund_id       => $body->{sub_fund_id_to},
                         ledger_id         => $fund_transferring_to->ledger_id,
-                        fiscal_yr_id      => $fund_transferring_to->fiscal_yr_id,
+                        fiscal_period_id      => $fund_transferring_to->fiscal_period_id,
                         allocation_amount => $body->{transfer_amount},
                         reference         => $body->{reference},
                         note              => $note_to,

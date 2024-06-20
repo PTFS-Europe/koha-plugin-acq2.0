@@ -1,4 +1,4 @@
-package Koha::Acquire::Funds::FiscalYear;
+package Koha::Acquire::Funds::FiscalPeriod;
 
 # Copyright 2024 PTFS Europe
 
@@ -55,7 +55,7 @@ sub delete {
 
 =head3 cascade_to_ledgers
 
-This method cascades changes to the values of the "visible_to" and "status" properties to all ledgers attached to this fiscal year
+This method cascades changes to the values of the "visible_to" and "status" properties to all ledgers attached to this fiscal period
 
 =cut
 
@@ -86,7 +86,7 @@ sub cascade_to_ledgers {
 
 =head3 koha_plugin_acquire_ledgers
 
-Method to embed ledgers to the fiscal year
+Method to embed ledgers to the fiscal period
 
 =cut
 
@@ -99,7 +99,7 @@ sub koha_plugin_acquire_ledgers {
 
 =head3 owner
 
-Method to embed the owner to a given fiscal year
+Method to embed the owner to a given fiscal period
 
 =cut
 
@@ -117,7 +117,7 @@ sub owner {
 =cut
 
 sub _type {
-    return 'KohaPluginAcquireFiscalYear';
+    return 'KohaPluginAcquireFiscalPeriod';
 }
 
 1;

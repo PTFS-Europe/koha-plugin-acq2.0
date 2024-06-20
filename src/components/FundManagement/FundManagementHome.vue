@@ -1,10 +1,10 @@
 <template>
     <Toolbar>
         <ToolbarLink
-            :to="{ name: 'FiscalYearList' }"
+            :to="{ name: 'FiscalPeriodList' }"
             icon="pen-to-square"
-            title="Manage fiscal years"
-            v-if="isUserPermitted('manageFiscalYears')"
+            title="Manage fiscal periods"
+            v-if="isUserPermitted('manageFiscalPeriods')"
         />
         <ToolbarLink
             :to="{ name: 'LedgerList' }"
@@ -116,15 +116,15 @@
                     </v-select>
                 </div>
                 <div class="filter-grid-cell">
-                    <label for="fiscal_year" class="filter-label"
-                        >Fiscal year:</label
+                    <label for="fiscal_period" class="filter-label"
+                        >Fiscal period:</label
                     >
                     <InfiniteScrollSelect
-                        id="fiscal_year"
-                        v-model="filters.fiscal_yr_id"
+                        id="fiscal_period"
+                        v-model="filters.fiscal_period_id"
                         :selectedData="null"
-                        dataType="fiscalYears"
-                        dataIdentifier="fiscal_yr_id"
+                        dataType="fiscalPeriods"
+                        dataIdentifier="fiscal_period_id"
                         label="code"
                         apiClient="acquisition"
                         :filters="filterLimitations"
@@ -239,7 +239,7 @@ export default {
                 fund_type: null,
                 fund_group: null,
                 owner: null,
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null
             },
             statusOptions: [
@@ -327,7 +327,7 @@ export default {
                 status: null,
                 fund_type: null,
                 owner: null,
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null
             }
         }
