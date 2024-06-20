@@ -27,9 +27,9 @@ BEGIN {
     require Koha::Schema::Result::KohaPluginAcquireWorkflowTask;
     Koha::Schema->register_class( KohaPluginAcquireWorkflowTask => 'Koha::Schema::Result::KohaPluginAcquireWorkflowTask' );
 
-    require Koha::Acquire::Funds::FiscalYears;
-    require Koha::Schema::Result::KohaPluginAcquireFiscalYear;
-    Koha::Schema->register_class( KohaPluginAcquireFiscalYear => 'Koha::Schema::Result::KohaPluginAcquireFiscalYear' );
+    require Koha::Acquire::Funds::FiscalPeriods;
+    require Koha::Schema::Result::KohaPluginAcquireFiscalPeriod;
+    Koha::Schema->register_class( KohaPluginAcquireFiscalPeriod => 'Koha::Schema::Result::KohaPluginAcquireFiscalPeriod' );
 
     require Koha::Acquire::Funds::Ledgers;
     require Koha::Schema::Result::KohaPluginAcquireLedger;
@@ -99,7 +99,7 @@ sub install {
                 table_name_mappings => {
                     settings        => $self->get_qualified_table_name('settings'),
                     workflow_tasks  => $self->get_qualified_table_name('workflow_tasks'),
-                    fiscal_year     => $self->get_qualified_table_name('fiscal_year'),
+                    fiscal_period     => $self->get_qualified_table_name('fiscal_period'),
                     ledgers         => $self->get_qualified_table_name('ledgers'),
                     funds           => $self->get_qualified_table_name('funds'),
                     sub_funds       => $self->get_qualified_table_name('sub_funds'),

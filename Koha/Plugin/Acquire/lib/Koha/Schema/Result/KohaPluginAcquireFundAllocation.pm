@@ -60,7 +60,7 @@ ledger the fund allocation applies to
   is_foreign_key: 1
   is_nullable: 1
 
-fiscal year the fund allocation applies to
+fiscal period the fund allocation applies to
 
 =head2 allocation_amount
 
@@ -190,13 +190,13 @@ __PACKAGE__->set_primary_key("fund_allocation_id");
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalPeriod>
 
 =cut
 
 __PACKAGE__->belongs_to(
     "fiscal_yr",
-    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalPeriod",
     { fiscal_yr_id => "fiscal_yr_id" },
     {
         is_deferrable => 1,

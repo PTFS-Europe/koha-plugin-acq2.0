@@ -36,7 +36,7 @@ __PACKAGE__->table("koha_plugin_acquire_ledgers");
   is_foreign_key: 1
   is_nullable: 1
 
-fiscal year the ledger applies to
+fiscal period the ledger applies to
 
 =head2 name
 
@@ -266,13 +266,13 @@ __PACKAGE__->set_primary_key("ledger_id");
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalPeriod>
 
 =cut
 
 __PACKAGE__->belongs_to(
     "fiscal_yr",
-    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalPeriod",
     { fiscal_yr_id => "fiscal_yr_id" },
     {
         is_deferrable => 1,
@@ -352,11 +352,11 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::Acquire::Fund::FiscalYear';
+    'Koha::Acquire::Fund::FiscalPeriod';
 }
 
 sub koha_objects_class {
-    'Koha::Acquire::Fund::FiscalYears';
+    'Koha::Acquire::Fund::FiscalPeriods';
 }
 
 

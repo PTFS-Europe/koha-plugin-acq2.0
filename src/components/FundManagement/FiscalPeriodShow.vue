@@ -3,29 +3,29 @@
     <div v-else id="fiscal_yrs_show">
         <Toolbar>
             <ToolbarLink
-                :to="{ name: 'FiscalYearList' }"
+                :to="{ name: 'FiscalPeriodList' }"
                 icon="xmark"
                 title="Close"
             />
             <ToolbarLink
-                :to="{ name: 'FiscalYearFormEdit', params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id } }"
+                :to="{ name: 'FiscalPeriodFormEdit', params: { fiscal_yr_id: fiscal_yr.fiscal_yr_id } }"
                 icon="pencil"
                 title="Edit"
-                v-if="isUserPermitted('editFiscalYear')"
+                v-if="isUserPermitted('editFiscalPeriod')"
             />
             <ToolbarButton
                 icon="trash"
                 title="Delete"
                 @clicked="delete_fiscal_yr(fiscal_yr.fiscal_yr_id, fiscal_yr.code)"
-                v-if="isUserPermitted('deleteFiscalYear')"
+                v-if="isUserPermitted('deleteFiscalPeriod')"
             />
         </Toolbar>
-        <h2>{{ "Fiscal year " + fiscal_yr.fiscal_yr_id }}</h2>
+        <h2>{{ "Fiscal period " + fiscal_yr.fiscal_yr_id }}</h2>
         <div style="display:flex;">
             <DisplayDataFields 
                 :data="fiscal_yr"
-                homeRoute="FiscalYearList"
-                dataType="fiscalYear"
+                homeRoute="FiscalPeriodList"
+                dataType="fiscalPeriod"
                 :showClose="false"
             />
             <div class="page-section filler"></div>
@@ -96,13 +96,13 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.fiscal_yr = vm.getFiscalYear(to.params.fiscal_yr_id)
+            vm.fiscal_yr = vm.getFiscalPeriod(to.params.fiscal_yr_id)
         })
     },
     methods: {
-        async getFiscalYear(fiscal_yr_id) {
+        async getFiscalPeriod(fiscal_yr_id) {
             const client = APIClient.acquisition
-            await client.fiscalYears.get(fiscal_yr_id, { "x-koha-embed": "owner" }).then(
+            await client.fiscalPeriods.get(fiscal_yr_id, { "x-koha-embed": "owner" }).then(
                 fiscal_yr => {
                     this.fiscal_yr = fiscal_yr
                     this.initialized = true
@@ -113,17 +113,17 @@ export default {
         delete_fiscal_yr: function (fiscal_yr_id, fiscal_yr_code) {
             this.setConfirmationDialog(
                 {
-                    title: "Are you sure you want to remove this fiscal year?",
+                    title: "Are you sure you want to remove this fiscal period?",
                     message: fiscal_yr_code,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.fiscalYears.delete(fiscal_yr_id).then(
+                    client.fiscalPeriods.delete(fiscal_yr_id).then(
                         success => {
-                            this.setMessage("Fiscal year deleted")
-                            this.$router.push({ name: "FiscalYearList" })
+                            this.setMessage("Fiscal period deleted")
+                            this.$router.push({ name: "FiscalPeriodList" })
                         },
                         error => {}
                     )

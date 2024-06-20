@@ -1,4 +1,4 @@
-package Koha::Acquire::Funds::FiscalYears;
+package Koha::Acquire::Funds::FiscalPeriods;
 
 # Copyright 2024 PTFS Europe
 
@@ -23,7 +23,7 @@ use base qw(Koha::Objects);
 use Mojo::JSON qw(decode_json);
 use JSON       qw ( encode_json );
 
-use Koha::Acquire::Funds::FiscalYear;
+use Koha::Acquire::Funds::FiscalPeriod;
 
 =head2 Internal methods
 
@@ -32,7 +32,7 @@ use Koha::Acquire::Funds::FiscalYear;
 =cut
 
 sub _type {
-    return 'KohaPluginAcquireFiscalYear';
+    return 'KohaPluginAcquireFiscalPeriod';
 }
 
 =head3 object_class
@@ -40,7 +40,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Acquire::Funds::FiscalYear';
+    return 'Koha::Acquire::Funds::FiscalPeriod';
 }
 
 1;
