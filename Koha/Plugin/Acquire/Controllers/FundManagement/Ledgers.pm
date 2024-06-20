@@ -141,7 +141,7 @@ sub update {
                 my $body = $c->req->json;
 
                 delete $body->{lib_groups}   if $body->{lib_groups};
-                delete $body->{fiscal_year}  if $body->{fiscal_year};
+                delete $body->{fiscal_period}  if $body->{fiscal_period};
                 delete $body->{last_updated} if $body->{last_updated};
 
                 $ledger->set_from_api($body)->store;

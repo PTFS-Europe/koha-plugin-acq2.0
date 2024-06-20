@@ -1,10 +1,10 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="fiscal_year_add">
+    <div v-else id="fiscal_period_add">
         <h2 v-if="fiscal_yr.fiscal_yr_id">
-            {{ `Edit fiscal year ${fiscal_yr.fiscal_yr_id}` }}
+            {{ `Edit fiscal period ${fiscal_yr.fiscal_yr_id}` }}
         </h2>
-        <h2 v-else>New fiscal year</h2>
+        <h2 v-else>New fiscal period</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
@@ -16,7 +16,7 @@
                             <input
                                 id="fiscal_yr_code"
                                 v-model="fiscal_yr.code"
-                                placeholder="Fiscal year code"
+                                placeholder="Fiscal period code"
                                 required
                             />
                             <span class="required">Required</span>
@@ -128,7 +128,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        :to="{ name: 'FiscalYearList' }"
+                        :to="{ name: 'FiscalPeriodList' }"
                         role="button"
                         class="cancel"
                         >Cancel</router-link
@@ -198,16 +198,16 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.fiscal_yr_id) {
-                vm.getFiscalYear(to.params.fiscal_yr_id)
+                vm.getFiscalPeriod(to.params.fiscal_yr_id)
             } else {
                 vm.initialized = true
             }
         })
     },
     methods: {
-        async getFiscalYear(fiscal_yr_id) {
+        async getFiscalPeriod(fiscal_yr_id) {
             const client = APIClient.acquisition
-            client.fiscalYears.get(fiscal_yr_id).then(fiscal_yr => {
+            client.fiscalPeriods.get(fiscal_yr_id).then(fiscal_yr => {
                 this.fiscal_yr = fiscal_yr
                 this.fiscal_yr.visible_to = this.formatLibraryGroupIds(fiscal_yr.visible_to)
                 this.initialized = true
@@ -216,8 +216,8 @@ export default {
         onSubmit(e) {
             e.preventDefault()
             
-            if(!this.isUserPermitted('createFiscalYears')) {
-                setWarning('You do not have the required permissions to create fiscal years.')
+            if(!this.isUserPermitted('createFiscalPeriods')) {
+                setWarning('You do not have the required permissions to create fiscal periods.')
                 return
             }
 
@@ -231,21 +231,21 @@ export default {
 
             if(fiscal_yr_id) {
                 const acq_client = APIClient.acquisition
-                acq_client.fiscalYears
+                acq_client.fiscalPeriods
                     .update(fiscal_yr, fiscal_yr_id).then(
                         success => {
-                            setMessage("Fiscal year updated")
-                            this.$router.push({ name: "FiscalYearList" })
+                            setMessage("Fiscal period updated")
+                            this.$router.push({ name: "FiscalPeriodList" })
                         },
                         error => {}
                     )
             } else {
                 const acq_client = APIClient.acquisition
-                acq_client.fiscalYears
+                acq_client.fiscalPeriods
                     .create(fiscal_yr).then(
                         success => {
-                            setMessage("Fiscal year created")
-                            this.$router.push({ name: "FiscalYearList" })
+                            setMessage("Fiscal period created")
+                            this.$router.push({ name: "FiscalPeriodList" })
                         },
                         error => {}
                     )

@@ -109,20 +109,20 @@ sub update_ledger_total {
 
 =head3 fiscal_yr
 
-Method to embed the fiscal year to a given ledger
+Method to embed the fiscal period to a given ledger
 
 =cut
 
 sub fiscal_yr {
     my ($self) = @_;
-    my $fiscal_year_rs = $self->_result->fiscal_yr;
-    return Koha::Acquire::Funds::FiscalYear->_new_from_dbic($fiscal_year_rs);
+    my $fiscal_period_rs = $self->_result->fiscal_yr;
+    return Koha::Acquire::Funds::FiscalPeriod->_new_from_dbic($fiscal_period_rs);
 }
 
 
 =head3 koha_plugin_acquire_funds
 
-Method to embed funds to the fiscal year
+Method to embed funds to the fiscal period
 
 =cut
 

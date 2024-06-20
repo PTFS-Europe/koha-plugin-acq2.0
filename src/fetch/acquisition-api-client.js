@@ -53,15 +53,15 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.delete({
                     endpoint: "tasks/" + id,
                 }),
-            create: fiscal_year =>
+            create: fiscal_period =>
                 this.post({
                     endpoint: "tasks",
-                    body: fiscal_year,
+                    body: fiscal_period,
                 }),
-            update: (fiscal_year, id) =>
+            update: (fiscal_period, id) =>
                 this.put({
                     endpoint: "tasks/" + id,
-                    body: fiscal_year,
+                    body: fiscal_period,
                 }),
             count: (query = {}) =>
                 this.count({
@@ -76,18 +76,18 @@ export class AcquisitionAPIClient extends HttpClient {
         };
     }
 
-    get fiscalYears() {
+    get fiscalPeriods() {
         return {
             get: (id, headers) =>
                 this.get({
-                    endpoint: "fiscal_years/" + id,
+                    endpoint: "fiscal_periods/" + id,
                     ...(headers && {
                         headers
                     })
                 }),
             getAll: (query, params, headers) =>
                 this.getAll({
-                    endpoint: "fiscal_years",
+                    endpoint: "fiscal_periods",
                     query,
                     params,
                     ...(headers && {
@@ -96,22 +96,22 @@ export class AcquisitionAPIClient extends HttpClient {
                 }),
             delete: id =>
                 this.delete({
-                    endpoint: "fiscal_years/" + id,
+                    endpoint: "fiscal_periods/" + id,
                 }),
-            create: fiscal_year =>
+            create: fiscal_period =>
                 this.post({
-                    endpoint: "fiscal_years",
-                    body: fiscal_year,
+                    endpoint: "fiscal_periods",
+                    body: fiscal_period,
                 }),
-            update: (fiscal_year, id) =>
+            update: (fiscal_period, id) =>
                 this.put({
-                    endpoint: "fiscal_years/" + id,
-                    body: fiscal_year,
+                    endpoint: "fiscal_periods/" + id,
+                    body: fiscal_period,
                 }),
             count: (query = {}) =>
                 this.count({
                     endpoint:
-                        "fiscal_years?" +
+                        "fiscal_periods?" +
                         new URLSearchParams({
                             _page: 1,
                             _per_page: 1,

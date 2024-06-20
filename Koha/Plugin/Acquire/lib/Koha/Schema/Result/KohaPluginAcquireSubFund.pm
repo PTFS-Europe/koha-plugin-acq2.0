@@ -52,7 +52,7 @@ ledger the sub_fund applies to
   is_foreign_key: 1
   is_nullable: 1
 
-fiscal year the sub_fund applies to
+fiscal period the sub_fund applies to
 
 =head2 name
 
@@ -213,13 +213,13 @@ __PACKAGE__->set_primary_key("sub_fund_id");
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalYear>
+Related object: L<Koha::Schema::Result::KohaPluginAcquireFiscalPeriod>
 
 =cut
 
 __PACKAGE__->belongs_to(
     "fiscal_yr",
-    "Koha::Schema::Result::KohaPluginAcquireFiscalYear",
+    "Koha::Schema::Result::KohaPluginAcquireFiscalPeriod",
     { fiscal_yr_id => "fiscal_yr_id" },
     {
         is_deferrable => 1,
