@@ -26,7 +26,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             const { loggedInUser: { loggedInBranch, branchcode } } = this.user
             return loggedInBranch ? loggedInBranch : branchcode
         },
-        mapSubGroups(group, filteredGroups, branch, groupsToCheck) {
+        _mapSubGroups(group, filteredGroups, branch, groupsToCheck) {
             let matched = false
             if (group.libraries.find(lib => lib.branchcode === branch)) {
                 if(groupsToCheck && groupsToCheck.length && groupsToCheck.includes(group.id)) {
@@ -40,7 +40,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             }
             if(group.sub_groups && group.sub_groups.length) {
                 group.sub_groups.forEach(grp => {
-                    const result = this.mapSubGroups(grp, filteredGroups, branch, groupsToCheck)
+                    const result = this._mapSubGroups(grp, filteredGroups, branch, groupsToCheck)
                     matched = matched ? matched : result
                 })
             }
@@ -50,9 +50,9 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             const branch = this.determineBranch(branchcode)
             const filteredGroups = {}
             this.libraryGroups.forEach(group => {
-                const matched = this.mapSubGroups(group, filteredGroups, branch, groupsToCheck)
+                const matched = this._mapSubGroups(group, filteredGroups, branch, groupsToCheck)
                 // If a sub group has been matched but the parent level group did not, then we should add the parent level group as well
-                // This happens when a parent group doesn't have nay branchcodes assigned to it, only sub groups
+                // This happens when a parent group doesn't have any branchcodes assigned to it, only sub groups
                 if (matched && !Object.keys(filteredGroups).find(id => id === group.id)) {
                     filteredGroups[group.id] = group
                 }
@@ -61,7 +61,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 return filteredGroups[key]
             }).sort((a,b) => a.id - b.id)
         },
-        findBranchcodesInGroup(groups) {
+        _findBranchCodesInGroup(groups) {
             const codes = []
             groups.forEach(group => {
                 group.libraries.forEach(lib => {
@@ -141,8 +141,8 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
                 this.owners = permittedUsers
                 data.owner = null
             } else {
-                const groups = libGroups.filter(group => e.includes(group.id))
-                const branchcodes = this.findBranchcodesInGroup(groups)
+                const filteredGroups = libGroups.filter(group => e.includes(group.id))
+                const branchcodes = this._findBranchCodesInGroup(filteredGroups)
                 this.owners = this.filterUsersByPermissions(this.currentPermission, false, branchcodes)
             }
         },
