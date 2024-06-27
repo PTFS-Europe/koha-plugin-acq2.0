@@ -1,9 +1,9 @@
 <template>
     <div v-if="initialized">
         <h1>{{ moduleTitle }} settings</h1>
-        <form @submit="onSubmit($event)" v-if="settingsRenderingData.length">
+        <form @submit="onSubmit($event)" v-if="settingsRenderingData.length" id="settingsForm">
             <fieldset class="rows">
-                <ol>
+                <ol id="settingsList">
                     <SettingFormElement
                         v-for="(item, key) in settingsRenderingData"
                         v-bind:key="key"
