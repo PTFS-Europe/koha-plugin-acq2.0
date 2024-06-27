@@ -7,8 +7,9 @@ module.exports = defineConfig({
     },
     experimentalStudio: true,
     baseUrl: "http://localhost:8081",
-    specPattern: "tests/cypress/e2e/**/*.*",
+    specPattern: "tests/cypress/specs/**/*.*",
     supportFile: "tests/cypress/support/e2e.js",
-    video: false
+    video: false,
+    screenshotOnRunFailure: false
   },
 });

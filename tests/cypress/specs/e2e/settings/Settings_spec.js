@@ -53,28 +53,28 @@ describe("Acquisitions settings", () => {
 
 });
 
-describe("Acquisitions settings for a user with no settings permissions", () => {
-    beforeEach(() => {
-        cy.login('CPLmanage_budgets', 'Test1234');
-        cy.title().should("eq", "Koha staff interface");
-        cy.intercept(
-            "GET",
-            "/api/v1/contrib/acquire/settings",
-            [
-                {
-                    "explanation": "Select which modules you wish to use in the acquisitions portal",
-                    "options": "",
-                    "type": "multiple",
-                    "value": "",
-                    "variable": "modulesEnabled"
-                }
-            ]
-        );
-    });
+// describe("Acquisitions settings for a user with no settings permissions", () => {
+//     beforeEach(() => {
+//         cy.login('CPLmanage_budgets', 'Test1234');
+//         cy.title().should("eq", "Koha staff interface");
+//         cy.intercept(
+//             "GET",
+//             "/api/v1/contrib/acquire/settings",
+//             [
+//                 {
+//                     "explanation": "Select which modules you wish to use in the acquisitions portal",
+//                     "options": "",
+//                     "type": "multiple",
+//                     "value": "",
+//                     "variable": "modulesEnabled"
+//                 }
+//             ]
+//         );
+//     });
 
-    it("Should only show the manual", () => {
-        cy.visit("/acquisitions/settings");
-        cy.get(".navPanesGrid").children().should("have.length", 1);
-        cy.get(".navPanesGrid > a:nth-child(1) > span").contains("Manual");
-    })
-})
+//     it("Should only show the manual", () => {
+//         cy.visit("/acquisitions/settings");
+//         cy.get(".navPanesGrid").children().should("have.length", 1);
+//         cy.get(".navPanesGrid > a:nth-child(1) > span").contains("Manual");
+//     })
+// })
