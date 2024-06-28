@@ -43,559 +43,495 @@ Cypress.Commands.add('login', (username, password) => {
 cy.getLibraryGroups = () => {
     return [
         {
-            "id": 1,
             "sub_groups": [
                 {
-                    "id": 2,
                     "is_sub_group": 1,
+                    "title": "LibGroup1 SubGroupA",
                     "sub_groups": [
                         {
                             "sub_groups": [],
-                            "is_sub_group": 1,
+                            "title": "LibGroup1 SubGroupA SubGroup1",
                             "id": 3,
                             "libraries": [
                                 {
+                                    "ft_hide_patron_info": 0,
+                                    "ft_acquisitions": 0,
                                     "branchcode": "FPL",
-                                    "id": 9,
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_search_groups_staff": 0,
+                                    "ft_local_hold_group": 0,
+                                    "ft_limit_item_editing": 0,
                                     "ft_search_groups_opac": 0,
                                     "title": null,
-                                    "ft_search_groups_staff": 0,
-                                    "ft_hide_patron_info": 0,
-                                    "description": null,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "parent_id": 3,
-                                    "ft_local_hold_group": 0,
                                     "ft_local_float_group": 0,
-                                    "ft_acquisitions": 0,
-                                    "ft_limit_item_editing": 0,
-                                    "created_on": "2024-06-27 13:36:58"
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "description": null,
+                                    "parent_id": 3,
+                                    "id": 9
                                 }
                             ],
-                            "title": "LibGroup1 SubGroupA SubGroup1"
+                            "is_sub_group": 1
                         },
                         {
                             "is_sub_group": 1,
                             "sub_groups": [],
-                            "id": 4,
                             "title": "LibGroup1 SubGroupA SubGroup2",
+                            "id": 4,
                             "libraries": [
                                 {
-                                    "ft_search_groups_opac": 0,
+                                    "branchcode": "CPL",
+                                    "ft_acquisitions": 0,
                                     "ft_hide_patron_info": 0,
                                     "ft_search_groups_staff": 0,
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_local_float_group": 0,
+                                    "ft_search_groups_opac": 0,
                                     "title": null,
-                                    "branchcode": "CPL",
-                                    "id": 10,
-                                    "description": null,
-                                    "parent_id": 4,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "created_on": "2024-06-27 13:36:58",
                                     "ft_limit_item_editing": 0,
                                     "ft_local_hold_group": 0,
-                                    "ft_local_float_group": 0,
-                                    "ft_acquisitions": 0
+                                    "id": 10,
+                                    "parent_id": 4,
+                                    "description": null,
+                                    "created_on": "2024-06-28 09:26:42"
                                 }
                             ]
                         }
                     ],
                     "libraries": [
                         {
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 2,
-                            "ft_acquisitions": 0,
-                            "ft_local_float_group": 0,
-                            "ft_local_hold_group": 0,
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "branchcode": "CPL",
-                            "id": 6,
-                            "ft_search_groups_opac": 0,
-                            "title": null,
+                            "updated_on": "2024-06-28 09:26:42",
                             "ft_search_groups_staff": 0,
                             "ft_hide_patron_info": 0,
-                            "description": null
+                            "ft_acquisitions": 0,
+                            "branchcode": "CPL",
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "id": 6,
+                            "parent_id": 2,
+                            "title": null,
+                            "ft_search_groups_opac": 0,
+                            "ft_local_float_group": 0,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0
                         },
                         {
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 2,
-                            "ft_local_hold_group": 0,
-                            "ft_local_float_group": 0,
-                            "ft_acquisitions": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "ft_limit_item_editing": 0,
-                            "id": 7,
-                            "branchcode": "FPL",
-                            "ft_hide_patron_info": 0,
+                            "updated_on": "2024-06-28 09:26:42",
                             "ft_search_groups_staff": 0,
+                            "ft_hide_patron_info": 0,
+                            "ft_acquisitions": 0,
+                            "branchcode": "FPL",
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "parent_id": 2,
+                            "id": 7,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
                             "title": null,
                             "ft_search_groups_opac": 0,
-                            "description": null
+                            "ft_local_float_group": 0
                         }
                     ],
-                    "title": "LibGroup1 SubGroupA"
+                    "id": 2
                 },
                 {
-                    "id": 5,
-                    "sub_groups": [],
-                    "is_sub_group": 1,
                     "libraries": [
                         {
-                            "ft_acquisitions": 0,
-                            "ft_local_hold_group": 0,
-                            "ft_local_float_group": 0,
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 5,
-                            "description": null,
-                            "id": 8,
-                            "branchcode": "CPL",
-                            "ft_search_groups_opac": 0,
-                            "ft_search_groups_staff": 0,
                             "ft_hide_patron_info": 0,
-                            "title": null
+                            "ft_acquisitions": 0,
+                            "branchcode": "CPL",
+                            "updated_on": "2024-06-28 09:26:42",
+                            "ft_search_groups_staff": 0,
+                            "ft_search_groups_opac": 0,
+                            "title": null,
+                            "ft_local_float_group": 0,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "parent_id": 5,
+                            "id": 8
                         }
                     ],
-                    "title": "LibGroup1 SubGroupB"
+                    "id": 5,
+                    "sub_groups": [],
+                    "title": "LibGroup1 SubGroupB",
+                    "is_sub_group": 1
                 }
             ],
             "title": "LibGroup1",
             "libraries": [
                 {
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 2,
+                    "updated_on": "2024-06-28 09:26:42",
+                    "ft_search_groups_staff": 0,
+                    "ft_hide_patron_info": 0,
                     "ft_acquisitions": 0,
-                    "ft_local_float_group": 0,
-                    "ft_local_hold_group": 0,
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
                     "branchcode": "CPL",
-                    "id": 6,
-                    "ft_search_groups_opac": 0,
-                    "title": null,
-                    "ft_search_groups_staff": 0,
-                    "ft_hide_patron_info": 0,
-                    "description": null
-                },
-                {
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 2,
-                    "ft_local_hold_group": 0,
-                    "ft_local_float_group": 0,
-                    "ft_acquisitions": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "ft_limit_item_editing": 0,
-                    "id": 7,
-                    "branchcode": "FPL",
-                    "ft_hide_patron_info": 0,
-                    "ft_search_groups_staff": 0,
-                    "title": null,
-                    "ft_search_groups_opac": 0,
-                    "description": null
-                },
-                {
-                    "ft_acquisitions": 0,
-                    "ft_local_hold_group": 0,
-                    "ft_local_float_group": 0,
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 5,
+                    "created_on": "2024-06-28 09:26:42",
                     "description": null,
-                    "id": 8,
-                    "branchcode": "CPL",
+                    "id": 6,
+                    "parent_id": 2,
+                    "title": null,
                     "ft_search_groups_opac": 0,
+                    "ft_local_float_group": 0,
+                    "ft_local_hold_group": 0,
+                    "ft_limit_item_editing": 0
+                },
+                {
+                    "updated_on": "2024-06-28 09:26:42",
                     "ft_search_groups_staff": 0,
                     "ft_hide_patron_info": 0,
-                    "title": null
+                    "ft_acquisitions": 0,
+                    "branchcode": "FPL",
+                    "created_on": "2024-06-28 09:26:42",
+                    "description": null,
+                    "parent_id": 2,
+                    "id": 7,
+                    "ft_local_hold_group": 0,
+                    "ft_limit_item_editing": 0,
+                    "title": null,
+                    "ft_search_groups_opac": 0,
+                    "ft_local_float_group": 0
+                }
+            ],
+            "id": 1
+        },
+        {
+            "sub_groups": [
+                {
+                    "title": "LibGroup2 SubGroupA",
+                    "sub_groups": [
+                        {
+                            "libraries": [
+                                {
+                                    "ft_local_float_group": 0,
+                                    "ft_search_groups_opac": 0,
+                                    "title": null,
+                                    "ft_local_hold_group": 0,
+                                    "ft_limit_item_editing": 0,
+                                    "id": 25,
+                                    "parent_id": 13,
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "description": null,
+                                    "branchcode": "MPL",
+                                    "ft_hide_patron_info": 0,
+                                    "ft_acquisitions": 0,
+                                    "ft_search_groups_staff": 0,
+                                    "updated_on": "2024-06-28 09:26:42"
+                                }
+                            ],
+                            "id": 13,
+                            "sub_groups": [],
+                            "title": "LibGroup2 SubGroupA SubGroup1",
+                            "is_sub_group": 1
+                        },
+                        {
+                            "sub_groups": [],
+                            "title": "LibGroup2 SubGroupA SubGroup2",
+                            "libraries": [
+                                {
+                                    "ft_acquisitions": 0,
+                                    "ft_hide_patron_info": 0,
+                                    "branchcode": "CPL",
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_search_groups_staff": 0,
+                                    "ft_limit_item_editing": 0,
+                                    "ft_local_hold_group": 0,
+                                    "ft_search_groups_opac": 0,
+                                    "title": null,
+                                    "ft_local_float_group": 0,
+                                    "description": null,
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "id": 26,
+                                    "parent_id": 14
+                                }
+                            ],
+                            "id": 14,
+                            "is_sub_group": 1
+                        }
+                    ],
+                    "libraries": [
+                        {
+                            "updated_on": "2024-06-28 09:26:42",
+                            "ft_search_groups_staff": 0,
+                            "ft_hide_patron_info": 0,
+                            "ft_acquisitions": 0,
+                            "branchcode": "CPL",
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "parent_id": 12,
+                            "id": 19,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "ft_search_groups_opac": 0,
+                            "title": null,
+                            "ft_local_float_group": 0
+                        },
+                        {
+                            "ft_acquisitions": 0,
+                            "ft_hide_patron_info": 0,
+                            "branchcode": "MPL",
+                            "updated_on": "2024-06-28 09:26:42",
+                            "ft_search_groups_staff": 0,
+                            "ft_limit_item_editing": 0,
+                            "ft_local_hold_group": 0,
+                            "title": null,
+                            "ft_search_groups_opac": 0,
+                            "ft_local_float_group": 0,
+                            "description": null,
+                            "created_on": "2024-06-28 09:26:42",
+                            "id": 20,
+                            "parent_id": 12
+                        }
+                    ],
+                    "id": 12,
+                    "is_sub_group": 1
+                },
+                {
+                    "sub_groups": [],
+                    "title": "LibGroup2 SubGroupB",
+                    "libraries": [
+                        {
+                            "id": 21,
+                            "parent_id": 15,
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "ft_local_float_group": 0,
+                            "ft_search_groups_opac": 0,
+                            "title": null,
+                            "ft_search_groups_staff": 0,
+                            "updated_on": "2024-06-28 09:26:42",
+                            "branchcode": "CPL",
+                            "ft_hide_patron_info": 0,
+                            "ft_acquisitions": 0
+                        }
+                    ],
+                    "id": 15,
+                    "is_sub_group": 1
+                },
+                {
+                    "is_sub_group": 1,
+                    "id": 16,
+                    "libraries": [
+                        {
+                            "ft_limit_item_editing": 0,
+                            "ft_local_hold_group": 0,
+                            "ft_local_float_group": 0,
+                            "ft_search_groups_opac": 0,
+                            "title": null,
+                            "parent_id": 16,
+                            "id": 22,
+                            "description": null,
+                            "created_on": "2024-06-28 09:26:42",
+                            "branchcode": "CPL",
+                            "ft_acquisitions": 0,
+                            "ft_hide_patron_info": 0,
+                            "ft_search_groups_staff": 0,
+                            "updated_on": "2024-06-28 09:26:42"
+                        },
+                        {
+                            "description": null,
+                            "created_on": "2024-06-28 09:26:42",
+                            "id": 23,
+                            "parent_id": 16,
+                            "ft_search_groups_opac": 0,
+                            "title": null,
+                            "ft_local_float_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "ft_local_hold_group": 0,
+                            "updated_on": "2024-06-28 09:26:42",
+                            "ft_search_groups_staff": 0,
+                            "ft_acquisitions": 0,
+                            "ft_hide_patron_info": 0,
+                            "branchcode": "MPL"
+                        },
+                        {
+                            "id": 24,
+                            "parent_id": 16,
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "ft_local_float_group": 0,
+                            "title": null,
+                            "ft_search_groups_opac": 0,
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "ft_search_groups_staff": 0,
+                            "updated_on": "2024-06-28 09:26:42",
+                            "branchcode": "TPL",
+                            "ft_hide_patron_info": 0,
+                            "ft_acquisitions": 0
+                        }
+                    ],
+                    "sub_groups": [
+                        {
+                            "is_sub_group": 1,
+                            "libraries": [
+                                {
+                                    "description": null,
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "id": 27,
+                                    "parent_id": 17,
+                                    "ft_limit_item_editing": 0,
+                                    "ft_local_hold_group": 0,
+                                    "title": null,
+                                    "ft_search_groups_opac": 0,
+                                    "ft_local_float_group": 0,
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_search_groups_staff": 0,
+                                    "ft_acquisitions": 0,
+                                    "ft_hide_patron_info": 0,
+                                    "branchcode": "MPL"
+                                }
+                            ],
+                            "id": 17,
+                            "title": "LibGroup2 SubGroupC SubGroup1",
+                            "sub_groups": []
+                        },
+                        {
+                            "is_sub_group": 1,
+                            "sub_groups": [],
+                            "title": "LibGroup2 SubGroupC SubGroup2",
+                            "id": 18,
+                            "libraries": [
+                                {
+                                    "ft_limit_item_editing": 0,
+                                    "ft_local_hold_group": 0,
+                                    "ft_search_groups_opac": 0,
+                                    "title": null,
+                                    "ft_local_float_group": 0,
+                                    "description": null,
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "id": 28,
+                                    "parent_id": 18,
+                                    "ft_acquisitions": 0,
+                                    "ft_hide_patron_info": 0,
+                                    "branchcode": "CPL",
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_search_groups_staff": 0
+                                },
+                                {
+                                    "ft_hide_patron_info": 0,
+                                    "ft_acquisitions": 0,
+                                    "branchcode": "TPL",
+                                    "updated_on": "2024-06-28 09:26:42",
+                                    "ft_search_groups_staff": 0,
+                                    "ft_local_hold_group": 0,
+                                    "ft_limit_item_editing": 0,
+                                    "title": null,
+                                    "ft_search_groups_opac": 0,
+                                    "ft_local_float_group": 0,
+                                    "created_on": "2024-06-28 09:26:42",
+                                    "description": null,
+                                    "id": 29,
+                                    "parent_id": 18
+                                }
+                            ]
+                        }
+                    ],
+                    "title": "LibGroup2 SubGroupC"
+                }
+            ],
+            "title": "LibGroup2",
+            "id": 11,
+            "libraries": [
+                {
+                    "updated_on": "2024-06-28 09:26:42",
+                    "ft_search_groups_staff": 0,
+                    "ft_hide_patron_info": 0,
+                    "ft_acquisitions": 0,
+                    "branchcode": "CPL",
+                    "created_on": "2024-06-28 09:26:42",
+                    "description": null,
+                    "parent_id": 12,
+                    "id": 19,
+                    "ft_local_hold_group": 0,
+                    "ft_limit_item_editing": 0,
+                    "ft_search_groups_opac": 0,
+                    "title": null,
+                    "ft_local_float_group": 0
+                },
+                {
+                    "ft_acquisitions": 0,
+                    "ft_hide_patron_info": 0,
+                    "branchcode": "MPL",
+                    "updated_on": "2024-06-28 09:26:42",
+                    "ft_search_groups_staff": 0,
+                    "ft_limit_item_editing": 0,
+                    "ft_local_hold_group": 0,
+                    "title": null,
+                    "ft_search_groups_opac": 0,
+                    "ft_local_float_group": 0,
+                    "description": null,
+                    "created_on": "2024-06-28 09:26:42",
+                    "id": 20,
+                    "parent_id": 12
+                },
+                {
+                    "id": 24,
+                    "parent_id": 16,
+                    "created_on": "2024-06-28 09:26:42",
+                    "description": null,
+                    "ft_local_float_group": 0,
+                    "title": null,
+                    "ft_search_groups_opac": 0,
+                    "ft_local_hold_group": 0,
+                    "ft_limit_item_editing": 0,
+                    "ft_search_groups_staff": 0,
+                    "updated_on": "2024-06-28 09:26:42",
+                    "branchcode": "TPL",
+                    "ft_hide_patron_info": 0,
+                    "ft_acquisitions": 0
                 }
             ]
         },
         {
-            "title": "LibGroup2",
             "libraries": [
                 {
-                    "parent_id": 12,
-                    "updated_on": "2024-06-27 13:36:58",
-                    "created_on": "2024-06-27 13:36:58",
-                    "ft_limit_item_editing": 0,
-                    "ft_local_float_group": 0,
-                    "ft_local_hold_group": 0,
-                    "ft_acquisitions": 0,
-                    "ft_hide_patron_info": 0,
-                    "title": null,
+                    "updated_on": "2024-06-28 09:26:42",
                     "ft_search_groups_staff": 0,
-                    "ft_search_groups_opac": 0,
-                    "id": 19,
-                    "branchcode": "CPL",
-                    "description": null
-                },
-                {
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 12,
-                    "ft_local_hold_group": 0,
-                    "ft_local_float_group": 0,
-                    "ft_acquisitions": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "ft_limit_item_editing": 0,
-                    "id": 20,
-                    "branchcode": "MPL",
-                    "ft_search_groups_opac": 0,
-                    "title": null,
                     "ft_hide_patron_info": 0,
-                    "ft_search_groups_staff": 0,
-                    "description": null
-                },
-                {
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 15,
-                    "ft_local_hold_group": 0,
-                    "ft_local_float_group": 0,
                     "ft_acquisitions": 0,
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "branchcode": "CPL",
-                    "id": 21,
-                    "ft_search_groups_opac": 0,
-                    "ft_hide_patron_info": 0,
-                    "title": null,
-                    "ft_search_groups_staff": 0,
-                    "description": null
-                },
-                {
-                    "ft_local_hold_group": 0,
-                    "ft_local_float_group": 0,
-                    "ft_acquisitions": 0,
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 16,
+                    "branchcode": "FFL",
+                    "created_on": "2024-06-28 09:26:42",
                     "description": null,
-                    "branchcode": "CPL",
-                    "id": 22,
-                    "title": null,
-                    "ft_search_groups_staff": 0,
-                    "ft_hide_patron_info": 0,
-                    "ft_search_groups_opac": 0
-                },
-                {
-                    "updated_on": "2024-06-27 13:36:58",
-                    "parent_id": 16,
-                    "ft_local_hold_group": 0,
-                    "ft_acquisitions": 0,
-                    "ft_local_float_group": 0,
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "id": 23,
-                    "branchcode": "MPL",
-                    "ft_search_groups_opac": 0,
-                    "ft_hide_patron_info": 0,
-                    "ft_search_groups_staff": 0,
-                    "title": null,
-                    "description": null
-                },
-                {
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "ft_local_float_group": 0,
-                    "ft_acquisitions": 0,
-                    "ft_local_hold_group": 0,
-                    "parent_id": 16,
-                    "updated_on": "2024-06-27 13:36:58",
-                    "description": null,
-                    "ft_hide_patron_info": 0,
-                    "title": null,
-                    "ft_search_groups_staff": 0,
-                    "ft_search_groups_opac": 0,
-                    "branchcode": "TPL",
-                    "id": 24
-                }
-            ],
-            "sub_groups": [
-                {
-                    "title": "LibGroup2 SubGroupA",
-                    "libraries": [
-                        {
-                            "parent_id": 12,
-                            "updated_on": "2024-06-27 13:36:58",
-                            "created_on": "2024-06-27 13:36:58",
-                            "ft_limit_item_editing": 0,
-                            "ft_local_float_group": 0,
-                            "ft_local_hold_group": 0,
-                            "ft_acquisitions": 0,
-                            "ft_hide_patron_info": 0,
-                            "title": null,
-                            "ft_search_groups_staff": 0,
-                            "ft_search_groups_opac": 0,
-                            "id": 19,
-                            "branchcode": "CPL",
-                            "description": null
-                        },
-                        {
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 12,
-                            "ft_local_hold_group": 0,
-                            "ft_local_float_group": 0,
-                            "ft_acquisitions": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "ft_limit_item_editing": 0,
-                            "id": 20,
-                            "branchcode": "MPL",
-                            "ft_search_groups_opac": 0,
-                            "title": null,
-                            "ft_hide_patron_info": 0,
-                            "ft_search_groups_staff": 0,
-                            "description": null
-                        }
-                    ],
-                    "is_sub_group": 1,
-                    "sub_groups": [
-                        {
-                            "id": 13,
-                            "is_sub_group": 1,
-                            "sub_groups": [],
-                            "title": "LibGroup2 SubGroupA SubGroup1",
-                            "libraries": [
-                                {
-                                    "branchcode": "MPL",
-                                    "id": 25,
-                                    "ft_search_groups_staff": 0,
-                                    "title": null,
-                                    "ft_hide_patron_info": 0,
-                                    "ft_search_groups_opac": 0,
-                                    "description": null,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "parent_id": 13,
-                                    "ft_acquisitions": 0,
-                                    "ft_local_hold_group": 0,
-                                    "ft_local_float_group": 0,
-                                    "created_on": "2024-06-27 13:36:58",
-                                    "ft_limit_item_editing": 0
-                                }
-                            ]
-                        },
-                        {
-                            "title": "LibGroup2 SubGroupA SubGroup2",
-                            "libraries": [
-                                {
-                                    "ft_limit_item_editing": 0,
-                                    "created_on": "2024-06-27 13:36:58",
-                                    "ft_local_hold_group": 0,
-                                    "ft_local_float_group": 0,
-                                    "ft_acquisitions": 0,
-                                    "parent_id": 14,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "description": null,
-                                    "ft_hide_patron_info": 0,
-                                    "title": null,
-                                    "ft_search_groups_staff": 0,
-                                    "ft_search_groups_opac": 0,
-                                    "branchcode": "CPL",
-                                    "id": 26
-                                }
-                            ],
-                            "is_sub_group": 1,
-                            "sub_groups": [],
-                            "id": 14
-                        }
-                    ],
-                    "id": 12
-                },
-                {
-                    "title": "LibGroup2 SubGroupB",
-                    "libraries": [
-                        {
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 15,
-                            "ft_local_hold_group": 0,
-                            "ft_local_float_group": 0,
-                            "ft_acquisitions": 0,
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "branchcode": "CPL",
-                            "id": 21,
-                            "ft_search_groups_opac": 0,
-                            "ft_hide_patron_info": 0,
-                            "title": null,
-                            "ft_search_groups_staff": 0,
-                            "description": null
-                        }
-                    ],
-                    "id": 15,
-                    "is_sub_group": 1,
-                    "sub_groups": []
-                },
-                {
-                    "title": "LibGroup2 SubGroupC",
-                    "libraries": [
-                        {
-                            "ft_local_hold_group": 0,
-                            "ft_local_float_group": 0,
-                            "ft_acquisitions": 0,
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 16,
-                            "description": null,
-                            "branchcode": "CPL",
-                            "id": 22,
-                            "title": null,
-                            "ft_search_groups_staff": 0,
-                            "ft_hide_patron_info": 0,
-                            "ft_search_groups_opac": 0
-                        },
-                        {
-                            "updated_on": "2024-06-27 13:36:58",
-                            "parent_id": 16,
-                            "ft_local_hold_group": 0,
-                            "ft_acquisitions": 0,
-                            "ft_local_float_group": 0,
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "id": 23,
-                            "branchcode": "MPL",
-                            "ft_search_groups_opac": 0,
-                            "ft_hide_patron_info": 0,
-                            "ft_search_groups_staff": 0,
-                            "title": null,
-                            "description": null
-                        },
-                        {
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "ft_local_float_group": 0,
-                            "ft_acquisitions": 0,
-                            "ft_local_hold_group": 0,
-                            "parent_id": 16,
-                            "updated_on": "2024-06-27 13:36:58",
-                            "description": null,
-                            "ft_hide_patron_info": 0,
-                            "title": null,
-                            "ft_search_groups_staff": 0,
-                            "ft_search_groups_opac": 0,
-                            "branchcode": "TPL",
-                            "id": 24
-                        }
-                    ],
-                    "id": 16,
-                    "sub_groups": [
-                        {
-                            "title": "LibGroup2 SubGroupC SubGroup1",
-                            "libraries": [
-                                {
-                                    "created_on": "2024-06-27 13:36:58",
-                                    "ft_limit_item_editing": 0,
-                                    "ft_local_float_group": 0,
-                                    "ft_acquisitions": 0,
-                                    "ft_local_hold_group": 0,
-                                    "parent_id": 17,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "description": null,
-                                    "title": null,
-                                    "ft_search_groups_staff": 0,
-                                    "ft_hide_patron_info": 0,
-                                    "ft_search_groups_opac": 0,
-                                    "branchcode": "MPL",
-                                    "id": 27
-                                }
-                            ],
-                            "id": 17,
-                            "is_sub_group": 1,
-                            "sub_groups": []
-                        },
-                        {
-                            "title": "LibGroup2 SubGroupC SubGroup2",
-                            "libraries": [
-                                {
-                                    "branchcode": "CPL",
-                                    "id": 28,
-                                    "ft_hide_patron_info": 0,
-                                    "ft_search_groups_staff": 0,
-                                    "title": null,
-                                    "ft_search_groups_opac": 0,
-                                    "description": null,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "parent_id": 18,
-                                    "ft_local_hold_group": 0,
-                                    "ft_local_float_group": 0,
-                                    "ft_acquisitions": 0,
-                                    "ft_limit_item_editing": 0,
-                                    "created_on": "2024-06-27 13:36:58"
-                                },
-                                {
-                                    "parent_id": 18,
-                                    "updated_on": "2024-06-27 13:36:58",
-                                    "ft_limit_item_editing": 0,
-                                    "created_on": "2024-06-27 13:36:58",
-                                    "ft_acquisitions": 0,
-                                    "ft_local_hold_group": 0,
-                                    "ft_local_float_group": 0,
-                                    "title": null,
-                                    "ft_hide_patron_info": 0,
-                                    "ft_search_groups_staff": 0,
-                                    "ft_search_groups_opac": 0,
-                                    "id": 29,
-                                    "branchcode": "TPL",
-                                    "description": null
-                                }
-                            ],
-                            "id": 18,
-                            "is_sub_group": 1,
-                            "sub_groups": []
-                        }
-                    ],
-                    "is_sub_group": 1
-                }
-            ],
-            "id": 11
-        },
-        {
-            "title": "LibGroup3",
-            "libraries": [
-                {
-                    "ft_limit_item_editing": 0,
-                    "created_on": "2024-06-27 13:36:58",
-                    "ft_local_float_group": 0,
-                    "ft_local_hold_group": 0,
-                    "ft_acquisitions": 0,
                     "parent_id": 31,
-                    "updated_on": "2024-06-27 13:36:58",
-                    "description": null,
-                    "ft_search_groups_opac": 0,
-                    "ft_search_groups_staff": 0,
-                    "ft_hide_patron_info": 0,
-                    "title": null,
                     "id": 32,
-                    "branchcode": "FFL"
+                    "ft_local_hold_group": 0,
+                    "ft_limit_item_editing": 0,
+                    "title": null,
+                    "ft_search_groups_opac": 0,
+                    "ft_local_float_group": 0
                 }
             ],
             "id": 30,
             "sub_groups": [
                 {
-                    "id": 31,
-                    "sub_groups": [],
                     "is_sub_group": 1,
-                    "title": "LibGroup3 SubGroupA",
+                    "id": 31,
                     "libraries": [
                         {
-                            "ft_limit_item_editing": 0,
-                            "created_on": "2024-06-27 13:36:58",
-                            "ft_local_float_group": 0,
-                            "ft_local_hold_group": 0,
-                            "ft_acquisitions": 0,
-                            "parent_id": 31,
-                            "updated_on": "2024-06-27 13:36:58",
-                            "description": null,
-                            "ft_search_groups_opac": 0,
+                            "updated_on": "2024-06-28 09:26:42",
                             "ft_search_groups_staff": 0,
                             "ft_hide_patron_info": 0,
-                            "title": null,
+                            "ft_acquisitions": 0,
+                            "branchcode": "FFL",
+                            "created_on": "2024-06-28 09:26:42",
+                            "description": null,
+                            "parent_id": 31,
                             "id": 32,
-                            "branchcode": "FFL"
+                            "ft_local_hold_group": 0,
+                            "ft_limit_item_editing": 0,
+                            "title": null,
+                            "ft_search_groups_opac": 0,
+                            "ft_local_float_group": 0
                         }
-                    ]
+                    ],
+                    "title": "LibGroup3 SubGroupA",
+                    "sub_groups": []
                 }
-            ]
+            ],
+            "title": "LibGroup3"
         }
     ]
 }
