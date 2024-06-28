@@ -69,12 +69,12 @@ describe("AcquisitionsStore", () => {
             testPermission: ['something']
         }
 
-        let filteredUsers = store.filterUsersByPermissions(null, false, null)
+        let filteredUsers = store.filterUsersByPermissions(null)
         expect(filteredUsers).to.have.length(2)
         expect(filteredUsers[0].displayName).to.eq('Test Patron')
         expect(filteredUsers[1].displayName).to.eq('Another Patron')
 
-        filteredUsers = store.filterUsersByPermissions('testPermission', false, null)
+        filteredUsers = store.filterUsersByPermissions('testPermission')
         expect(filteredUsers).to.have.length(1)
         expect(filteredUsers[0].displayName).to.eq('Test Patron')
 
@@ -92,12 +92,12 @@ describe("AcquisitionsStore", () => {
             "surname": "Patron",
         })
 
-        filteredUsers = store.filterUsersByPermissions('testPermission', false, null)
+        filteredUsers = store.filterUsersByPermissions('testPermission')
         expect(filteredUsers).to.have.length(2)
         expect(filteredUsers[0].displayName).to.eq('Test Patron')
         expect(filteredUsers[1].displayName).to.eq('Permitted Patron')
 
-        filteredUsers = store.filterUsersByPermissions('testPermission', false, ['XYZ'])
+        filteredUsers = store.filterUsersByPermissions('testPermission', ['XYZ'])
         expect(filteredUsers).to.have.length(1)
         expect(filteredUsers[0].displayName).to.eq('Permitted Patron')
     })
