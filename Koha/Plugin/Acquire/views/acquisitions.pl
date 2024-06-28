@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Output    qw( output_html_with_http_headers );
 
 use CGI qw ( -utf8 );
+use List::MoreUtils qw( uniq );
 
 use Koha::Plugin::Acquire;
 use Koha::Patrons;
@@ -125,7 +126,11 @@ sub _assign_branches_to_parent {
             }
             push(@sub_group_libraries, @{ $sub_group->{libraries} });
         }
-        $group->{libraries} = \@sub_group_libraries;
+        my @parent_branches;
+        foreach my $library (@sub_group_libraries) {
+            push(@parent_branches, $library) unless grep($_->{branchcode} eq $library->{branchcode}, @parent_branches);
+        }
+        $group->{libraries} = \@parent_branches;
     }
     return $group;
 }
