@@ -100,7 +100,7 @@ export default {
                     this.permittedUsers = patrons
                     const { permission } = this.$route.meta.self
                     const permissionRequired = permission ? permission : null
-                    this.owners = this.filterUsersByPermissions(permissionRequired, false)
+                    this.owners = this.filterUsersByPermissions(permissionRequired)
                     this.visibleGroups = this.filterLibGroupsByUsersBranchcode()
                 },
                 error => {}
