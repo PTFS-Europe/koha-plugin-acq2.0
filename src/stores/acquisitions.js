@@ -72,7 +72,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             })
             return codes
         },
-        filterUsersByPermissions(operation, returnAll, branchcodes) {
+        filterUsersByPermissions(operation, branchcodes = null, returnAll = false) {
             const filteredUsers = []
             this.permittedUsers.forEach(user => {
                 user.displayName = user.firstname + ' ' + user.surname
@@ -123,7 +123,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         filterGroupsBasedOnOwner(e, data, groups) {
             const libGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
-            const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false)
+            const permittedUsers = this.filterUsersByPermissions(this.currentPermission)
             if (!e) {
                 this.visibleGroups = libGroups
                 this.owners = permittedUsers
@@ -135,7 +135,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
         },
         filterOwnersBasedOnGroup(e, data, groups) {
             const libGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
-            const permittedUsers = this.filterUsersByPermissions(this.currentPermission, false, null)
+            const permittedUsers = this.filterUsersByPermissions(this.currentPermission)
             if (!e.length) {
                 this.visibleGroups = libGroups
                 this.owners = permittedUsers
@@ -143,16 +143,16 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             } else {
                 const filteredGroups = libGroups.filter(group => e.includes(group.id))
                 const branchcodes = this._findBranchCodesInGroup(filteredGroups)
-                this.owners = this.filterUsersByPermissions(this.currentPermission, false, branchcodes)
+                this.owners = this.filterUsersByPermissions(this.currentPermission, branchcodes)
             }
         },
         setOwnersBasedOnPermission(permission) {
             if(this.permittedUsers) {
-                this.owners = this.filterUsersByPermissions(permission, false, null)
+                this.owners = this.filterUsersByPermissions(permission)
             }
         },
         resetOwnersAndVisibleGroups(groups) {
-            this.owners = this.filterUsersByPermissions(this.currentPermission, false)
+            this.owners = this.filterUsersByPermissions(this.currentPermission)
             this.visibleGroups = this.filterLibGroupsByUsersBranchcode(null, groups)
         },
         getSetting(input) {
