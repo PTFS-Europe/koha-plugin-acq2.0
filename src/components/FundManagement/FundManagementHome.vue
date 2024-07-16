@@ -128,6 +128,7 @@
                         label="code"
                         apiClient="acquisition"
                         :filters="filterLimitations"
+                        :disabled="filters.ledger_id"
                     />
                 </div>
                 <div class="filter-grid-cell">
@@ -253,7 +254,7 @@ export default {
     computed: {
         filterLimitations() {
             const filterLimitations = {}
-            Object.keys(this.filters).forEach(key => {
+            Object.keys(this.filters).filter(key => !['fund_type', 'fund_group'].includes(key)).forEach(key => {
                 if(this.filters[key]) {
                     filterLimitations[key] = this.filters[key]
                 }
