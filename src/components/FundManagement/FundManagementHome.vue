@@ -121,10 +121,10 @@
                     >
                     <InfiniteScrollSelect
                         id="fiscal_period"
-                        v-model="filters.fiscal_yr_id"
+                        v-model="filters.fiscal_period_id"
                         :selectedData="null"
                         dataType="fiscalPeriods"
-                        dataIdentifier="fiscal_yr_id"
+                        dataIdentifier="fiscal_period_id"
                         label="code"
                         apiClient="acquisition"
                         :filters="filterLimitations"
@@ -239,7 +239,7 @@ export default {
                 fund_type: null,
                 fund_group: null,
                 owner: null,
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null
             },
             statusOptions: [
@@ -327,7 +327,7 @@ export default {
                 status: null,
                 fund_type: null,
                 owner: null,
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null
             }
         }

@@ -69,7 +69,7 @@ export const routes = [
                                 permission: "manageFiscalPeriods"
                             },
                             {
-                                path: ":fiscal_yr_id",
+                                path: ":fiscal_period_id",
                                 component: markRaw(FiscalPeriodShow),
                                 name: "FiscalPeriodShow",
                                 title: "Show fiscal period",
@@ -83,7 +83,7 @@ export const routes = [
                                 permission: "createFiscalPeriods"
                             },
                             {
-                                path: "edit/:fiscal_yr_id",
+                                path: "edit/:fiscal_period_id",
                                 component: markRaw(FiscalPeriodFormAdd),
                                 name: "FiscalPeriodFormEdit",
                                 title: "Edit fiscal period",

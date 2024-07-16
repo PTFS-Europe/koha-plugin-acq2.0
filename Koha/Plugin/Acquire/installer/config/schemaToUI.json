@@ -100,11 +100,11 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
+        "fiscal_period_id": {
             "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
             "linkSlug": "fiscal_period",
             "linkName": "code"
         },
@@ -182,11 +182,11 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
+        "fiscal_period_id": {
             "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
             "linkSlug": "fiscal_period",
             "linkName": "code"
         },
@@ -259,11 +259,11 @@
             "label": "Code",
             "type": "string"
         },
-        "fiscal_yr_id": {
+        "fiscal_period_id": {
             "label": "Fiscal period",
             "type": "link",
-            "dataType": "fiscal_yr",
-            "linkId": "fiscal_yr_id",
+            "dataType": "fiscal_period",
+            "linkId": "fiscal_period_id",
             "linkSlug": "fiscal_period",
             "linkName": "code"
         },

@@ -46,15 +46,15 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="ledger_fiscal_yr_id" class="required"
+                            <label for="ledger_fiscal_period_id" class="required"
                                 >Fiscal period:</label
                             >
                             <InfiniteScrollSelect
-                                id="ledger_fiscal_yr_id"
-                                v-model="ledger.fiscal_yr_id"
+                                id="ledger_fiscal_period_id"
+                                v-model="ledger.fiscal_period_id"
                                 :selectedData="fiscal_period"
                                 dataType="fiscalPeriods"
-                                dataIdentifier="fiscal_yr_id"
+                                dataIdentifier="fiscal_period_id"
                                 label="code"
                                 apiClient="acquisition"
                                 :required="true"
@@ -322,7 +322,7 @@ export default {
                 { description: 'Not allowed', value: 0 },
             ],
             ledger: {
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 name: '',
                 description: '',
                 code: '',
@@ -353,7 +353,7 @@ export default {
             this.getCurrencies().then(() => {
                 if(ledger_id) {
                     this.getLedger(ledger_id).then(() => {
-                        this.getFiscalPeriod(this.ledger.fiscal_yr_id)
+                        this.getFiscalPeriod(this.ledger.fiscal_period_id)
                     })
                 } else {
                     this.initialized = true
@@ -366,12 +366,12 @@ export default {
                 this.ledger = ledger
                 this.ledger.oe_warning_percent = ledger.oe_warning_percent * 100
                 this.ledger.visible_to = this.formatLibraryGroupIds(ledger.visible_to)
-                this.filterGroupsBySelectedFiscalPeriod(ledger.fiscal_yr_id)
+                this.filterGroupsBySelectedFiscalPeriod(ledger.fiscal_period_id)
             })
         },
-        async getFiscalPeriod(fiscal_yr_id) {
+        async getFiscalPeriod(fiscal_period_id) {
             const client = APIClient.acquisition
-            await client.fiscalPeriods.get(fiscal_yr_id).then(
+            await client.fiscalPeriods.get(fiscal_period_id).then(
                 fiscal_period => {
                     this.fiscal_period = fiscal_period
                     this.initialized = true
@@ -399,7 +399,7 @@ export default {
                 this.fiscal_period_groups = applicableGroups
                 this.resetOwnersAndVisibleGroups(applicableGroups)
             })
-            if(e !== this.ledger.fiscal_yr_id) {
+            if(e !== this.ledger.fiscal_period_id) {
                 this.ledger.visible_to = []
             }
         },

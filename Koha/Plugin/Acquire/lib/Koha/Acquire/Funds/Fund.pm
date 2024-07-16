@@ -89,7 +89,7 @@ sub cascade_to_fund_allocations {
                 child             => $fund_allocation
             }
         );
-        my @data_to_cascade = ( 'fiscal_yr_id', 'currency', 'owner', 'ledger_id' );
+        my @data_to_cascade = ( 'fiscal_period_id', 'currency', 'owner', 'ledger_id' );
         my $data_updated = Koha::Acquire::Funds::Utils->cascade_data(
             {
                 parent     => $self,
@@ -128,7 +128,7 @@ sub cascade_to_sub_funds {
                 child         => $sub_fund
             }
         );
-        my @data_to_cascade = ( 'fiscal_yr_id', 'currency', 'owner', 'ledger_id' );
+        my @data_to_cascade = ( 'fiscal_period_id', 'currency', 'owner', 'ledger_id' );
         my $data_updated    = Koha::Acquire::Funds::Utils->cascade_data(
             {
                 parent     => $self,
@@ -172,15 +172,15 @@ sub update_fund_total {
     return $total;
 }
 
-=head3 fiscal_yr
+=head3 fiscal_period
 
 Method to embed the fiscal period to a given fund
 
 =cut
 
-sub fiscal_yr {
+sub fiscal_period {
     my ($self) = @_;
-    my $fiscal_period_rs = $self->_result->fiscal_yr;
+    my $fiscal_period_rs = $self->_result->fiscal_period;
     return Koha::Acquire::Funds::FiscalPeriod->_new_from_dbic($fiscal_period_rs);
 }
 

@@ -1202,7 +1202,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "koha_plugin_acquire_funds",
                             "koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations",
                             "owner"
@@ -1360,7 +1360,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "koha_plugin_acquire_funds",
                             "koha_plugin_acquire_funds.koha_plugin_acquire_fund_allocations",
                             "owner"
@@ -1702,7 +1702,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "koha_plugin_acquire_sub_funds",
                             "koha_plugin_acquire_fund_allocations",
@@ -1861,7 +1861,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "fund_group",
                             "koha_plugin_acquire_sub_funds",
@@ -2206,7 +2206,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "fund",
                             "koha_plugin_acquire_fund_allocations",
@@ -2365,7 +2365,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "fund",
                             "koha_plugin_acquire_fund_allocations",
@@ -2708,7 +2708,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "fund",
                             "owner"
@@ -2913,7 +2913,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "fiscal_yr",
+                            "fiscal_period",
                             "ledger",
                             "fund",
                             "owner"

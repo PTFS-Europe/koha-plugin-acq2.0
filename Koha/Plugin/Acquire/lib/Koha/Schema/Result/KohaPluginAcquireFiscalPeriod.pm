@@ -24,7 +24,7 @@ __PACKAGE__->table("koha_plugin_acquire_fiscal_period");
 
 =head1 ACCESSORS
 
-=head2 fiscal_yr_id
+=head2 fiscal_period_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -100,7 +100,7 @@ library groups the fiscal period is visible to
 =cut
 
 __PACKAGE__->add_columns(
-    "fiscal_yr_id",
+    "fiscal_period_id",
     { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
     "description",
     { data_type => "longtext", default_value => "''", is_nullable => 1 },
@@ -129,13 +129,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</fiscal_yr_id>
+=item * L</fiscal_period_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("fiscal_yr_id");
+__PACKAGE__->set_primary_key("fiscal_period_id");
 
 =head1 RELATIONS
 
@@ -150,7 +150,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireFundAllocation>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_fund_allocations",
     "Koha::Schema::Result::KohaPluginAcquireFundAllocation",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -165,7 +165,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireFund>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_funds",
     "Koha::Schema::Result::KohaPluginAcquireFund",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -180,7 +180,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireLedger>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_ledgers",
     "Koha::Schema::Result::KohaPluginAcquireLedger",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
@@ -195,7 +195,7 @@ Related object: L<Koha::Schema::Result::KohaPluginAcquireSubFund>
 __PACKAGE__->has_many(
     "koha_plugin_acquire_sub_funds",
     "Koha::Schema::Result::KohaPluginAcquireSubFund",
-    { "foreign.fiscal_yr_id" => "self.fiscal_yr_id" },
+    { "foreign.fiscal_period_id" => "self.fiscal_period_id" },
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 

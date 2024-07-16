@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">Loading...</div>
-    <div v-else id="fiscal_yr_list">
+    <div v-else id="fiscal_period_list">
         <Toolbar>
             <ToolbarLink
                 :to="{ name: 'FiscalPeriodFormAdd' }"
@@ -9,7 +9,7 @@
                 v-if="isUserPermitted('createFiscalPeriods')"
             />
         </Toolbar>
-        <div v-if="fiscal_yr_count > 0" class="page-section">
+        <div v-if="fiscal_period_count > 0" class="page-section">
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
@@ -53,7 +53,7 @@ export default {
         if(this.isUserPermitted('editFiscalPeriod')) { actionButtons.push("edit") }
         if(this.isUserPermitted('deleteFiscalPeriod')) { actionButtons.push("delete") }
         return {
-            fiscal_yr_count: 0,
+            fiscal_period_count: 0,
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
@@ -77,32 +77,32 @@ export default {
             const client = APIClient.acquisition
             await client.fiscalPeriods.count().then(
                 count => {
-                    this.fiscal_yr_count = count
+                    this.fiscal_period_count = count
                 },
                 error => {}
             )
         },
-        doShow: function ({ fiscal_yr_id }, dt, event) {
+        doShow: function ({ fiscal_period_id }, dt, event) {
             event.preventDefault()
-            this.$router.push({ name: "FiscalPeriodShow", params: { fiscal_yr_id } })
+            this.$router.push({ name: "FiscalPeriodShow", params: { fiscal_period_id } })
         },
-        doEdit: function ({ fiscal_yr_id }, dt, event) {
+        doEdit: function ({ fiscal_period_id }, dt, event) {
             this.$router.push({
                 name: "FiscalPeriodFormEdit",
-                params: { fiscal_yr_id },
+                params: { fiscal_period_id },
             })
         },
-        doDelete: function (fiscal_yr, dt, event) {
+        doDelete: function (fiscal_period, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: "Are you sure you want to remove this fiscal period?",
-                    message: fiscal_yr.name,
+                    message: fiscal_period.name,
                     accept_label: "Yes, delete",
                     cancel_label: "No, do not delete",
                 },
                 () => {
                     const client = APIClient.acquisition
-                    client.fiscalPeriods.delete(fiscal_yr.fiscal_yr_id).then(
+                    client.fiscalPeriods.delete(fiscal_period.fiscal_period_id).then(
                         success => {
                             this.setMessage(`Fiscal period deleted`, true)
                             dt.draw()
@@ -116,13 +116,13 @@ export default {
             return [
                 {
                     title: __("Code"),
-                    data: "code:fiscal_yr_id",
+                    data: "code:fiscal_period_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return (
-                            '<a href="/acquisitions/fund_management/fiscal_yr/' +
-                            row.fiscal_yr_id +
+                            '<a href="/acquisitions/fund_management/fiscal_period/' +
+                            row.fiscal_period_id +
                             '" class="show">' +
                             escape_str(`${row.code}`) +
                             "</a>"

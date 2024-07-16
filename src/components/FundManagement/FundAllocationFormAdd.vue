@@ -100,7 +100,7 @@ export default {
             fund_allocation: {
                 fund_id: null,
                 sub_fund_id: null,
-                fiscal_yr_id: null,
+                fiscal_period_id: null,
                 ledger_id: null,
                 reference: '',
                 note: '',
@@ -146,7 +146,7 @@ export default {
                     this.selectedFund = result
                     this.fund_allocation[whichParam] = result[whichParam]
                     this.fund_allocation.ledger_id = result.ledger_id
-                    this.fund_allocation.fiscal_yr_id = result.fiscal_yr_id
+                    this.fund_allocation.fiscal_period_id = result.fiscal_period_id
                     this.fund_allocation.currency = result.currency
                     this.fund_allocation.owner = result.owner
                     this.fund_allocation.visible_to = result.visible_to

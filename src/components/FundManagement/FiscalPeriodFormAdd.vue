@@ -1,8 +1,8 @@
 <template>
     <div v-if="!initialized">Loading...</div>
     <div v-else id="fiscal_period_add">
-        <h2 v-if="fiscal_yr.fiscal_yr_id">
-            {{ `Edit fiscal period ${fiscal_yr.fiscal_yr_id}` }}
+        <h2 v-if="fiscal_period.fiscal_period_id">
+            {{ `Edit fiscal period ${fiscal_period.fiscal_period_id}` }}
         </h2>
         <h2 v-else>New fiscal period</h2>
         <div>
@@ -10,24 +10,24 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="fiscal_yr_code"
+                            <label class="required" for="fiscal_period_code"
                                 >Code:</label
                             >
                             <input
-                                id="fiscal_yr_code"
-                                v-model="fiscal_yr.code"
+                                id="fiscal_period_code"
+                                v-model="fiscal_period.code"
                                 placeholder="Fiscal period code"
                                 required
                             />
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="fiscal_yr_description" class="required"
+                            <label for="fiscal_period_description" class="required"
                                 >Description:
                             </label>
                             <textarea
-                                id="fiscal_yr_description"
-                                v-model="fiscal_yr.description"
+                                id="fiscal_period_description"
+                                v-model="fiscal_period.description"
                                 placeholder="Description"
                                 rows="10"
                                 cols="50"
@@ -36,19 +36,19 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="fiscal_yr_status" class="required"
+                            <label for="fiscal_period_status" class="required"
                                 >Status:</label
                             >
                             <v-select
-                                id="fiscal_yr_status"
-                                v-model="fiscal_yr.status"
+                                id="fiscal_period_status"
+                                v-model="fiscal_period.status"
                                 :reduce="av => av.value"
                                 :options="statusOptions"
                                 label="description"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!statusOptions.map(opt => opt.value).includes(fiscal_yr.status)"
+                                        :required="!statusOptions.map(opt => opt.value).includes(fiscal_period.status)"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -63,7 +63,7 @@
                             >
                             <flat-pickr
                                 id="start_date"
-                                v-model="fiscal_yr.start_date"
+                                v-model="fiscal_period.start_date"
                                 :config="fp_config"
                                 data-date_to="end_date"
                             />
@@ -72,25 +72,25 @@
                             <label for="end_date">End date:</label>
                             <flat-pickr
                                 id="end_date"
-                                v-model="fiscal_yr.end_date"
+                                v-model="fiscal_period.end_date"
                                 :config="fp_config"
                             />
                         </li>
                         <li>
-                            <label for="fiscal_yr_owner" class="required"
+                            <label for="fiscal_period_owner" class="required"
                                 >Owner:</label
                             >
                             <v-select
-                                id="fiscal_yr_owner"
-                                v-model="fiscal_yr.owner"
+                                id="fiscal_period_owner"
+                                v-model="fiscal_period.owner"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
-                                @update:modelValue="filterGroupsBasedOnOwner($event, fiscal_yr)"
+                                @update:modelValue="filterGroupsBasedOnOwner($event, fiscal_period)"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fiscal_yr.owner"
+                                        :required="!fiscal_period.owner"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -100,21 +100,21 @@
                             <span class="required">Required</span>
                         </li>
                         <li>
-                            <label for="fiscal_yr_visible_to" class="required"
+                            <label for="fiscal_period_visible_to" class="required"
                                 >Visible to:</label
                             >
                             <v-select
-                                id="fiscal_yr_visible_to"
-                                v-model="fiscal_yr.visible_to"
+                                id="fiscal_period_visible_to"
+                                v-model="fiscal_period.visible_to"
                                 :reduce="av => av.id"
                                 :options="getVisibleGroups"
                                 label="title"
-                                @update:modelValue="filterOwnersBasedOnGroup($event, fiscal_yr)"
+                                @update:modelValue="filterOwnersBasedOnGroup($event, fiscal_period)"
                                 multiple
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fiscal_yr.visible_to"
+                                        :required="!fiscal_period.visible_to"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -183,8 +183,8 @@ export default {
                 { description: 'Active', value: 1 },
                 { description: 'Inactive', value: 0 },
             ],
-            fiscal_yr: {
-                fiscal_yr_id: null,
+            fiscal_period: {
+                fiscal_period_id: null,
                 description: "",
                 code: "",
                 status: null,
@@ -197,19 +197,19 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (to.params.fiscal_yr_id) {
-                vm.getFiscalPeriod(to.params.fiscal_yr_id)
+            if (to.params.fiscal_period_id) {
+                vm.getFiscalPeriod(to.params.fiscal_period_id)
             } else {
                 vm.initialized = true
             }
         })
     },
     methods: {
-        async getFiscalPeriod(fiscal_yr_id) {
+        async getFiscalPeriod(fiscal_period_id) {
             const client = APIClient.acquisition
-            client.fiscalPeriods.get(fiscal_yr_id).then(fiscal_yr => {
-                this.fiscal_yr = fiscal_yr
-                this.fiscal_yr.visible_to = this.formatLibraryGroupIds(fiscal_yr.visible_to)
+            client.fiscalPeriods.get(fiscal_period_id).then(fiscal_period => {
+                this.fiscal_period = fiscal_period
+                this.fiscal_period.visible_to = this.formatLibraryGroupIds(fiscal_period.visible_to)
                 this.initialized = true
             })
         },
@@ -221,18 +221,18 @@ export default {
                 return
             }
 
-            const fiscal_yr = JSON.parse(JSON.stringify(this.fiscal_yr))
-            const fiscal_yr_id = fiscal_yr.fiscal_yr_id
+            const fiscal_period = JSON.parse(JSON.stringify(this.fiscal_period))
+            const fiscal_period_id = fiscal_period.fiscal_period_id
 
-            const visibility = fiscal_yr.visible_to.join("|")
-            fiscal_yr.visible_to = visibility
+            const visibility = fiscal_period.visible_to.join("|")
+            fiscal_period.visible_to = visibility
 
-            delete fiscal_yr.fiscal_yr_id
+            delete fiscal_period.fiscal_period_id
 
-            if(fiscal_yr_id) {
+            if(fiscal_period_id) {
                 const acq_client = APIClient.acquisition
                 acq_client.fiscalPeriods
-                    .update(fiscal_yr, fiscal_yr_id).then(
+                    .update(fiscal_period, fiscal_period_id).then(
                         success => {
                             setMessage("Fiscal period updated")
                             this.$router.push({ name: "FiscalPeriodList" })
@@ -242,7 +242,7 @@ export default {
             } else {
                 const acq_client = APIClient.acquisition
                 acq_client.fiscalPeriods
-                    .create(fiscal_yr).then(
+                    .create(fiscal_period).then(
                         success => {
                             setMessage("Fiscal period created")
                             this.$router.push({ name: "FiscalPeriodList" })

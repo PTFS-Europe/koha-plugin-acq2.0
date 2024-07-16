@@ -102,7 +102,7 @@ sub add {
 
                 my $fiscal_period = Koha::Acquire::Funds::FiscalPeriod->new_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_period_id );
                 return $c->render(
                     status  => 201,
                     openapi => $fiscal_period->to_api
@@ -143,7 +143,7 @@ sub update {
 
                 $fiscal_period->set_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_yr_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $fiscal_period->fiscal_period_id );
                 return $c->render(
                     status  => 200,
                     openapi => $fiscal_period->to_api
