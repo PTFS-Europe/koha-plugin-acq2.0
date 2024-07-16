@@ -14,6 +14,10 @@ if test -f "$FILE"; then
     echo "Plugin .kpz file already exists, previous version deleted"
     rm -r "$FILE"
 fi
+
+echo "Creating Vue build file"
+npm run build
+
 echo "Creating new .kpz file"
 zip -r "$FILE" Koha/
 
