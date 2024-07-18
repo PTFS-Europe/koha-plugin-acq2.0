@@ -56,14 +56,15 @@ BEGIN {
 our $VERSION = "0.0";
 
 our $metadata = {
-    name            => 'Acquisitions 2.0',
-    author          => 'PTFS Europe Ltd',
-    date_authored   => '2023-12-08',
-    date_updated    => '2023-12-08',
-    minimum_version => '22.11.00.000',
-    maximum_version => undef,
-    version         => $VERSION,
-    description     => 'A re-imagined acquisitions module for Koha',
+    name             => 'Acquisitions 2.0',
+    author           => 'PTFS Europe Ltd',
+    date_authored    => '2023-12-08',
+    date_updated     => '2023-12-08',
+    minimum_version  => '22.11.00.000',
+    maximum_version  => undef,
+    version          => $VERSION,
+    description      => 'A re-imagined acquisitions module for Koha',
+    has_translations => 1
 };
 
 sub new {

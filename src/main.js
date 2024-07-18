@@ -2,6 +2,7 @@ import { createApp } from "vue"
 import { createWebHistory, createRouter } from "vue-router"
 import { createPinia } from "pinia"
 import vSelect from "vue-select"
+import i18n from "./i18n";
 
 import { library } from "@fortawesome/fontawesome-svg-core"
 import {
@@ -41,6 +42,7 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router)
 app.use(pinia)
+app.use(i18n)
 app.provide("navigationStore", navigationStore)
 app.provide("acquisitionsStore", acquisitionsStore)
 app.provide("mainStore", mainStore)
