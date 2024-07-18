@@ -29,7 +29,7 @@ import FundAllocationShow from '../components/FundManagement/FundAllocationShow.
 import FundAllocationFormAdd from '../components/FundManagement/FundAllocationFormAdd.vue'
 import TransferFunds from '../components/FundManagement/TransferFunds.vue'
 
-
+import { $__ } from "../i18n";
 
 export const routes = [
     {
@@ -47,7 +47,7 @@ export const routes = [
             {
                 path: "/acquisitions/fund_management",
                 moduleName: "funds",
-                title: "Funds and ledgers",
+                title: $__("Funds and ledgers"),
                 icon: "fa fa-money-check-dollar",
                 children: [
                     {
@@ -249,7 +249,7 @@ export const routes = [
             },
             {
                 path: "/acquisitions/tasks",
-                title: "Tasks",
+                title: $__("Tasks"),
                 moduleName: "tasks",
                 icon: "fa fa-list-check",
                 is_end_node: true,
@@ -282,7 +282,7 @@ export const routes = [
             },
             {
                 path: "/acquisitions/settings",
-                title: "Settings",
+                title: $__("Settings"),
                 moduleName: "settings",
                 icon: "fa fa-cog",
                 is_end_node: true,

@@ -1,5 +1,5 @@
 <template>
-  <h1 id="acq2_homepage">Homepage</h1>
+  <h1 id="acq2_homepage">{{ $__('Homepage') }}</h1>
 </template>
 
 <script>
