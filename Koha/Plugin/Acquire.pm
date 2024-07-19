@@ -100,7 +100,7 @@ sub install {
                 table_name_mappings => {
                     settings        => $self->get_qualified_table_name('settings'),
                     workflow_tasks  => $self->get_qualified_table_name('workflow_tasks'),
-                    fiscal_period     => $self->get_qualified_table_name('fiscal_period'),
+                    fiscal_period   => $self->get_qualified_table_name('fiscal_period'),
                     ledgers         => $self->get_qualified_table_name('ledgers'),
                     funds           => $self->get_qualified_table_name('funds'),
                     sub_funds       => $self->get_qualified_table_name('sub_funds'),
