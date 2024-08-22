@@ -18,7 +18,7 @@
                                 label="name"
                                 apiClient="acquisition"
                                 :required="!fund_transfer.fund_id_to"
-                                :filters="{ fund_id: { 'not_in': [ $route.query.fund_id ] }, status: '1'}"
+                                :filters="{ fund_id: { '!=': $route.query.fund_id }, status: '1'}"
                                 @update:modelValue="handleSubFunds"
                             />
                             <span class="required">Required</span>
