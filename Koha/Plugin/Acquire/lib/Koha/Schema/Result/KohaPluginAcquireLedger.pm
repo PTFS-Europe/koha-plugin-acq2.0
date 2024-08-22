@@ -99,7 +99,7 @@ is the ledger currently active
 
 time of the last update to the ledger
 
-=head2 owner
+=head2 owner_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -203,7 +203,7 @@ __PACKAGE__->add_columns(
         default_value             => \"current_timestamp",
         is_nullable               => 1,
     },
-    "owner",
+    "owner_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "visible_to",
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 255 },
@@ -338,7 +338,7 @@ Related object: L<Koha::Schema::Result::Borrower>
 __PACKAGE__->belongs_to(
     "owner",
     "Koha::Schema::Result::Borrower",
-    { borrowernumber => "owner" },
+    { borrowernumber => "owner_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",

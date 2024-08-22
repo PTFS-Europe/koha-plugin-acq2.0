@@ -201,14 +201,14 @@
             ],
             "parameters": [
                 {
-                    "name": "owner",
+                    "name": "owner_id",
                     "in": "query",
                     "description": "Owner of the task",
                     "required": false,
                     "type": "integer"
                 },
                 {
-                    "name": "created_by",
+                    "name": "created_by_id",
                     "in": "query",
                     "description": "Creator of the task",
                     "required": false,

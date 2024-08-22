@@ -139,7 +139,7 @@ export const useAcquisitionsStore = defineStore("acquisitions", {
             if (!e.length) {
                 this.visibleGroups = libGroups
                 this.owners = permittedUsers
-                data.owner = null
+                data.owner_id = null
             } else {
                 const filteredGroups = libGroups.filter(group => e.includes(group.id))
                 const branchcodes = this._findBranchCodesInGroup(filteredGroups)

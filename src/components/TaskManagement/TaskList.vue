@@ -10,7 +10,7 @@
         </Toolbar>
         <fieldset v-if="task_count > 0" class="filters">
             <input
-                @click="filterTable('owner')"
+                @click="filterTable('owner_id')"
                 id="filter_table"
                 type="button"
                 :value="showUserCreatedTasksButtonText"
@@ -112,12 +112,12 @@ export default {
             let url = "/api/v1/contrib/acquire/tasks?q="
             const param = this.user.loggedInUser.borrowernumber
             const query = {
-                owner: param,
+                owner_id: param,
                 status: ['assigned', 'on_hold', 'cancelled']
             }
             if(this.showCreatedTasks) {
-                delete query.owner
-                query.created_by = param
+                delete query.owner_id
+                query.created_by_id = param
             }
             if(this.showCompletedTasks) {
                 query.status.push('complete')
@@ -126,7 +126,7 @@ export default {
             return url + queryObject
         },
         filterTable(button) {
-            if(button === 'owner') {
+            if(button === 'owner_id') {
                 if(this.showCreatedTasks) {
                     this.showCreatedTasks = false
                     this.tableName = "Your tasks"

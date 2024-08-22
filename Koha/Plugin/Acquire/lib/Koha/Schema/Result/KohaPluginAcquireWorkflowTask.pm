@@ -64,7 +64,7 @@ description for the task
 
 creation date of the task
 
-=head2 created_by
+=head2 created_by_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -97,7 +97,7 @@ is the task complete
 
 date the task was completed
 
-=head2 owner
+=head2 owner_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -118,7 +118,7 @@ __PACKAGE__->add_columns(
     { data_type => "longtext", default_value => "''", is_nullable => 1 },
     "created_on",
     { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-    "created_by",
+    "created_by_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "end_date",
     { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
@@ -131,7 +131,7 @@ __PACKAGE__->add_columns(
     },
     "closed_on",
     { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-    "owner",
+    "owner_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
@@ -160,7 +160,7 @@ Related object: L<Koha::Schema::Result::Borrower>
 __PACKAGE__->belongs_to(
     "created_by",
     "Koha::Schema::Result::Borrower",
-    { borrowernumber => "created_by" },
+    { borrowernumber => "created_by_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",
@@ -180,7 +180,7 @@ Related object: L<Koha::Schema::Result::Borrower>
 __PACKAGE__->belongs_to(
     "owner",
     "Koha::Schema::Result::Borrower",
-    { borrowernumber => "owner" },
+    { borrowernumber => "owner_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",

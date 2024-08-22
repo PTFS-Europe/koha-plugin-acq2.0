@@ -256,7 +256,7 @@ sub _inherit_currency_and_owner {
     my $ledger = Koha::Acquire::Funds::Ledgers->find( { ledger_id => $fund->{ledger_id} } );
 
     $fund->{currency} = $ledger->currency;
-    $fund->{owner}    = $ledger->owner;
+    $fund->{owner_id} = $ledger->owner_id;
 
     return $fund;
 }

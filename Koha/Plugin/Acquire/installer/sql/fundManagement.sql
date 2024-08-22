@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS { { fiscal_period } } (
     `end_date` date DEFAULT NULL COMMENT 'end date of the event',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fiscal period currently active',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fiscal period',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal period',
+    `owner_id` INT(11) DEFAULT NULL COMMENT 'owner of the fiscal period',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fiscal period is visible to',
     PRIMARY KEY (`fiscal_period_id`),
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+    FOREIGN KEY (`owner_id`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `ledger_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the ledger',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the ledger currently active',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the ledger',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
+    `owner_id` INT(11) DEFAULT NULL COMMENT 'owner of the ledger',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the ledger is visible to',
     `ledger_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the ledger',
     `over_spend_allowed` TINYINT(1) DEFAULT '1' COMMENT 'is an overspend allowed on the ledger',
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS { { ledgers } } (
     `os_limit_sum` decimal(28,6) DEFAULT 0.000000 COMMENT 'amount to trigger a block on the ledger for overspend',
     PRIMARY KEY (`ledger_id`),
     FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+    FOREIGN KEY (`owner_id`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_group } } (
     `fund_group_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the fund for use with external accounting systems',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the fund currently active',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fund',
+    `owner_id` INT(11) DEFAULT NULL COMMENT 'owner of the fund',
     `fund_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the fund',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund is visible to',
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS { { funds } } (
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fund_group_id`) REFERENCES { { fund_group } } (`fund_group_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+    FOREIGN KEY (`owner_id`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { sub_funds } } (
     `sub_fund_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS { { sub_funds } } (
     `external_id` VARCHAR(255) DEFAULT '' COMMENT 'external id for the sub_fund for use with external accounting systems',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the sub_fund',
     `status` TINYINT(1) DEFAULT '1' COMMENT 'is the sub_fund currently active',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the sub_fund',
+    `owner_id` INT(11) DEFAULT NULL COMMENT 'owner of the sub_fund',
     `sub_fund_value` decimal(28,6) DEFAULT 0.000000 COMMENT 'value of the sub_fund',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the sub_fund',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the sub_fund is visible to',
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS { { sub_funds } } (
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+    FOREIGN KEY (`owner_id`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;
 CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `fund_allocation_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     `reference` VARCHAR(255) DEFAULT '' COMMENT 'allocation reference',
     `note` longtext DEFAULT '' COMMENT 'any notes associated to the allocation',
     `currency` VARCHAR(10) DEFAULT '' COMMENT 'currency of the fund allocation',
-    `owner` INT(11) DEFAULT NULL COMMENT 'owner of the fund allocation',
+    `owner_id` INT(11) DEFAULT NULL COMMENT 'owner of the fund allocation',
     `is_transfer` TINYINT(1) DEFAULT '0' COMMENT 'is the fund allocation a transfer to/from another fund',
     `last_updated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of the last update to the fund allocation',
     `visible_to` VARCHAR(255) DEFAULT '' COMMENT 'library groups the fund allocation is visible to',
@@ -104,5 +104,5 @@ CREATE TABLE IF NOT EXISTS { { fund_allocation } } (
     FOREIGN KEY (`fund_id`) REFERENCES { { funds } } (`fund_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`ledger_id`) REFERENCES { { ledgers } } (`ledger_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`fiscal_period_id`) REFERENCES { { fiscal_period } } (`fiscal_period_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`)
+    FOREIGN KEY (`owner_id`) REFERENCES `borrowers` (`borrowernumber`)
 ) ENGINE = INNODB;

@@ -101,7 +101,7 @@
                     >
                     <v-select
                         id="owner"
-                        v-model="filters.owner"
+                        v-model="filters.owner_id"
                         :reduce="av => av.borrowernumber"
                         :options="getOwners"
                         label="displayName"
@@ -239,7 +239,7 @@ export default {
                 status: null,
                 fund_type: null,
                 fund_group: null,
-                owner: null,
+                owner_id: null,
                 fiscal_period_id: null,
                 ledger_id: null
             },
@@ -327,7 +327,7 @@ export default {
             this.filters =  {
                 status: null,
                 fund_type: null,
-                owner: null,
+                owner_id: null,
                 fiscal_period_id: null,
                 ledger_id: null
             }

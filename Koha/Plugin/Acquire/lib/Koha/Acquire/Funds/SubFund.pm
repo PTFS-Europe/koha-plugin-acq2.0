@@ -74,7 +74,7 @@ sub cascade_to_fund_allocations {
                 child             => $fund_allocation
             }
         );
-        my @data_to_cascade = ( 'fiscal_period_id', 'currency', 'owner', 'ledger_id' );
+        my @data_to_cascade = ( 'fiscal_period_id', 'currency', 'owner_id', 'ledger_id' );
         my $data_updated    = Koha::Acquire::Funds::Utils->cascade_data(
             {
                 parent     => $self,

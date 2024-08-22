@@ -82,7 +82,7 @@
                             >
                             <v-select
                                 id="fiscal_period_owner"
-                                v-model="fiscal_period.owner"
+                                v-model="fiscal_period.owner_id"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
                                 @update:modelValue="filterGroupsBasedOnOwner($event, fiscal_period)"
@@ -90,7 +90,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!fiscal_period.owner"
+                                        :required="!fiscal_period.owner_id"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -188,7 +188,7 @@ export default {
                 description: "",
                 code: "",
                 status: null,
-                owner: null,
+                owner_id: null,
                 visible_to: [],
                 start_date: undefined,
                 end_date: undefined,

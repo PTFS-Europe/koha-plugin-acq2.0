@@ -122,7 +122,7 @@
                             >
                             <v-select
                                 id="ledger_owner"
-                                v-model="ledger.owner"
+                                v-model="ledger.owner_id"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
                                 @update:modelValue="filterGroupsBasedOnOwner($event, ledger, fiscal_period_groups)"
@@ -130,7 +130,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!ledger.owner"
+                                        :required="!ledger.owner_id"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -329,7 +329,7 @@ export default {
                 external_id: '',
                 currency: null,
                 status: null,
-                owner: null,
+                owner_id: null,
                 visible_to: [],
                 over_spend_allowed: null,
                 over_encumbrance_allowed: null,

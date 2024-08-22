@@ -148,7 +148,7 @@ export default {
                     this.fund_allocation.ledger_id = result.ledger_id
                     this.fund_allocation.fiscal_period_id = result.fiscal_period_id
                     this.fund_allocation.currency = result.currency
-                    this.fund_allocation.owner = result.owner
+                    this.fund_allocation.owner_id = result.owner_id
                     this.fund_allocation.visible_to = result.visible_to
                 },
                 error => {}

@@ -182,7 +182,7 @@ export default {
                 this.sub_fund.fiscal_period_id = fund.fiscal_period_id
                 this.sub_fund.sub_fund_type = fund.fund_type
                 this.sub_fund.currency = fund.currency
-                this.sub_fund.owner = fund.owner
+                this.sub_fund.owner_id = fund.owner_id
                 this.sub_fund.visible_to = fund.visible_to
             })
         },

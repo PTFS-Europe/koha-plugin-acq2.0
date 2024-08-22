@@ -98,7 +98,7 @@ sub add {
 
                 my $date = dt_from_string();
                 $body->{created_on} = $date;
-                $body->{created_by} = $c->stash('koha.user')->borrowernumber;
+                $body->{created_by_id} = $c->stash('koha.user')->borrowernumber;
 
                 $body->{closed_on} = $date if $body->{status} eq 'completed';
 

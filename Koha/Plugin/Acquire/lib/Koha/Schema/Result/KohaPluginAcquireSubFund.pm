@@ -115,7 +115,7 @@ currency of the sub_fund
 
 is the sub_fund currently active
 
-=head2 owner
+=head2 owner_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -175,7 +175,7 @@ __PACKAGE__->add_columns(
     { data_type => "varchar", default_value => "", is_nullable => 1, size => 10 },
     "status",
     { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-    "owner",
+    "owner_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "sub_fund_value",
     {
@@ -295,7 +295,7 @@ Related object: L<Koha::Schema::Result::Borrower>
 __PACKAGE__->belongs_to(
     "owner",
     "Koha::Schema::Result::Borrower",
-    { borrowernumber => "owner" },
+    { borrowernumber => "owner_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",

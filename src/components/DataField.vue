@@ -38,7 +38,7 @@
     <li v-if="item.type === 'creator'">
         <label>{{ item.label }}:</label>
         <span>
-            {{ `${item.value.firstname} ${item.value.surname}` }}
+            {{ `${item.value.firstname || ''} ${item.value.surname || ''}` }}
         </span>
     </li>
     <li v-if="item.type === 'table'">

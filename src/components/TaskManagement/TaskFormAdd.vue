@@ -63,14 +63,14 @@
                             >
                             <v-select
                                 id="task_owner"
-                                v-model="task.owner"
+                                v-model="task.owner_id"
                                 :reduce="av => av.borrowernumber"
                                 :options="getOwners"
                                 label="displayName"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!task.owner"
+                                        :required="!task.owner_id"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
