@@ -177,7 +177,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!ledger.over_spend_allowed"
+                                        :required="ledger.over_spend_allowed === null"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
@@ -199,7 +199,7 @@
                             >
                                 <template #search="{ attributes, events }">
                                     <input
-                                        :required="!ledger.over_encumbrance_allowed"
+                                        :required="ledger.over_encumbrance_allowed === null"
                                         class="vs__search"
                                         v-bind="attributes"
                                         v-on="events"
