@@ -71,7 +71,7 @@ sub get {
         unless ($fund_group) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "Fund allocation not found" }
+                openapi => { error => "Fund group not found" }
             );
         }
 
@@ -131,7 +131,7 @@ sub update {
     unless ($fund_group) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fund allocation not found" }
+            openapi => { error => "Fund group not found" }
         );
     }
 
@@ -188,7 +188,7 @@ sub delete {
     unless ($fund_group) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Fund allocation not found" }
+            openapi => { error => "Fund group not found" }
         );
     }
 

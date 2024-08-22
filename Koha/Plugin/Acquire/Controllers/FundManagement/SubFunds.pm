@@ -104,7 +104,7 @@ sub add {
 
                 my $sub_fund = Koha::Acquire::Funds::SubFund->new_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $sub_fund->fund_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $sub_fund->sub_fund_id );
                 return $c->render(
                     status  => 201,
                     openapi => $sub_fund->to_api
@@ -145,7 +145,7 @@ sub update {
 
                 $sub_fund->set_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $sub_fund->fund_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $sub_fund->sub_fund_id );
                 return $c->render(
                     status  => 200,
                     openapi => $sub_fund->to_api

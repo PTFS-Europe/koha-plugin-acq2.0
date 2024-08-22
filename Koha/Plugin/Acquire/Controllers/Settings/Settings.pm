@@ -47,7 +47,7 @@ sub store_settings {
         $setting->value($settings->{$key})->store();
     }
 
-    return $c->render( status => 200, openapi => 'Success' );
+    return $c->render( status => 201, openapi => 'Success' );
 
 }
 

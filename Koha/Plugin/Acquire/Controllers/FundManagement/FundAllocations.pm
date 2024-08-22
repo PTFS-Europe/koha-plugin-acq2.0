@@ -49,18 +49,9 @@ sub list {
         my $filtered_fund_allocations =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $fund_allocations } );
 
-        my @sorted_allocations =
-            sort { $a->{fund_allocation_id} <=> $b->{fund_allocation_id} } @{$filtered_fund_allocations};
+        my $sorted_allocations = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_totals_to_fund_allocations( { allocations => $filtered_fund_allocations } );
 
-        my $total = 0;
-        foreach my $allocation_index ( 1 .. scalar(@sorted_allocations) ) {
-            my $allocation = $sorted_allocations[ $allocation_index - 1 ];
-            $allocation->{allocation_index} = $allocation_index;
-            $total += $allocation->{allocation_amount};
-            $allocation->{new_fund_value} = $total;
-        }
-
-        return $c->render( status => 200, openapi => \@sorted_allocations );
+        return $c->render( status => 200, openapi => $sorted_allocations );
     } catch {
         $c->unhandled_exception($_);
     };

@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "release": "bash ./release_kpz.sh",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "cy:ui": "cypress open",
-    "cy:cli": "cypress run"
+    "cy:cli": "cypress run -q",
+    "test": "docker exec -it kohadev-koha-1 sh -c \"prove /kohadevbox/plugins/koha-plugin-acq2/tests/t/**/*\""
   },
   "keywords": [],
   "author": "",

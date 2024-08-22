@@ -56,7 +56,7 @@
                 "application/json"
             ],
             "responses": {
-                "200": {
+                "201": {
                     "description": "Settings",
                     "schema": {
                         "type": "string"
