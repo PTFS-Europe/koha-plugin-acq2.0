@@ -24,6 +24,10 @@ use Scalar::Util qw( looks_like_number );
 
 =head3 cascade_lib_group_visibility
 
+This method will update the visibility if the parent visibility has changed.
+This only works if library groups have been removed i.e. new groups are not automatically cascaded
+to prevent data being made visible where it shouldn't be.
+
 =cut
 
 sub cascade_lib_group_visibility {
@@ -56,6 +60,9 @@ sub cascade_lib_group_visibility {
 }
 
 =head3 cascade_status
+
+This method will update the status if the parent status has changed
+This only applies to a parent being set to "inactive". Activating a parent object again will not change the status of the child
 
 =cut
 
