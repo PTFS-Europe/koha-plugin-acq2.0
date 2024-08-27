@@ -34,7 +34,7 @@ sub store {
 
     $self->SUPER::store;
 
-    $self->cascade_to_ledgers;
+    $self->cascade_to_ledgers unless $args->{no_cascade};
 
     return $self;
 }

@@ -33,8 +33,10 @@ sub store {
 
     $self->SUPER::store;
 
-    $self->cascade_to_fund_allocations;
-    $self->cascade_to_sub_funds;
+    unless ($args->{no_cascade}) {
+        $self->cascade_to_fund_allocations;
+        $self->cascade_to_sub_funds;
+    }
 
     return $self;
 }
@@ -80,7 +82,6 @@ sub cascade_to_fund_allocations {
 
     my @fund_allocations = $self->koha_plugin_acquire_fund_allocations->as_list;
     my $visible_to       = $self->visible_to;
-    my $status           = $self->status;
 
     foreach my $fund_allocation (@fund_allocations) {
         my $visibility_updated = Koha::Acquire::Funds::Utils->cascade_lib_group_visibility(
@@ -164,7 +165,7 @@ sub update_fund_total {
     foreach my $allocation (@allocations) {
         $total += $allocation->allocation_amount;
     }
-    $self->fund_value($total)->store;
+    $self->fund_value($total)->store({ no_cascade => 1 });
 
     my $ledger = $self->ledger;
     $ledger->update_ledger_total;

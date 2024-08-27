@@ -33,7 +33,7 @@ sub store {
 
     $self->SUPER::store;
 
-    $self->cascade_to_fund_allocations;
+    $self->cascade_to_fund_allocations unless $args->{no_cascade};
 
     return $self;
 }
@@ -102,7 +102,7 @@ sub update_sub_fund_total {
     foreach my $allocation (@allocations) {
         $total += $allocation->allocation_amount;
     }
-    $self->sub_fund_value($total)->store;
+    $self->sub_fund_value($total)->store({ no_cascade => 1 });
 
     my $fund = $self->fund;
     $fund->update_fund_total;

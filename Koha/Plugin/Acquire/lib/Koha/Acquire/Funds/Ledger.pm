@@ -32,7 +32,7 @@ sub store {
 
     $self->SUPER::store;
 
-    $self->cascade_to_funds;
+    $self->cascade_to_funds unless $args->{no_cascade};
 
     return $self;
 }
@@ -102,7 +102,7 @@ sub update_ledger_total {
     foreach my $fund (@funds) {
         $total += $fund->fund_value;
     }
-    $self->ledger_value($total)->store;
+    $self->ledger_value($total)->store({ no_cascade => 1 });
     return $total;
 }
 
