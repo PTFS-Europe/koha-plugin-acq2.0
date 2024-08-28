@@ -148,21 +148,4 @@ sub add_accounting_values_to_ledgers_or_fund_groups_or_funds {
     return $data;
 }
 
-sub add_totals_to_fund_allocations {
-    my ($self, $args) = @_;
-
-    my $allocations = $args->{allocations};
-    my @sorted_allocations = sort { $a->{allocation_amount} <=> $b->{allocation_amount} } @$allocations;
-
-    my $total = 0;
-    foreach my $allocation_index ( 1 .. scalar(@sorted_allocations) ) {
-        my $allocation = $sorted_allocations[ $allocation_index - 1 ];
-        $allocation->{allocation_index} = $allocation_index;
-        $total += $allocation->{allocation_amount};
-        $allocation->{new_fund_value} = $total;
-    }
-
-    return \@sorted_allocations;
-}
-
 1;

@@ -80,7 +80,7 @@ subtest 'list() tests' => sub {
     my $fund_allocation = $builder->build_object(
         { class => 'Koha::Acquire::Funds::FundAllocations', value => { visible_to => $lib_group->id } } );
 
-    my $module2 = Test::MockModule->new('Koha::Plugin::Acquire::Controllers::ControllerUtils');
+    my $module2 = Test::MockModule->new('Koha::Acquire::Funds::FundAllocations');
     $module2->mock(
         'add_totals_to_fund_allocations',
         sub {

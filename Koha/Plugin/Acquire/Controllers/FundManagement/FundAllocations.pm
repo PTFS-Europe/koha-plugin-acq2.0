@@ -49,7 +49,7 @@ sub list {
         my $filtered_fund_allocations =
             Koha::Plugin::Acquire::Controllers::ControllerUtils->filter_data_by_group( { dataset => $fund_allocations } );
 
-        my $sorted_allocations = Koha::Plugin::Acquire::Controllers::ControllerUtils->add_totals_to_fund_allocations( { allocations => $filtered_fund_allocations } );
+        my $sorted_allocations = Koha::Acquire::Funds::FundAllocations->add_totals_to_fund_allocations( { allocations => $filtered_fund_allocations } );
 
         return $c->render( status => 200, openapi => $sorted_allocations );
     } catch {
