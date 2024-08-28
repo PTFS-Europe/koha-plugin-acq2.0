@@ -9,7 +9,7 @@
     "dev": "webpack --mode development --watch",
     "cy:ui": "cypress open",
     "cy:cli": "cypress run -q",
-    "test": "docker exec -it kohadev-koha-1 sh -c \"prove /kohadevbox/plugins/koha-plugin-acq2/tests/t/**/*\""
+    "test": "docker exec -it kohadev-koha-1 sh -c \"prove /kohadevbox/plugins/koha-plugin-acq2/t/**/*\""
   },
   "keywords": [],
   "author": "",
